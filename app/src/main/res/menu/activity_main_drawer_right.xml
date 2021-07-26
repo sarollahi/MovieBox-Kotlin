@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/search_movie_tv">
+        <menu>
+            <item
+                android:icon="@drawable/ic_title"
+                android:title="@string/title" />
+            <item
+                android:id="@+id/navTitle"
+                android:title="@null"
+                app:actionLayout="@layout/edit_text" />
+            <item
+                android:icon="@drawable/ic_calendar"
+                android:title="@string/year" />
+            <item
+                android:id="@+id/navYear"
+                android:title="@null"
+                app:actionLayout="@layout/edit_text" />
+            <item
+                android:id="@+id/navMovieSrearch"
+                android:title="@null"
+                app:actionLayout="@layout/button" />
+        </menu>
+
+    </item>
+
+    <item android:title="@string/search_by_person">
+        <menu>
+            <item
+                android:icon="@drawable/ic_person"
+                android:title="@string/name" />
+            <item
+                android:id="@+id/navPerson"
+                android:title="@null"
+                app:actionLayout="@layout/edit_text" />
+            <item
+                android:id="@+id/navPersonSearch"
+                android:title="@null"
+                app:actionLayout="@layout/button" />
+        </menu>
+
+    </item>
+
+        <item android:title="@string/search_by_genre">
+            <menu>
+                <item
+                    android:icon="@drawable/ic_movies"
+                    android:title="@string/movies_search_title" />
+                <item
+                    android:id="@+id/navMovieGenres"
+                    android:title="@null"
+                    app:actionLayout="@layout/spinner" />
+
+                <item
+                    android:icon="@drawable/ic_tv"
+                    android:title="@string/tv_shows" />
+                <item
+                    android:id="@+id/navTVGenres"
+                    android:title="@null"
+                    app:actionLayout="@layout/spinner" />
+                <item
+                    android:title="@null"/>
+            </menu>
+        </item>
+
+</menu>

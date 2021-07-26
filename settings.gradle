@@ -1,0 +1,5 @@
+rootProject.name = "Movie Box"
+include ':app'
+include ':tv'
+include ':api'
+include ':common'

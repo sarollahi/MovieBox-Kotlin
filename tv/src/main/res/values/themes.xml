@@ -1,0 +1,8 @@
+<resources>
+
+    <style name="Theme.Test" parent="@style/Theme.Leanback" />
+
+    <style name="Theme.Custom.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
+        <item name="guidedStepBackground">#0C394E</item>
+    </style>
+</resources>

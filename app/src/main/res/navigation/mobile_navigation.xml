@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_root">
+
+    <fragment
+        android:id="@+id/nav_root"
+        android:name="com.aastudio.sarollahi.moviebox.ui.rootMovie.RootMovieFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_root_movie">
+        <action
+            android:id="@+id/action_nav_root_to_nav_upcoming"
+            app:destination="@id/nav_upcoming" />
+        <action
+            android:id="@+id/action_nav_root_to_nav_nowPlaying"
+            app:destination="@id/nav_nowPlaying" />
+        <action
+            android:id="@+id/action_nav_root_to_nav_popular"
+            app:destination="@id/nav_popular" />
+        <action
+            android:id="@+id/action_nav_root_to_nav_toprated"
+            app:destination="@id/nav_toprated" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_nowPlaying"
+        android:name="com.aastudio.sarollahi.moviebox.ui.nowPlayingMovies.NowPlayingFragment"
+        android:label="@string/now_playing_movies"
+        tools:layout="@layout/fragment_now_playing_movies"/>
+
+    <fragment
+        android:id="@+id/nav_upcoming"
+        android:name="com.aastudio.sarollahi.moviebox.ui.upcomingMovies.UpcomingMoviesFragment"
+        android:label="@string/upcoming_movies"
+        tools:layout="@layout/fragment_upcoming_movies" />
+
+    <fragment
+        android:id="@+id/nav_popular"
+        android:name="com.aastudio.sarollahi.moviebox.ui.popularMovies.PopularMoviesFragment"
+        android:label="@string/popular_movies"
+        tools:layout="@layout/fragment_popular_movies" />
+
+    <fragment
+        android:id="@+id/nav_toprated"
+        android:name="com.aastudio.sarollahi.moviebox.ui.topRatedMovies.TopRatedMoviesFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_top_rated_movies" />
+</navigation>

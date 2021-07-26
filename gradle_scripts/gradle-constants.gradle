@@ -1,0 +1,41 @@
+ext {
+
+    // Version of the app
+    appVersion = "1.0.0"
+
+    // Versions of Google libraries and compile SDKs
+    buildToolsVersion = "30.0.3"
+    compileSdkVersion = 30
+    defaultMinSdkVersion = 23
+    defaultTargetSdkVersion = 30
+    playServicesVersion = "17.0.0"
+    firebaseVersion = "17.2.1"
+    googleAnalytics = "17.4.3"
+    firebaseCrashAnalytics = "17.1.0"
+
+    //Versions of androidx libraries
+    constraintLayoutVersion = "2.0.4"
+    googleMaterialVersion = '1.3.0'
+    appcompatVersion = '1.3.0'
+    expressoVersion = "3.3.0"
+    legacySupportV4 = '1.1.0'
+    lifeCycleVersion = '2.3.1'
+    navigationUiKtx = '2.3.5'
+    navigationFragmentKtx = '2.3.5'
+    coreKtx = '1.5.0'
+
+    // Versions of third-party libraries
+    junitVersion = '4.13.2'
+    junitPlatformVersion = "1.1.2"
+    glideVersion = '4.12.0'
+    crashlyticsVersion = "2.9.1"
+    facebookSdkVersion = "4.24.0"
+    gsonVersion = "2.8.7"
+    retrofitVersion = "2.9.0"
+    koinVersion = "2.0.0-GA"
+    rxKotlinVersion = "2.2.0"
+    rxAndroidVersion = "2.1.1"
+    exoplayerVersion = '2.14.0'
+    torrentstreamVersion = "2.7.0"
+    openSubtitlesVersion = "0.0.8"
+}

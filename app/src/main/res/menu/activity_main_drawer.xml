@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/my_collection">
+        <menu>
+            <item
+                android:id="@+id/nav_movies"
+                android:icon="@drawable/ic_movies"
+                android:title="@string/movies_search_title" />
+            <item
+                android:id="@+id/nav_tv_shows"
+                android:icon="@drawable/ic_tv"
+                android:title="@string/tv_shows" />
+            <item
+                android:id="@+id/nav_music_videos"
+                android:icon="@drawable/ic_music_video"
+                android:title="@string/music_videos" />
+            <item
+                android:id="@+id/nav_wish"
+                android:icon="@drawable/ic_favorite"
+                android:title="@string/favorites" />
+            <item
+                android:id="@+id/nav_download"
+                android:icon="@drawable/ic_download"
+                android:title="@string/downloads" />
+        </menu>
+    </item>
+
+    <item android:title="@string/utilities">
+        <menu>
+            <item
+                android:id="@+id/nav_updates"
+                android:icon="@drawable/ic_feed"
+                android:title="@string/updates" />
+            <item
+                android:id="@+id/nav_br"
+                android:icon="@drawable/ic_backup"
+                android:title="@string/backup_restore" />
+            <item
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_email"
+                android:title="@string/contact_developer_title" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info"
+                android:title="@string/about" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">Movie Box</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_subtitle">moviebox@sarollahi.ir</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="upcoming">Upcoming</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="upcoming_movies">Upcoming Movies</string>
+    <string name="now_playing_movies">Now Playing Movies</string>
+    <string name="popular_movies">Popular Movies</string>
+    <string name="top_rated_movies">Top Rated Movies</string>
+    <string name="error_fetch_movies">Please check your internet connection</string>
+    <!--tabs-->
+    <string name="info">Info</string>
+    <string name="review">Review</string>
+    <string name="biography">Biography</string>
+    <string name="images">Images</string>
+    <!--info-->
+    <string name="overview">Story Line</string>
+    <string name="cast">Cast List</string>
+    <string name="director">Director</string>
+    <string name="writer">Writer</string>
+    <string name="language">Language</string>
+    <string name="country">Country</string>
+    <string name="budget">Budget</string>
+    <string name="boxOffice">BoxOffice</string>
+    <string name="production_companies">Production Companies</string>
+    <string name="related_movies">Related Movies</string>
+    <string name="recommended_movies">Recommended Movies</string>
+    <string name="imdb">IMDB</string>
+
+    <string name="movieQuality">Select Quality</string>
+    <string name="streamProgress">%1$.2f %2$s</string>
+    <string name="streamDownloadSpeed">Speed: %d KB</string>
+    <string name="movieSubtitle">Select Subtitle</string>
+    <string name="noSubtitle">No subtitles found to this movie..</string>
+    <string name="subtitleError">Error with adding subtitle, Please try again..</string>
+    <string name="view_all">View All</string>
+    <string name="home">Home</string>
+    <!--facebook-->
+    <string name="sponsored">Sponsored</string>
+    <!--search-->
+    <string name="search_movie_tv">SEARCH MOVIE/TV SHOW</string>
+    <string name="title">Title</string>
+    <string name="year">Year</string>
+    <string name="search_by_person">SEARCH BY PERSON</string>
+    <string name="name">Name</string>
+    <string name="search_by_genre">SEARCH BY GENRE</string>
+    <string name="movies_search_title">Movies</string>
+    <string name="tv_shows">Tv Shows</string>
+    <string name="music_videos">Music Videos</string>
+    <string name="search">Search</string>
+    <string name="search_drawer">Search Drawer</string>
+    <!--menu-->
+    <string name="favorites">Favorites</string>
+    <string name="downloads">My Downloads</string>
+    <string name="updates">Updates</string>
+    <string name="backup_restore"><![CDATA[Backup & restore]]></string>
+    <string name="contact_developer_title">Contact developer</string>
+    <string name="about">About</string>
+    <string name="utilities">UTILITIES</string>
+    <string name="my_collection">MY COLLECTION</string>
+
+
+    <string name="streamSeeds">Seeds: %d</string>
+    <!--person-->
+    <string name="search_movies_tv_shows"> movies/TV shows </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
