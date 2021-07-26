@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
@@ -6,8 +11,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
-import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.moviebox.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 
@@ -41,7 +46,7 @@ class RecommendedMoviesAdapter(
         private val poster: ImageView = itemView.findViewById(R.id.poster)
 
         fun bind(movie: Movie) {
-            if (!movie.posterPath.isNullOrEmpty()){
+            if (!movie.posterPath.isNullOrEmpty()) {
                 Glide.with(itemView)
                     .load("$IMAGE_ADDRESS${movie.posterPath}")
                     .transform(CenterCrop())

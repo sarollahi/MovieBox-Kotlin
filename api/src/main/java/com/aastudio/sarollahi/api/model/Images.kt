@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api.model
 
 import android.os.Parcel
@@ -6,7 +11,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ProfileImages(
     @SerializedName("profiles") val profiles: List<Images>?
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(parcel.createTypedArrayList(Images)?.toList())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

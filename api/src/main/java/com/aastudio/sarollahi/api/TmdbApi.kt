@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api
 
 import com.aastudio.sarollahi.api.model.Movie
@@ -16,7 +21,7 @@ interface TmdbApi {
         const val KEY = ""
     }
 
-    //MOVIES
+    // MOVIES
     @GET("movie/popular")
     fun getPopularMovies(
         @Query("api_key") apiKey: String = KEY,
@@ -53,7 +58,7 @@ interface TmdbApi {
         @Query("api_key") apiKey: String = KEY
     ): Call<Movie>
 
-    //TV SHOWS
+    // TV SHOWS
     @GET("tv/popular")
     fun getPopularTVShows(
         @Query("api_key") apiKey: String = KEY,
@@ -91,7 +96,7 @@ interface TmdbApi {
         @Query("page") page: Int
     ): Call<GetTVShowResponse>
 
-    //PEOPLE
+    // PEOPLE
     @GET("person/{person_id}")
     fun getPersonDetails(
         @Path("person_id") personId: Int,

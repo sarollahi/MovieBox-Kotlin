@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox
 
 import android.os.Bundle
@@ -72,6 +77,6 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-     return true
+        return true
     }
 }

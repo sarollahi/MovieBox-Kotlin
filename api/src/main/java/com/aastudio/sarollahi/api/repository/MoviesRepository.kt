@@ -1,8 +1,17 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api.repository
 
 import com.aastudio.sarollahi.api.TmdbApi
 import com.aastudio.sarollahi.api.YtsApi
-import com.aastudio.sarollahi.api.model.*
+import com.aastudio.sarollahi.api.model.BaseMovie
+import com.aastudio.sarollahi.api.model.Genre
+import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.model.Person
+import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import com.aastudio.sarollahi.api.response.GetTVShowResponse
 import retrofit2.Call

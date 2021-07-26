@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 @file:Suppress("DEPRECATION")
 
 package com.aastudio.sarollahi.moviebox.ui.player
@@ -13,8 +18,15 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.aastudio.sarollahi.common.*
-import com.aastudio.sarollahi.moviebox.*
+import com.aastudio.sarollahi.common.formatText
+import com.aastudio.sarollahi.common.gone
+import com.aastudio.sarollahi.common.hideSystemUI
+import com.aastudio.sarollahi.common.resumePlayer
+import com.aastudio.sarollahi.common.seekPlayer
+import com.aastudio.sarollahi.common.show
+import com.aastudio.sarollahi.common.showSystemUI
+import com.aastudio.sarollahi.common.startPlayer
+import com.aastudio.sarollahi.common.stopPlayer
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.databinding.ActivityStreamBinding
 import com.github.se_bastiaan.torrentstream.StreamStatus
@@ -22,8 +34,11 @@ import com.github.se_bastiaan.torrentstream.Torrent
 import com.github.se_bastiaan.torrentstream.TorrentOptions
 import com.github.se_bastiaan.torrentstream.TorrentStream
 import com.github.se_bastiaan.torrentstream.listeners.TorrentListener
-import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.source.*
+import com.google.android.exoplayer2.ExoPlaybackException
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.MergingMediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -45,12 +60,10 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
     private var streamProgressText: TextView? = null
     private var movieSubtitle: ImageButton? = null
 
-
     private lateinit var simplePlayer: SimpleExoPlayer
     private lateinit var torrentStream: TorrentStream
     private lateinit var mergeMediaSource: MergingMediaSource
     private lateinit var viewModel: StreamViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,10 +78,9 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
         val title = intent.getStringExtra(MOVIE_TITLE)
         if (!url.isNullOrEmpty() && !title.isNullOrEmpty()) {
             initTorrentStream(url)
-            //observeObservers()
+            // observeObservers()
             viewsListener(title)
         }
-
     }
 
     private fun setUpUI() {
@@ -105,7 +117,6 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
         torrentStream = TorrentStream.init(torrentOptions)
         torrentStream.startStream(url)
         torrentStream.addListener(this)
-
     }
 
     private fun initPlayer(path: String) {
@@ -119,7 +130,6 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
 //            startPlayer(mergeMediaSource)
 //            addListener(this@StreamActivity)
 //        }
-
 
         val exoplayer: SimpleExoPlayer?
         val playbackStateBuilder: PlaybackStateCompat.Builder =
@@ -145,7 +155,7 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
 
         playbackStateBuilder.setActions(
             PlaybackStateCompat.ACTION_PLAY or PlaybackStateCompat.ACTION_PAUSE or
-                    PlaybackStateCompat.ACTION_FAST_FORWARD
+                PlaybackStateCompat.ACTION_FAST_FORWARD
         )
 
         mediaSession.setPlaybackState(playbackStateBuilder.build())
@@ -186,7 +196,6 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
         super.onPause()
         torrentStream.currentTorrent.pause()
         if (this::simplePlayer.isInitialized) simplePlayer.stopPlayer()
-
     }
 
     override fun onResume() {
@@ -195,7 +204,6 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
             torrentStream.currentTorrent.resume()
         if (this::simplePlayer.isInitialized) simplePlayer.resumePlayer()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

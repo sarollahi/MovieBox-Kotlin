@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Magine Pro
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
  * All rights reserved.
  */
 

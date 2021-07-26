@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.ui.rootMovie
 
 import android.app.Application
@@ -40,7 +45,7 @@ class RootMovieViewModel(private val application: Application) : ViewModel() {
         )
     }
 
-    fun getGenres(){
+    fun getGenres() {
         MoviesRepository.getMovieGenres(
             ::onMovieGenresFetched,
             ::onError

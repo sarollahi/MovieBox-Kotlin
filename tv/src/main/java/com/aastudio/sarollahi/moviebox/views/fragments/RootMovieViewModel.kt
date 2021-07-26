@@ -1,12 +1,17 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.views.fragments
 
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.repository.MoviesRepository
+import com.aastudio.sarollahi.moviebox.R
 
 class RootMovieViewModel(private val application: Application) : ViewModel() {
 

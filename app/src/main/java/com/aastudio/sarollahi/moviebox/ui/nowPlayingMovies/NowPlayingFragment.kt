@@ -1,20 +1,25 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.ui.nowPlayingMovies
 
 import android.content.Intent
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.repository.MoviesRepository
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentNowPlayingMoviesBinding
-import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.MoviesRepository
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity.Companion.MOVIE_ID
 import com.facebook.ads.AdError
@@ -132,5 +137,4 @@ class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
 
         getNowPlayingMovies()
     }
-
 }

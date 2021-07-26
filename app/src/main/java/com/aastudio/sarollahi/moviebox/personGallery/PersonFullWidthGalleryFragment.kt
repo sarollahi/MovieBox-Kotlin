@@ -1,20 +1,20 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.personGallery
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.common.calculateNoOfColumns
-import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.GalleryAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentPersonFullWidthGalleryBinding
-import com.aastudio.sarollahi.moviebox.databinding.FragmentPersonGalleryBinding
-import java.text.FieldPosition
 
 class PersonFullWidthGalleryFragment : Fragment() {
     lateinit var binding: FragmentPersonFullWidthGalleryBinding
@@ -33,7 +33,8 @@ class PersonFullWidthGalleryFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
@@ -60,9 +61,9 @@ class PersonFullWidthGalleryFragment : Fragment() {
 
         personGallery?.setHasFixedSize(true)
         personGallery?.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        galleryAdapter = GalleryAdapter(mutableListOf()) { _, _ ->}
+        galleryAdapter = GalleryAdapter(mutableListOf()) { _, _ -> }
         personGallery?.adapter = galleryAdapter
-        position?.let { personGallery?.findViewHolderForAdapterPosition(it)?.itemView?.performClick() };
+        position?.let { personGallery?.findViewHolderForAdapterPosition(it)?.itemView?.performClick() }
     }
 
     companion object {

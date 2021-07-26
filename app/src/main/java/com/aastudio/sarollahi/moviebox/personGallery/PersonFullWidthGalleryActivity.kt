@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.personGallery
 
 import android.os.Bundle
@@ -7,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Person
 import com.aastudio.sarollahi.moviebox.adapter.FullWidthGalleryAdapter
 import com.aastudio.sarollahi.moviebox.databinding.ActivityPersonFullWidthGalleryBinding
-
 
 class PersonFullWidthGalleryActivity : AppCompatActivity() {
     lateinit var binding: ActivityPersonFullWidthGalleryBinding

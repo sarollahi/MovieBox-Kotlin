@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.ui.rootMovie
 
 import android.content.Intent
@@ -12,7 +17,11 @@ import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
-import com.aastudio.sarollahi.moviebox.adapter.*
+import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
+import com.aastudio.sarollahi.moviebox.adapter.RootPlayingMoviesAdapter
+import com.aastudio.sarollahi.moviebox.adapter.RootPopularMoviesAdapter
+import com.aastudio.sarollahi.moviebox.adapter.RootTopRatedMoviesAdapter
+import com.aastudio.sarollahi.moviebox.adapter.RootUpcommingMoviesAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentRootMovieBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -83,7 +92,7 @@ class RootMovieFragment : Fragment() {
     }
 
     private fun setUpUI() {
-        //upcomming
+        // upcomming
         binding.upcomingMovies.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -93,7 +102,7 @@ class RootMovieFragment : Fragment() {
             RootUpcommingMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
         binding.upcomingMovies.adapter = upcomingMoviesAdapter
 
-        //playing
+        // playing
         binding.nowPlayingMovies.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -103,7 +112,7 @@ class RootMovieFragment : Fragment() {
             RootPlayingMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
         binding.nowPlayingMovies.adapter = playingMoviesAdapter
 
-        //popular
+        // popular
         binding.popularMovies.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -113,7 +122,7 @@ class RootMovieFragment : Fragment() {
             RootPopularMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
         binding.popularMovies.adapter = popularMoviesAdapter
 
-        //topRated
+        // topRated
         binding.popularMovies.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -123,7 +132,7 @@ class RootMovieFragment : Fragment() {
             RootTopRatedMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
         binding.popularMovies.adapter = topRatedMoviesAdapter
 
-        //movie genres
+        // movie genres
         binding.genres.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,

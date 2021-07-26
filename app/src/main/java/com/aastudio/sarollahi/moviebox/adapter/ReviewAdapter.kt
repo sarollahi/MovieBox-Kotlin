@@ -1,11 +1,16 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.aastudio.sarollahi.moviebox.databinding.RowReviewBinding
 import com.aastudio.sarollahi.api.model.Review
+import com.aastudio.sarollahi.moviebox.databinding.RowReviewBinding
 
 class ReviewAdapter(
     private var reviews: MutableList<Review>

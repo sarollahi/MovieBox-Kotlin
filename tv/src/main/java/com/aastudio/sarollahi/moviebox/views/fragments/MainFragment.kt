@@ -1,12 +1,21 @@
-package com.aastudio.sarollahi.moviebox.views.fragments
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
 
+package com.aastudio.sarollahi.moviebox.views.fragments
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.BrowseSupportFragment
-import androidx.leanback.widget.*
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.HeaderItem
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
+import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.leanback.widget.OnItemViewSelectedListener
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.repository.MoviesRepository
 import com.aastudio.sarollahi.moviebox.R
@@ -105,5 +114,4 @@ class MainFragment : BrowseSupportFragment() {
     private fun onError() {
         Toast.makeText(context, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
     }
-
 }

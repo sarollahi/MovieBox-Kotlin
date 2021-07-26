@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.personGallery
 
 import android.content.Intent
@@ -12,7 +17,6 @@ import com.aastudio.sarollahi.api.model.Person
 import com.aastudio.sarollahi.common.calculateNoOfColumns
 import com.aastudio.sarollahi.moviebox.adapter.GalleryAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentPersonGalleryBinding
-
 
 class PersonGalleryFragment : Fragment() {
 
@@ -30,7 +34,8 @@ class PersonGalleryFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment

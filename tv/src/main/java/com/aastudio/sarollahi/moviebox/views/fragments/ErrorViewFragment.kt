@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.views.fragments
 
 import android.os.Bundle
@@ -5,7 +10,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.ErrorSupportFragment
 import com.aastudio.sarollahi.moviebox.R
-
 
 class ErrorViewFragment : ErrorSupportFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.ui.movieDetails
 
 import android.app.AlertDialog
@@ -16,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
-import com.aastudio.sarollahi.moviebox.adapter.*
+import com.aastudio.sarollahi.moviebox.adapter.DetailsTabsAdapter
+import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
+import com.aastudio.sarollahi.moviebox.adapter.QualityAdapter
 import com.aastudio.sarollahi.moviebox.databinding.ActivityMovieDetailsBinding
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_TITLE
@@ -25,7 +32,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.tabs.TabLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 @Suppress("DEPRECATION")
 class MovieDetailsActivity : AppCompatActivity() {
@@ -118,15 +124,14 @@ class MovieDetailsActivity : AppCompatActivity() {
                     )
                 )
                 binding.detailTabs.addOnTabSelectedListener(object :
-                    TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab) {
-                        binding.viewPager.currentItem = tab.position
-                    }
+                        TabLayout.OnTabSelectedListener {
+                        override fun onTabSelected(tab: TabLayout.Tab) {
+                            binding.viewPager.currentItem = tab.position
+                        }
 
-                    override fun onTabUnselected(tab: TabLayout.Tab) {}
-                    override fun onTabReselected(tab: TabLayout.Tab) {}
-                })
-
+                        override fun onTabUnselected(tab: TabLayout.Tab) {}
+                        override fun onTabReselected(tab: TabLayout.Tab) {}
+                    })
             }
             observe(torrentTv) {
                 if (it.isNotEmpty()) {

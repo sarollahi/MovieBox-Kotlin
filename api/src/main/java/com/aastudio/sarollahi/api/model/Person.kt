@@ -1,9 +1,13 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api.model
 
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class Person(
     @SerializedName("id") val id: Int,
@@ -21,7 +25,7 @@ data class Person(
     @SerializedName("department") val department: String?,
     @SerializedName("character") val character: String?,
     @SerializedName("images") val images: ProfileImages?
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),

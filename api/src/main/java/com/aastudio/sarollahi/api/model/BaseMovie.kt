@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api.model
 
 import android.os.Parcel
@@ -20,7 +25,6 @@ class BaseMovie {
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
-
         }
 
         override fun describeContents(): Int {
@@ -43,7 +47,6 @@ class BaseMovie {
     }
 
     class Data {
-       @SerializedName("movies") val movies: List<Movie>? = null
+        @SerializedName("movies") val movies: List<Movie>? = null
     }
 }
-

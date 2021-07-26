@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.views.fragments
 
 import android.content.Intent
@@ -8,7 +13,14 @@ import android.os.Parcelable
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
-import androidx.leanback.widget.*
+import androidx.leanback.widget.Action
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.ClassPresenterSelector
+import androidx.leanback.widget.DetailsOverviewLogoPresenter
+import androidx.leanback.widget.DetailsOverviewRow
+import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.views.activities.GuidedStepActivity
@@ -50,7 +62,6 @@ class MovieDetailsFragment : DetailsSupportFragment() {
         loadBackground(selectedMovie)
         setMovieDetailActions()
         setMovieDetailAdapter()
-
     }
 
     private fun setMovieDetailAdapter() {
@@ -66,7 +77,6 @@ class MovieDetailsFragment : DetailsSupportFragment() {
 
         adapter = detailPageAdapter
     }
-
 
 //    private fun generateRelatedMoviesRow(): ListRow {
 //        val movieViewPresenter = MovieViewPresenter(requireContext())
@@ -113,14 +123,18 @@ class MovieDetailsFragment : DetailsSupportFragment() {
 
     private fun setMovieDetailActions() {
         val actionsAdapter = ArrayObjectAdapter().apply {
-            add(Action(1, "Watch").apply {
-                icon =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow_white_24dp)
-            })
-            add(Action(2, "78 People", "Liked the Movie").apply {
-                icon =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_thumb_up_white_24dp)
-            })
+            add(
+                Action(1, "Watch").apply {
+                    icon =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow_white_24dp)
+                }
+            )
+            add(
+                Action(2, "78 People", "Liked the Movie").apply {
+                    icon =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_thumb_up_white_24dp)
+                }
+            )
             add(Action(3, "Watch Trailer"))
 
             setOnItemViewClickedListener { _, item, _, _ ->
@@ -154,10 +168,12 @@ class MovieDetailsFragment : DetailsSupportFragment() {
             .load(selectedMovie.backdropPath)
             .skipMemoryCache(true)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(BitmapTarget {
-                detailsBackground.coverBitmap = it
-                detailsBackground.enableParallax()
-            })
+            .into(
+                BitmapTarget {
+                    detailsBackground.coverBitmap = it
+                    detailsBackground.enableParallax()
+                }
+            )
     }
 
     inner class BitmapTarget(val callback: (Bitmap?) -> Unit) : SimpleTarget<Bitmap>() {

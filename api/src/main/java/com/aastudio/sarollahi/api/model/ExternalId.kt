@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api.model
 
 import android.os.Parcel
@@ -9,7 +14,7 @@ data class ExternalId(
     @SerializedName("facebook_id") val facebookId: String?,
     @SerializedName("instagram_id") val instagramId: String?,
     @SerializedName("twitter_id") val twitterId: String?
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),

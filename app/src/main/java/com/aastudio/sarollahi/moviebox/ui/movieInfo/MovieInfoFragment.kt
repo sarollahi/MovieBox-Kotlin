@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.ui.movieInfo
 
 import android.animation.ObjectAnimator
@@ -12,7 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.model.Person
 import com.aastudio.sarollahi.moviebox.R
-import com.aastudio.sarollahi.moviebox.adapter.*
+import com.aastudio.sarollahi.moviebox.adapter.CastAdapter
+import com.aastudio.sarollahi.moviebox.adapter.CompanyAdapter
+import com.aastudio.sarollahi.moviebox.adapter.CountryAdapter
+import com.aastudio.sarollahi.moviebox.adapter.DirectorAdapter
+import com.aastudio.sarollahi.moviebox.adapter.LanguageAdapter
+import com.aastudio.sarollahi.moviebox.adapter.RecommendedMoviesAdapter
+import com.aastudio.sarollahi.moviebox.adapter.RelatedMoviesAdapter
+import com.aastudio.sarollahi.moviebox.adapter.WriterAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentInfoBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieViewModel
@@ -44,7 +56,8 @@ class MovieInfoFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentInfoBinding.inflate(inflater, container, false)
@@ -181,8 +194,6 @@ class MovieInfoFragment : Fragment() {
                 writerAdapter.appendCrew(writer)
                 writerAdapter.notifyDataSetChanged()
             }
-
-
         }
 
         binding.overviewArrow.setOnClickListener {

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api.model
 
 import android.os.Parcel
@@ -7,7 +12,7 @@ import com.google.gson.annotations.SerializedName
 data class Genre(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String?
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()

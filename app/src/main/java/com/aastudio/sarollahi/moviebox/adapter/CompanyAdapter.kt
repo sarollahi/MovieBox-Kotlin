@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
@@ -5,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.api.model.Company
+import com.aastudio.sarollahi.moviebox.R
 
 class CompanyAdapter(
     private var company: MutableList<Company>,

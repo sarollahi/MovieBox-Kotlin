@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.views.presenters
 
 import android.content.Context
@@ -31,7 +36,6 @@ class MovieViewPresenter(private val context: Context) : Presenter() {
         }
     }
 
-
     class CardViewHolder(itemView: View) : ViewHolder(itemView) {
         var imageCardView: ImageCardView = itemView as ImageCardView
 
@@ -47,8 +51,6 @@ class MovieViewPresenter(private val context: Context) : Presenter() {
         }
     }
 
-
     override fun onUnbindViewHolder(viewHolder: ViewHolder?) {
-
     }
 }

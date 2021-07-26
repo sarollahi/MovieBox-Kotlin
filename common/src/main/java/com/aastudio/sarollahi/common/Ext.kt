@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 @file:Suppress("DEPRECATION")
 
 package com.aastudio.sarollahi.common
@@ -86,17 +91,21 @@ fun TextView.addCategories(genres: List<String>) {
 }
 
 fun hideSystemUI(): Int {
-    return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+    return (
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             or View.SYSTEM_UI_FLAG_FULLSCREEN
-            or View.SYSTEM_UI_FLAG_IMMERSIVE)
+            or View.SYSTEM_UI_FLAG_IMMERSIVE
+        )
 }
 
 fun showSystemUI(): Int {
-    return (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    return (
+        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        )
 }
 
 fun TextView.formatText(stringPath: Int, obj1: Any?, obj2: Any? = 0) {
@@ -115,5 +124,3 @@ fun RecyclerView.addDividers(dividerItemDecoration: Int) {
         )
     )
 }
-
-

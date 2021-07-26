@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.app.Activity
@@ -11,11 +16,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
-import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.moviebox.R
 import com.bumptech.glide.Glide
-import com.facebook.ads.*
-import java.util.*
+import com.facebook.ads.AdOptionsView
+import com.facebook.ads.MediaView
+import com.facebook.ads.NativeAd
+import com.facebook.ads.NativeAdLayout
+import com.facebook.ads.NativeAdsManager
+import java.util.Locale
 
 class MoviesAdapter(
     private var movies: MutableList<Movie>,
@@ -119,9 +128,9 @@ class MoviesAdapter(
                 } else {
                     movie.releaseDate?.let {
                         "${it.substring(0, 4)} | ${
-                            movie.originalLanguage?.toUpperCase(
-                                Locale.getDefault()
-                            )
+                        movie.originalLanguage?.toUpperCase(
+                            Locale.getDefault()
+                        )
                         }"
                     }
                 }

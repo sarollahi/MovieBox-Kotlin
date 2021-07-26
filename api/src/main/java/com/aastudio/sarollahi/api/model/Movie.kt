@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.api.model
 
 import android.os.Parcel
@@ -97,7 +102,7 @@ data class Movie(
 
 data class SimilarAndRecommendationMovies(
     @SerializedName("results") val results: List<Movie>?,
-): Parcelable {
+) : Parcelable {
     constructor(parcel: Parcel) : this(parcel.createTypedArrayList(Movie))
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -118,4 +123,3 @@ data class SimilarAndRecommendationMovies(
         }
     }
 }
-

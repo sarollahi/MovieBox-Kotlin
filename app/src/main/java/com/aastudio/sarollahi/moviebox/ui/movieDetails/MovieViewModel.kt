@@ -1,17 +1,25 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.ui.movieDetails
 
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aastudio.sarollahi.api.model.*
+import com.aastudio.sarollahi.api.model.BaseMovie
+import com.aastudio.sarollahi.api.model.Genre
+import com.aastudio.sarollahi.api.model.Language
+import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.model.Person
 import com.aastudio.sarollahi.api.repository.MoviesRepository
 import com.aastudio.sarollahi.moviebox.R
 
 class MovieViewModel(private val application: Application) : ViewModel() {
 
     companion object {
-
     }
 
     val movie = MutableLiveData<Movie>()
@@ -35,7 +43,7 @@ class MovieViewModel(private val application: Application) : ViewModel() {
         this.movie.value = movie
         loading.value = false
 
-        //Get Torrent
+        // Get Torrent
         movie.imdbId?.let {
             MoviesRepository.torrent(
                 it,
@@ -86,7 +94,7 @@ class MovieViewModel(private val application: Application) : ViewModel() {
     fun refactorTime(time: Int): String {
         return if (time != 0) {
             val runtime: String
-            val hours: Int = time / 60 //since both are ints, you get an int
+            val hours: Int = time / 60 // since both are ints, you get an int
             val minutes: Int = time % 60
             runtime = String.format("%d H %02d Min", hours, minutes)
             runtime
