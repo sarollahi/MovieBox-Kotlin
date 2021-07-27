@@ -16,6 +16,8 @@ import com.aastudio.sarollahi.moviebox.databinding.ActivityRootBinding
 import com.google.android.material.navigation.NavigationView
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.koinApplication
 
 class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -78,5 +80,10 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopKoin()
     }
 }

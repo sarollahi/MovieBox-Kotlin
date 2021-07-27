@@ -53,7 +53,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
@@ -83,7 +82,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
@@ -113,7 +111,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
@@ -143,7 +140,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
@@ -257,7 +253,6 @@ object MoviesRepository {
                     call: Call<Person?>,
                     response: Response<Person?>
                 ) {
-                    val a = response
                     if (response.isSuccessful) {
                         val person: Person? = response.body()
                         if (person != null) {

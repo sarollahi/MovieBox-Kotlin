@@ -54,9 +54,6 @@ class RootTopRatedMoviesAdapter(
                 Glide.with(itemView)
                     .load("$IMAGE_ADDRESS${movie.posterPath}")
                     .into(poster)
-                if (!movie.releaseDate.isNullOrEmpty()) {
-                    infoText = movie.releaseDate?.substring(0, 4)
-                }
                 if (!movie.originalLanguage.isNullOrEmpty() && infoText.isNullOrEmpty()) {
                     infoText = movie.originalLanguage?.toUpperCase(Locale.getDefault())
                 } else if (!movie.originalLanguage.isNullOrEmpty() && !infoText.isNullOrEmpty()) {

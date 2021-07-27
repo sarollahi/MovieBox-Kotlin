@@ -102,7 +102,7 @@ class RootMovieFragment : Fragment() {
             RootUpcommingMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
         binding.upcomingMovies.adapter = upcomingMoviesAdapter
 
-        // playing
+        // now playing
         binding.nowPlayingMovies.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -123,14 +123,14 @@ class RootMovieFragment : Fragment() {
         binding.popularMovies.adapter = popularMoviesAdapter
 
         // topRated
-        binding.popularMovies.layoutManager = LinearLayoutManager(
+        binding.topRatedMovies.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
         topRatedMoviesAdapter =
             RootTopRatedMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
-        binding.popularMovies.adapter = topRatedMoviesAdapter
+        binding.topRatedMovies.adapter = topRatedMoviesAdapter
 
         // movie genres
         binding.genres.layoutManager = LinearLayoutManager(
@@ -164,8 +164,10 @@ class RootMovieFragment : Fragment() {
     }
 
     private fun setMovieGenres(genres: List<Genre>) {
-        genreAdapter?.appendGenre(genres)
-        genreAdapter?.notifyDataSetChanged()
+        if (genreAdapter?.itemCount == 0) {
+            genreAdapter?.appendGenre(genres)
+            genreAdapter?.notifyDataSetChanged()
+        }
     }
 
     private fun showMovieDetails(movie: Movie) {

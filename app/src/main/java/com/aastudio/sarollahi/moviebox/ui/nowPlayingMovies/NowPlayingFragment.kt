@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aastudio.sarollahi.api.NOW_PLAYING_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.repository.MoviesRepository
 import com.aastudio.sarollahi.moviebox.R
@@ -51,8 +52,7 @@ class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
         _binding = FragmentNowPlayingMoviesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val placementId = ""
-        nativeAdsManager = NativeAdsManager(activity, placementId, 5)
+        nativeAdsManager = NativeAdsManager(activity, NOW_PLAYING_ADS_PLACEMENT_ID, 5)
         nativeAdsManager?.loadAds()
         nativeAdsManager?.setListener(this)
 

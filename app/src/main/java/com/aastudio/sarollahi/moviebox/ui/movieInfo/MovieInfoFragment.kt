@@ -75,31 +75,59 @@ class MovieInfoFragment : Fragment() {
         castAdapter = CastAdapter(mutableListOf()) { person -> showPersonDetails(person) }
         binding.castRecyclerView.adapter = castAdapter
 
-        binding.directorRecyclerView.layoutManager = layoutManager
+        binding.directorRecyclerView.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         directorAdapter = DirectorAdapter(mutableListOf()) { person -> showPersonDetails(person) }
         binding.directorRecyclerView.adapter = directorAdapter
 
-        binding.writerRecyclerView.layoutManager = layoutManager
+        binding.writerRecyclerView.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         writerAdapter = WriterAdapter(mutableListOf()) { person -> showPersonDetails(person) }
         binding.writerRecyclerView.adapter = writerAdapter
 
-        binding.movieCompany.layoutManager = layoutManager
+        binding.movieCompany.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         companyAdapter = CompanyAdapter(mutableListOf()) {}
         binding.movieCompany.adapter = companyAdapter
 
-        binding.movieCountry.layoutManager = layoutManager
+        binding.movieCountry.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         countryAdapter = CountryAdapter(mutableListOf()) {}
         binding.movieCountry.adapter = countryAdapter
 
-        binding.movieLanguage.layoutManager = layoutManager
+        binding.movieLanguage.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         languageAdapter = LanguageAdapter(mutableListOf()) {}
         binding.movieLanguage.adapter = languageAdapter
 
-        binding.movieRelated.layoutManager = layoutManager
+        binding.movieRelated.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         relatedAdapter = RelatedMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
         binding.movieRelated.adapter = relatedAdapter
 
-        binding.movieRecommended.layoutManager = layoutManager
+        binding.movieRecommended.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
         recommendedAdapter =
             RecommendedMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
         binding.movieRecommended.adapter = recommendedAdapter
@@ -200,12 +228,6 @@ class MovieInfoFragment : Fragment() {
             overViewStatus(arrowDown)
         }
     }
-
-    private val layoutManager = LinearLayoutManager(
-        context,
-        LinearLayoutManager.HORIZONTAL,
-        false
-    )
 
     private fun setVisibility(view: View?) {
         when (view) {

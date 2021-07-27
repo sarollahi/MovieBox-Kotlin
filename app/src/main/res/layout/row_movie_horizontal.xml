@@ -45,5 +45,5 @@
         android:layout_marginBottom="10dp"
         android:textColor="@color/bodyText"
         android:textStyle="bold"
-        tools:text="2020 | EN | 8.5"/>
+        tools:text="EN | 8.5"/>
 </LinearLayout>

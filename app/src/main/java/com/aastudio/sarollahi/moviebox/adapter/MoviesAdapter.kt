@@ -128,9 +128,9 @@ class MoviesAdapter(
                 } else {
                     movie.releaseDate?.let {
                         "${it.substring(0, 4)} | ${
-                        movie.originalLanguage?.toUpperCase(
-                            Locale.getDefault()
-                        )
+                            movie.originalLanguage?.uppercase(
+                                Locale.getDefault()
+                            )
                         }"
                     }
                 }
