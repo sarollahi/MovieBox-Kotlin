@@ -4,9 +4,9 @@
         android:color="@color/darkBackground" />
     <solid android:color="@color/bodyTextBackground" />
     <padding
-        android:bottom="6dp"
-        android:left="6dp"
-        android:right="6dp"
-        android:top="6dp" />
-    <corners android:radius="10dp" />
+        android:bottom="10dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp" />
+    <corners android:radius="3dp" />
 </shape>

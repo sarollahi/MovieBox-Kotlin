@@ -25,8 +25,6 @@ class MovieViewModel(private val application: Application) : ViewModel() {
     val movie = MutableLiveData<Movie>()
     var loading = MutableLiveData<Boolean>()
     val torrentTv = MutableLiveData<List<BaseMovie.Torrent>>()
-    val directorList = MutableLiveData<List<Person>>()
-    val writerList = MutableLiveData<List<Person>>()
     val languageList = MutableLiveData<List<Language>>()
 
     fun getMovieDetails(movieId: Long) {
