@@ -6,13 +6,11 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Images
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowImageBinding
 import com.bumptech.glide.Glide
 
 class GalleryAdapter(
@@ -21,10 +19,8 @@ class GalleryAdapter(
 ) : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_image, parent, false)
-        return GalleryViewHolder(view)
+        val binding = RowImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return GalleryViewHolder(binding)
     }
 
     override fun getItemCount(): Int = gallery.size
@@ -41,8 +37,8 @@ class GalleryAdapter(
         )
     }
 
-    inner class GalleryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val profilePath: ImageView = itemView.findViewById(R.id.image)
+    inner class GalleryViewHolder(itemView: RowImageBinding) : RecyclerView.ViewHolder(itemView.root) {
+        private val profilePath = itemView.image
 
         fun bind(image: Images) {
             if (!image.path.isNullOrEmpty()) {

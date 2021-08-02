@@ -155,7 +155,7 @@ class MovieInfoFragment : Fragment() {
             }
 
             budget?.let {
-                if (it.isNotEmpty() && it != "$0") {
+                if (it.isNotEmpty() && it != "0") {
                     setVisibility(binding.movieBudget)
                     binding.movieBudget.text = it
                 }

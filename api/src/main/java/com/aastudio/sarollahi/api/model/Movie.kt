@@ -20,6 +20,7 @@ data class Movie(
     @SerializedName("poster_path") val posterPath: String?,
     @SerializedName("backdrop_path") val backdropPath: String?,
     @SerializedName("vote_average") val rating: Float?,
+    @SerializedName("vote_count") val voteCount: Int?,
     @SerializedName("release_date") val releaseDate: String?,
     @SerializedName("original_language") val originalLanguage: String?,
     @SerializedName("budget") val budget: String?,
@@ -44,6 +45,7 @@ data class Movie(
         parcel.readString(),
         parcel.readString(),
         parcel.readValue(Float::class.java.classLoader) as? Float,
+        parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -69,6 +71,7 @@ data class Movie(
         parcel.writeString(posterPath)
         parcel.writeString(backdropPath)
         parcel.writeValue(rating)
+        parcel.writeValue(voteCount)
         parcel.writeString(releaseDate)
         parcel.writeString(originalLanguage)
         parcel.writeString(budget)

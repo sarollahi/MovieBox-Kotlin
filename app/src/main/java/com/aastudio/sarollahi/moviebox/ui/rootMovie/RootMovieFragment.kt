@@ -24,6 +24,7 @@ import com.aastudio.sarollahi.moviebox.adapter.RootTopRatedMoviesAdapter
 import com.aastudio.sarollahi.moviebox.adapter.RootUpcommingMoviesAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentRootMovieBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
+import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RootMovieFragment : Fragment() {
@@ -139,7 +140,7 @@ class RootMovieFragment : Fragment() {
             false
         )
         genreAdapter =
-            GenreAdapter(mutableListOf()) { }
+            GenreAdapter(mutableListOf()) { genre -> searchMovies(genre) }
         binding.genres.adapter = genreAdapter
     }
 
@@ -173,6 +174,13 @@ class RootMovieFragment : Fragment() {
     private fun showMovieDetails(movie: Movie) {
         val intent = Intent(context, MovieDetailsActivity::class.java)
         intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.id)
+        startActivity(intent)
+    }
+
+    private fun searchMovies(genre: Genre) {
+        val intent = Intent(context, SearchActivity::class.java)
+        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Movies")
+        intent.putExtra(SearchActivity.GENRE_ID, genre.id)
         startActivity(intent)
     }
 }

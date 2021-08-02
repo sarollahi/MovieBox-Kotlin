@@ -6,13 +6,11 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowPosterBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 
@@ -22,10 +20,8 @@ class RecommendedMoviesAdapter(
 ) : RecyclerView.Adapter<RecommendedMoviesAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_poster, parent, false)
-        return MovieViewHolder(view)
+        val binding = RowPosterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MovieViewHolder(binding)
     }
 
     override fun getItemCount(): Int = movies.size
@@ -42,8 +38,9 @@ class RecommendedMoviesAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val poster: ImageView = itemView.findViewById(R.id.poster)
+    inner class MovieViewHolder(itemView: RowPosterBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
+        private val poster = itemView.poster
 
         fun bind(movie: Movie) {
             if (!movie.posterPath.isNullOrEmpty()) {

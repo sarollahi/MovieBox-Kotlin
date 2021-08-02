@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.POPULAR_ADS_PLACEMENT_ID
@@ -27,8 +26,6 @@ import com.facebook.ads.AdError
 import com.facebook.ads.NativeAdsManager
 
 class PopularMoviesFragment : Fragment(), NativeAdsManager.Listener {
-
-    private lateinit var mPopularMoviesViewModel: PopularMoviesViewModel
     private var _binding: FragmentPopularMoviesBinding? = null
     private var nativeAdsManager: NativeAdsManager? = null
     private lateinit var popularMovies: RecyclerView
@@ -46,17 +43,13 @@ class PopularMoviesFragment : Fragment(), NativeAdsManager.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mPopularMoviesViewModel =
-            ViewModelProvider(this).get(PopularMoviesViewModel::class.java)
-
         _binding = FragmentPopularMoviesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
         nativeAdsManager = NativeAdsManager(activity, POPULAR_ADS_PLACEMENT_ID, 5)
         nativeAdsManager?.loadAds()
         nativeAdsManager?.setListener(this)
 
-        popularMovies = root.findViewById(R.id.popular_movies)
+        popularMovies = binding.popularMovies
 
         popularMoviesLayoutMgr = LinearLayoutManager(
             context,
@@ -65,7 +58,7 @@ class PopularMoviesFragment : Fragment(), NativeAdsManager.Listener {
         )
         popularMovies.layoutManager = popularMoviesLayoutMgr
 
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -81,12 +74,7 @@ class PopularMoviesFragment : Fragment(), NativeAdsManager.Listener {
         )
     }
 
-    private fun onPopularMoviesFetched(movies: List<Movie>) {
-        popularMoviesAdapter.appendMovies(movies)
-        attachPopularMoviesOnScrollListener()
-    }
-
-    private fun attachPopularMoviesOnScrollListener() {
+    private fun attachTopRatedMoviesOnScrollListener() {
         popularMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val totalItemCount = popularMoviesLayoutMgr.itemCount
@@ -100,6 +88,11 @@ class PopularMoviesFragment : Fragment(), NativeAdsManager.Listener {
                 }
             }
         })
+    }
+
+    private fun onPopularMoviesFetched(movies: List<Movie>) {
+        popularMoviesAdapter.appendMovies(movies)
+        attachTopRatedMoviesOnScrollListener()
     }
 
     private fun onError() {

@@ -3,23 +3,25 @@
  * All rights reserved.
  */
 
-package com.aastudio.sarollahi.moviebox.personGallery
+package com.aastudio.sarollahi.moviebox.ui.personGallery
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Person
+import com.aastudio.sarollahi.common.calculateNoOfColumns
 import com.aastudio.sarollahi.moviebox.adapter.GalleryAdapter
-import com.aastudio.sarollahi.moviebox.databinding.FragmentPersonFullWidthGalleryBinding
+import com.aastudio.sarollahi.moviebox.databinding.FragmentPersonGalleryBinding
 
-class PersonFullWidthGalleryFragment : Fragment() {
-    lateinit var binding: FragmentPersonFullWidthGalleryBinding
+class PersonGalleryFragment : Fragment() {
+
+    lateinit var binding: FragmentPersonGalleryBinding
     private var person: Person? = null
-    private var position: Int? = null
     private var personGallery: RecyclerView? = null
     private lateinit var galleryAdapter: GalleryAdapter
 
@@ -28,7 +30,6 @@ class PersonFullWidthGalleryFragment : Fragment() {
 
         arguments?.let {
             person = it.getParcelable(PERSON_GALLERY)
-            position = it.getInt(POSITION)
         }
     }
 
@@ -38,7 +39,7 @@ class PersonFullWidthGalleryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentPersonFullWidthGalleryBinding.inflate(inflater, container, false)
+        binding = FragmentPersonGalleryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -59,22 +60,27 @@ class PersonFullWidthGalleryFragment : Fragment() {
     private fun setUpUI() {
         personGallery = binding.gallery
 
+        val mNoOfColumns: Int = calculateNoOfColumns(requireContext(), 128f)
         personGallery?.setHasFixedSize(true)
-        personGallery?.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        galleryAdapter = GalleryAdapter(mutableListOf()) { _, _ -> }
+        personGallery?.layoutManager = GridLayoutManager(activity, mNoOfColumns)
+        galleryAdapter = GalleryAdapter(mutableListOf()) { _, position ->
+            person?.let {
+                val intent = Intent(requireActivity(), PersonFullWidthGalleryActivity().javaClass)
+                intent.putExtra("person", it)
+                intent.putExtra("pos", position)
+                startActivity(intent)
+            }
+        }
         personGallery?.adapter = galleryAdapter
-        position?.let { personGallery?.findViewHolderForAdapterPosition(it)?.itemView?.performClick() }
     }
 
     companion object {
         private const val PERSON_GALLERY = "personGallery"
-        private const val POSITION = "position"
 
-        fun newInstance(person: Person, position: Int): PersonGalleryFragment {
+        fun newInstance(person: Person): PersonGalleryFragment {
             val fragment = PersonGalleryFragment()
             val args = Bundle()
             args.putParcelable(PERSON_GALLERY, person)
-            args.putInt(POSITION, position)
             fragment.arguments = args
             return fragment
         }

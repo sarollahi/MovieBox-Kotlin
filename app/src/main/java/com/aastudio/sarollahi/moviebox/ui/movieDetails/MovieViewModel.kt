@@ -13,7 +13,6 @@ import com.aastudio.sarollahi.api.model.BaseMovie
 import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.Language
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.model.Person
 import com.aastudio.sarollahi.api.repository.MoviesRepository
 import com.aastudio.sarollahi.moviebox.R
 

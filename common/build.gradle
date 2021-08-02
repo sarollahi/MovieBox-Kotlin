@@ -83,7 +83,6 @@ dependencies {
     api("com.google.android.exoplayer:extension-ima:$exoplayerVersion") {
         exclude module: 'support-v4'
     }
-    api 'com.google.android.exoplayer:exoplayer:2.14.0'
 
     // OpenSubtitles
     api "com.github.masterwok:open-subtitles-android:$openSubtitlesVersion"

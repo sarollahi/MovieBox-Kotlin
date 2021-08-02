@@ -6,12 +6,11 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.BaseMovie
 import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowMovieQualityBinding
 
 class QualityAdapter(
     private var movie: MutableList<BaseMovie.Torrent>,
@@ -19,10 +18,9 @@ class QualityAdapter(
 ) : RecyclerView.Adapter<QualityAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_movie_quality, parent, false)
-        return MovieViewHolder(view)
+        val binding =
+            RowMovieQualityBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MovieViewHolder(binding)
     }
 
     override fun getItemCount(): Int = movie.size
@@ -39,12 +37,18 @@ class QualityAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var quality: TextView = itemView.findViewById(R.id.qualityText)
+    inner class MovieViewHolder(itemView: RowMovieQualityBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
+        private var quality = itemView.qualityText
 
         fun bind(movie: BaseMovie.Torrent) {
-            quality.text = "${movie.type} ${movie.quality}"
+            reuse()
+            quality.text = itemView.context.getString(R.string.quality, movie.type, movie.quality)
             itemView.setOnClickListener { onCastClick.invoke(movie) }
+        }
+
+        private fun reuse() {
+            quality.text = ""
         }
     }
 }

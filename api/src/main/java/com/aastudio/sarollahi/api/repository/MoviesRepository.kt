@@ -156,6 +156,37 @@ object MoviesRepository {
             })
     }
 
+    fun findMoviesByGenre(
+        page: Int = 1,
+        sort: String,
+        id: Int,
+        onSuccess: (movies: List<Movie>) -> Unit,
+        onError: () -> Unit
+    ) {
+        TMDB_API.findMoviesByGenre(page = page, sortBy = sort, genreId = id)
+            .enqueue(object : Callback<GetMoviesResponse> {
+                override fun onResponse(
+                    call: Call<GetMoviesResponse>,
+                    response: Response<GetMoviesResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            onSuccess.invoke(responseBody.movies)
+                        } else {
+                            onError.invoke()
+                        }
+                    } else {
+                        onError.invoke()
+                    }
+                }
+
+                override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
+                    onError.invoke()
+                }
+            })
+    }
+
     fun getMovieDetails(
         id: Long,
         onSuccess: (movies: Movie) -> Unit,
@@ -314,7 +345,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
@@ -344,7 +374,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
@@ -374,7 +403,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
@@ -404,7 +432,6 @@ object MoviesRepository {
                 ) {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
-
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody)
                         } else {

@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
@@ -28,6 +29,7 @@ import com.aastudio.sarollahi.moviebox.databinding.ActivityMovieDetailsBinding
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_TITLE
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_URL
+import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.tabs.TabLayout
@@ -97,7 +99,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                     LinearLayoutManager.HORIZONTAL,
                     false
                 )
-                val genreAdapter = GenreAdapter(mutableListOf()) {}
+                val genreAdapter = GenreAdapter(mutableListOf()) { genre -> searchMovies(genre) }
                 binding.movieGenre.adapter = genreAdapter
                 movie.genre?.let {
                     if (it.isNotEmpty() && genreAdapter.itemCount == 0) {
@@ -195,5 +197,12 @@ class MovieDetailsActivity : AppCompatActivity() {
             interpolator = OvershootInterpolator()
             start()
         }
+    }
+
+    private fun searchMovies(genre: Genre) {
+        val intent = Intent(this, SearchActivity::class.java)
+        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Movies")
+        intent.putExtra(SearchActivity.GENRE_ID, genre.id)
+        startActivity(intent)
     }
 }

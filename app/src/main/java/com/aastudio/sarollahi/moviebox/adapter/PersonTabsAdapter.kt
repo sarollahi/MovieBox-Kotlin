@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.moviebox.personGallery.PersonGalleryFragment
+import com.aastudio.sarollahi.moviebox.ui.personGallery.PersonGalleryFragment
 import com.aastudio.sarollahi.moviebox.ui.personInfo.PersonInfoFragment
 
 @Suppress("DEPRECATION")

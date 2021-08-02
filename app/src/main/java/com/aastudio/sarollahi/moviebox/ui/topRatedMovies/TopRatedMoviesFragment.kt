@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.TOP_RATED_ADS_PLACEMENT_ID
@@ -28,7 +27,6 @@ import com.facebook.ads.NativeAdsManager
 
 class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
 
-    private lateinit var homeViewModel: TopRatedMoviesViewModel
     private var _binding: FragmentTopRatedMoviesBinding? = null
     private var nativeAdsManager: NativeAdsManager? = null
     private lateinit var topRatedMovies: RecyclerView
@@ -46,9 +44,6 @@ class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        homeViewModel =
-            ViewModelProvider(this).get(TopRatedMoviesViewModel::class.java)
-
         _binding = FragmentTopRatedMoviesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 

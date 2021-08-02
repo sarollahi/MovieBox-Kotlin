@@ -17,7 +17,6 @@ import com.google.android.material.navigation.NavigationView
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.dsl.koinApplication
 
 class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 

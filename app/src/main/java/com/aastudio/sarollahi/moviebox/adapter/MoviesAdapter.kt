@@ -10,19 +10,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.NativeAdsUnitBinding
+import com.aastudio.sarollahi.moviebox.databinding.RowMovieVerticalBinding
 import com.bumptech.glide.Glide
 import com.facebook.ads.AdOptionsView
-import com.facebook.ads.MediaView
 import com.facebook.ads.NativeAd
-import com.facebook.ads.NativeAdLayout
 import com.facebook.ads.NativeAdsManager
 import java.util.Locale
 
@@ -41,15 +37,13 @@ class MoviesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == AD_TYPE && adResponce) {
-            val view =
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.native_ads_unit, parent, false) as NativeAdLayout
-            AdHolder(view)
+            val binding =
+                NativeAdsUnitBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            AdHolder(binding)
         } else {
-            val view = LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.row_movie_vertical, parent, false)
-            MovieViewHolder(view)
+            val binding =
+                RowMovieVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            MovieViewHolder(binding)
         }
     }
 
@@ -85,7 +79,7 @@ class MoviesAdapter(
                 adHolder.btnAdCallToAction.text = nonNullAd.adCallToAction
                 adHolder.btnAdCallToAction.visibility =
                     if (nonNullAd.hasCallToAction()) View.VISIBLE else View.INVISIBLE
-                val adOptionsView = AdOptionsView(activity, nonNullAd, adHolder.nativeAdLayout)
+                val adOptionsView = AdOptionsView(activity, nonNullAd, adHolder.nativeAdLayout.root)
                 adHolder.adChoicesContainer.addView(adOptionsView, 0)
 
                 val clickableViews = ArrayList<View>()
@@ -93,7 +87,10 @@ class MoviesAdapter(
                 clickableViews.add(adHolder.mvAdMedia)
                 clickableViews.add(adHolder.btnAdCallToAction)
                 nonNullAd.registerViewForInteraction(
-                    adHolder.nativeAdLayout, adHolder.mvAdMedia, adHolder.ivAdIcon, clickableViews
+                    adHolder.nativeAdLayout.root,
+                    adHolder.mvAdMedia,
+                    adHolder.ivAdIcon,
+                    clickableViews
                 )
             }
         } else {
@@ -111,15 +108,17 @@ class MoviesAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val poster: ImageView = itemView.findViewById(R.id.moviePoster)
-        private var title: TextView = itemView.findViewById(R.id.movieTitle)
-        private var release: TextView = itemView.findViewById(R.id.movieRelease)
-        private var overview: TextView = itemView.findViewById(R.id.movieOverview)
-        private var ratingNumber: TextView = itemView.findViewById(R.id.movieRating)
+    inner class MovieViewHolder(itemView: RowMovieVerticalBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
+        private val poster = itemView.moviePoster
+        private var title = itemView.movieTitle
+        private var release = itemView.movieRelease
+        private var overview = itemView.movieOverview
+        private var ratingNumber = itemView.movieRating
 
         fun bind(movie: Movie) {
             if (!movie.posterPath.isNullOrEmpty()) {
+                reuse()
                 Glide.with(itemView)
                     .load("$IMAGE_ADDRESS${movie.posterPath}")
                     .into(poster)
@@ -128,9 +127,9 @@ class MoviesAdapter(
                 } else {
                     movie.releaseDate?.let {
                         "${it.substring(0, 4)} | ${
-                            movie.originalLanguage?.uppercase(
-                                Locale.getDefault()
-                            )
+                        movie.originalLanguage?.uppercase(
+                            Locale.getDefault()
+                        )
                         }"
                     }
                 }
@@ -140,23 +139,25 @@ class MoviesAdapter(
                 itemView.setOnClickListener { onMovieClick.invoke(movie) }
             }
         }
+
+        private fun reuse() {
+            title.text = ""
+            release.text = ""
+            overview.text = ""
+            ratingNumber.text = ""
+        }
     }
 
-    private class AdHolder(var nativeAdLayout: NativeAdLayout) :
-        RecyclerView.ViewHolder(nativeAdLayout) {
-        var mvAdMedia: MediaView =
-            nativeAdLayout.findViewById(R.id.native_ad_media)
-        var ivAdIcon: MediaView = nativeAdLayout.findViewById(R.id.native_ad_icon)
-        var tvAdTitle: TextView = nativeAdLayout.findViewById(R.id.native_ad_title)
-        var tvAdBody: TextView = nativeAdLayout.findViewById(R.id.native_ad_body)
-        var tvAdSocialContext: TextView =
-            nativeAdLayout.findViewById(R.id.native_ad_social_context)
-        var tvAdSponsoredLabel: TextView =
-            nativeAdLayout.findViewById(R.id.native_ad_sponsored_label)
-        var btnAdCallToAction: Button =
-            nativeAdLayout.findViewById(R.id.native_ad_call_to_action)
-        var adChoicesContainer: LinearLayout =
-            nativeAdLayout.findViewById(R.id.ad_choices_container)
+    private class AdHolder(var nativeAdLayout: NativeAdsUnitBinding) :
+        RecyclerView.ViewHolder(nativeAdLayout.root) {
+        var mvAdMedia = nativeAdLayout.nativeAdMedia
+        var ivAdIcon = nativeAdLayout.nativeAdIcon
+        var tvAdTitle = nativeAdLayout.nativeAdTitle
+        var tvAdBody = nativeAdLayout.nativeAdBody
+        var tvAdSocialContext = nativeAdLayout.nativeAdSocialContext
+        var tvAdSponsoredLabel = nativeAdLayout.nativeAdSponsoredLabel
+        var btnAdCallToAction = nativeAdLayout.nativeAdCallToAction
+        var adChoicesContainer = nativeAdLayout.adChoicesContainer
     }
 
     companion object {

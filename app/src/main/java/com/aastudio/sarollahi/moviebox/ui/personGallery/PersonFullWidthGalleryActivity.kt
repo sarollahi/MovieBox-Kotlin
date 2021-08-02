@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.aastudio.sarollahi.moviebox.personGallery
+package com.aastudio.sarollahi.moviebox.ui.personGallery
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

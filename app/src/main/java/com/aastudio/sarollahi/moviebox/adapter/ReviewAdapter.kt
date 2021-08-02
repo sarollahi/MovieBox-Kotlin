@@ -41,8 +41,14 @@ class ReviewAdapter(
         private var reviewText: TextView = itemBinding.reviewText
 
         fun bind(review: Review) {
+            reuse()
             authorName.text = review.name
             reviewText.text = review.review
+        }
+
+        private fun reuse() {
+            authorName.text = ""
+            reviewText.text = ""
         }
     }
 }

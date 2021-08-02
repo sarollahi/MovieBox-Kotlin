@@ -48,6 +48,14 @@ interface TmdbApi {
         @Query("append_to_response") append_to_response: String = "external_ids,credits,reviews,similar,recommendations"
     ): Call<Movie>
 
+    @GET("discover/movie")
+    fun findMoviesByGenre(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("sort_by") sortBy: String,
+        @Query("with_genres") genreId: Int,
+        @Query("page") page: Int
+    ): Call<GetMoviesResponse>
+
     @GET("genre/movie/list")
     fun getMovieGenres(
         @Query("api_key") apiKey: String = API_KEY

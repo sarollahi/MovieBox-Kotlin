@@ -6,28 +6,24 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Language
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class LanguageAdapter(
     private var language: MutableList<Language>,
     private val onCastClick: (language: Language) -> Unit
-) : RecyclerView.Adapter<LanguageAdapter.MovieViewHolder>() {
+) : RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_text, parent, false)
-        return MovieViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageViewHolder {
+        val binding = RowTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return LanguageViewHolder(binding)
     }
 
     override fun getItemCount(): Int = language.size
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: LanguageViewHolder, position: Int) {
         holder.bind(language[position])
     }
 
@@ -39,17 +35,18 @@ class LanguageAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var name: TextView = itemView.findViewById(R.id.generalText)
+    inner class LanguageViewHolder(itemView: RowTextBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
+        private var language = itemView.generalText
 
         fun bind(language: Language) {
             readyToReuse()
-            name.text = language.name
+            this.language.text = language.name
             itemView.setOnClickListener { onCastClick.invoke(language) }
         }
 
         private fun readyToReuse() {
-            name.text = ""
+            this.language.text = ""
         }
     }
 }

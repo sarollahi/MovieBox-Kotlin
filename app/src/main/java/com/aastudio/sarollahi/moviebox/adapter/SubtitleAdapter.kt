@@ -6,11 +6,9 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowSubtitleBinding
 import com.masterwok.opensubtitlesandroid.models.OpenSubtitleItem
 
 class SubtitleAdapter(
@@ -19,10 +17,8 @@ class SubtitleAdapter(
 ) : RecyclerView.Adapter<SubtitleAdapter.SubtitleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubtitleViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_subtitle, parent, false)
-        return SubtitleViewHolder(view)
+        val binding = RowSubtitleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SubtitleViewHolder(binding)
     }
 
     override fun getItemCount(): Int = subtitleList.size
@@ -31,16 +27,23 @@ class SubtitleAdapter(
         holder.bind(subtitleList[position])
     }
 
-    inner class SubtitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var movieSubName: TextView = itemView.findViewById(R.id.movieSubName)
-        private var movieSubLanguage: TextView = itemView.findViewById(R.id.movieSubLanguage)
+    inner class SubtitleViewHolder(itemView: RowSubtitleBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
+        private var movieSubName = itemView.movieSubName
+        private var movieSubLanguage = itemView.movieSubLanguage
 
         fun bind(item: OpenSubtitleItem) = with(itemView) {
+            reuse()
             movieSubName.text = item.SubFileName
             movieSubLanguage.text = item.LanguageName
             setOnClickListener {
                 itemView.setOnClickListener { onCastClick.invoke(item) }
             }
+        }
+
+        private fun reuse() {
+            movieSubName.text = ""
+            movieSubLanguage.text = ""
         }
     }
 }

@@ -6,28 +6,24 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Company
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class CompanyAdapter(
     private var company: MutableList<Company>,
     private val onCastClick: (company: Company) -> Unit
-) : RecyclerView.Adapter<CompanyAdapter.MovieViewHolder>() {
+) : RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_text, parent, false)
-        return MovieViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
+        val binding = RowTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CompanyViewHolder(binding)
     }
 
     override fun getItemCount(): Int = company.size
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CompanyViewHolder, position: Int) {
         holder.bind(company[position])
     }
 
@@ -39,12 +35,18 @@ class CompanyAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var name: TextView = itemView.findViewById(R.id.generalText)
+    inner class CompanyViewHolder(itemView: RowTextBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
+        private var company = itemView.generalText
 
         fun bind(company: Company) {
-            name.text = company.name
+            reuse()
+            this.company.text = company.name
             itemView.setOnClickListener { onCastClick.invoke(company) }
+        }
+
+        private fun reuse() {
+            this.company.text = ""
         }
     }
 }

@@ -67,7 +67,7 @@
                 android:paddingHorizontal="7dp"
                 android:paddingVertical="2dp"
                 android:visibility="gone"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>

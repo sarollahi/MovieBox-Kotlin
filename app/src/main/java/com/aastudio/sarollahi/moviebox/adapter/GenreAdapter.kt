@@ -6,12 +6,10 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Genre
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class GenreAdapter(
     private var genre: MutableList<Genre>,
@@ -19,10 +17,8 @@ class GenreAdapter(
 ) : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_text, parent, false)
-        return GenreViewHolder(view)
+        val binding = RowTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return GenreViewHolder(binding)
     }
 
     override fun getItemCount(): Int = genre.size
@@ -39,12 +35,17 @@ class GenreAdapter(
         )
     }
 
-    inner class GenreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var name: TextView = itemView.findViewById(R.id.generalText)
+    inner class GenreViewHolder(itemView: RowTextBinding) : RecyclerView.ViewHolder(itemView.root) {
+        private var genre = itemView.generalText
 
         fun bind(genre: Genre) {
-            name.text = genre.name
+            reuse()
+            this.genre.text = genre.name
             itemView.setOnClickListener { onCastClick.invoke(genre) }
+        }
+
+        private fun reuse() {
+            this.genre.text = ""
         }
     }
 }

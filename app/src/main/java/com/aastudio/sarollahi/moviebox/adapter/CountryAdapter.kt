@@ -6,28 +6,24 @@
 package com.aastudio.sarollahi.moviebox.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Country
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class CountryAdapter(
     private var country: MutableList<Country>,
     private val onCastClick: (country: Country) -> Unit
-) : RecyclerView.Adapter<CountryAdapter.MovieViewHolder>() {
+) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_text, parent, false)
-        return MovieViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
+        val binding = RowTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CountryViewHolder(binding)
     }
 
     override fun getItemCount(): Int = country.size
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
         holder.bind(country[position])
     }
 
@@ -39,12 +35,17 @@ class CountryAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var name: TextView = itemView.findViewById(R.id.generalText)
+    inner class CountryViewHolder(itemView: RowTextBinding) : RecyclerView.ViewHolder(itemView.root) {
+        private var country = itemView.generalText
 
         fun bind(country: Country) {
-            name.text = country.name
+            reuse()
+            this.country.text = country.name
             itemView.setOnClickListener { onCastClick.invoke(country) }
+        }
+
+        private fun reuse() {
+            this.country.text = ""
         }
     }
 }
