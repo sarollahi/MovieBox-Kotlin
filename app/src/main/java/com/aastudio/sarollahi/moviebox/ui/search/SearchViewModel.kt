@@ -10,15 +10,17 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.MoviesRepository
+import com.aastudio.sarollahi.api.repository.Repository
+import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import com.aastudio.sarollahi.moviebox.R
+import retrofit2.Call
 
 class SearchViewModel(private val application: Application) : ViewModel() {
 
     val moviesList = MutableLiveData<List<Movie>>()
 
     fun findMovies(page: Int, sort: String, id: Int) {
-        MoviesRepository.findMoviesByGenre(
+        Repository.findMoviesByGenre(
             page,
             sort,
             id,
@@ -31,7 +33,7 @@ class SearchViewModel(private val application: Application) : ViewModel() {
         moviesList.value = movies
     }
 
-    private fun onError() {
+    private fun onError(call: Call<GetMoviesResponse>, error: String) {
         Toast.makeText(
             application.applicationContext,
             application.applicationContext.getString(R.string.error_fetch_movies),

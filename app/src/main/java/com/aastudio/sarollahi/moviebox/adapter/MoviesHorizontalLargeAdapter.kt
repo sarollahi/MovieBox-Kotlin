@@ -18,10 +18,10 @@ import com.aastudio.sarollahi.moviebox.databinding.RowMovieHorizontalLargeBindin
 import com.bumptech.glide.Glide
 import java.util.Locale
 
-class RootUpcommingMoviesAdapter(
+class MoviesHorizontalLargeAdapter(
     private var movies: MutableList<Movie>,
     private val onMovieClick: (movie: Movie) -> Unit
-) : RecyclerView.Adapter<RootUpcommingMoviesAdapter.MovieViewHolder>() {
+) : RecyclerView.Adapter<MoviesHorizontalLargeAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = RowMovieHorizontalLargeBinding.inflate(

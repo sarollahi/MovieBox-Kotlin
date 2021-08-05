@@ -5,6 +5,8 @@
     <string name="nav_header_subtitle">moviebox@sarollahi.ir</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="region">region</string>
+    <string name="default_region">us</string>
 
     <string name="upcoming">Upcoming</string>
     <string name="now_playing">Now Playing</string>

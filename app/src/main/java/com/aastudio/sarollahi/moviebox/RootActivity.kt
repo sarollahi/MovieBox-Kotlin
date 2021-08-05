@@ -12,7 +12,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.aastudio.sarollahi.moviebox.databinding.ActivityRootBinding
+import com.aastudio.sarollahi.moviebox.ui.rootMovie.RootMovieFragment
+import com.aastudio.sarollahi.moviebox.ui.rootTV.RootTVFragment
 import com.google.android.material.navigation.NavigationView
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -78,7 +82,56 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val fragment: Fragment
+        val fragmentManager = supportFragmentManager
+        when (item.itemId) {
+            R.id.nav_movies -> {
+                fragment = RootMovieFragment()
+                fragmentManager.commit {
+                    this.replace(
+                        binding.appBarMain.contentMain.navHostFragmentContentMain.id,
+                        fragment
+                    )
+                }
+                drawerLayout?.closeDrawer(GravityCompat.START)
+            }
+            R.id.nav_tv_shows -> {
+                fragment = RootTVFragment()
+                fragmentManager.commit {
+                    this.replace(
+                        binding.appBarMain.contentMain.navHostFragmentContentMain.id,
+                        fragment
+                    )
+                }
+                drawerLayout?.closeDrawer(GravityCompat.START)
+            }
+            R.id.nav_music_videos -> {
+            }
+            R.id.nav_wish -> {
+            }
+            R.id.nav_download -> {
+            }
+            R.id.nav_updates -> {
+            }
+            R.id.nav_br -> {
+            }
+            R.id.nav_contact -> {
+            }
+            R.id.nav_about -> {
+            }
+        }
         return true
+    }
+
+    override fun onBackPressed() {
+        val drawer: DrawerLayout = binding.drawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onDestroy() {

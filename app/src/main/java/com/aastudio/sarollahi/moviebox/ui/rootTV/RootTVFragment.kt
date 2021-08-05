@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.aastudio.sarollahi.moviebox.ui.rootMovie
+package com.aastudio.sarollahi.moviebox.ui.rootTV
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,26 +15,26 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aastudio.sarollahi.api.model.Genre
-import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.common.network.NetworkUtils
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
-import com.aastudio.sarollahi.moviebox.adapter.MoviesHorizontalLargeAdapter
-import com.aastudio.sarollahi.moviebox.adapter.MoviesHorizontalSmallAdapter
+import com.aastudio.sarollahi.moviebox.adapter.TVHorizontalLargeAdapter
+import com.aastudio.sarollahi.moviebox.adapter.TVHorizontalSmallAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentRootMovieBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class RootMovieFragment : Fragment() {
+class RootTVFragment : Fragment() {
 
-    private val viewModel by viewModel<RootMovieViewModel>()
+    private val viewModel by viewModel<RootTVViewModel>()
     private lateinit var binding: FragmentRootMovieBinding
-    private var upcomingMoviesAdapter: MoviesHorizontalLargeAdapter? = null
-    private var playingMoviesAdapter: MoviesHorizontalSmallAdapter? = null
-    private var popularMoviesAdapter: MoviesHorizontalSmallAdapter? = null
-    private var topRatedMoviesAdapter: MoviesHorizontalSmallAdapter? = null
+    private var upcomingShowsAdapter: TVHorizontalLargeAdapter? = null
+    private var playingShowsAdapter: TVHorizontalSmallAdapter? = null
+    private var popularShowsAdapter: TVHorizontalSmallAdapter? = null
+    private var topRatedShowsAdapter: TVHorizontalSmallAdapter? = null
     private var genreAdapter: GenreAdapter? = null
 
     override fun onCreateView(
@@ -47,7 +47,7 @@ class RootMovieFragment : Fragment() {
 
         if (NetworkUtils.checkIsOnline(requireContext())) {
             viewModel.apply {
-                getMovies(requireContext())
+                getShows(requireContext())
                 getGenres()
             }
         } else {
@@ -57,7 +57,7 @@ class RootMovieFragment : Fragment() {
                 if (NetworkUtils.checkIsOnline(requireContext())) {
                     viewModel.apply {
                         binding.networkError.errorContainer.visibility = View.GONE
-                        getMovies(requireContext())
+                        getShows(requireContext())
                         getGenres()
                     }
                 } else {
@@ -75,30 +75,30 @@ class RootMovieFragment : Fragment() {
             observe(upcomingList) {
                 if (it.isNotEmpty()) {
                     binding.upcommingLoading.visibility = View.GONE
-                    setUpcomingMovies(it)
+                    setUpcomingShows(it)
                 }
             }
             observe(nowPlayingList) {
                 if (it.isNotEmpty()) {
                     binding.nowPlayingLoading.visibility = View.GONE
-                    setPlayingMovies(it)
+                    setPlayingShows(it)
                 }
             }
             observe(popularList) {
                 if (it.isNotEmpty()) {
                     binding.popularLoading.visibility = View.GONE
-                    setPopularMovies(it)
+                    setPopularShows(it)
                 }
             }
             observe(topRatedList) {
                 if (it.isNotEmpty()) {
                     binding.topRatedLoading.visibility = View.GONE
-                    setTopRatedMovies(it)
+                    setTopRatedShows(it)
                 }
             }
             observe(movieGenres) {
                 if (it.isNotEmpty()) {
-                    setMovieGenres(it)
+                    setShowGenres(it)
                 }
             }
         }
@@ -126,9 +126,9 @@ class RootMovieFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        upcomingMoviesAdapter =
-            MoviesHorizontalLargeAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
-        binding.upcomingMovies.adapter = upcomingMoviesAdapter
+        upcomingShowsAdapter =
+            TVHorizontalLargeAdapter(mutableListOf()) { show -> showShowDetails(show) }
+        binding.upcomingMovies.adapter = upcomingShowsAdapter
 
         // now playing
         binding.nowPlayingMovies.layoutManager = LinearLayoutManager(
@@ -136,9 +136,9 @@ class RootMovieFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        playingMoviesAdapter =
-            MoviesHorizontalSmallAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
-        binding.nowPlayingMovies.adapter = playingMoviesAdapter
+        playingShowsAdapter =
+            TVHorizontalSmallAdapter(mutableListOf()) { show -> showShowDetails(show) }
+        binding.nowPlayingMovies.adapter = playingShowsAdapter
 
         // popular
         binding.popularMovies.layoutManager = LinearLayoutManager(
@@ -146,19 +146,19 @@ class RootMovieFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        popularMoviesAdapter =
-            MoviesHorizontalSmallAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
-        binding.popularMovies.adapter = popularMoviesAdapter
-
+        popularShowsAdapter =
+            TVHorizontalSmallAdapter(mutableListOf()) { show -> showShowDetails(show) }
+        binding.popularMovies.adapter = popularShowsAdapter
+//
         // topRated
         binding.topRatedMovies.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        topRatedMoviesAdapter =
-            MoviesHorizontalSmallAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
-        binding.topRatedMovies.adapter = topRatedMoviesAdapter
+        topRatedShowsAdapter =
+            TVHorizontalSmallAdapter(mutableListOf()) { show -> showShowDetails(show) }
+        binding.topRatedMovies.adapter = topRatedShowsAdapter
 
         // movie genres
         binding.genres.layoutManager = LinearLayoutManager(
@@ -167,46 +167,46 @@ class RootMovieFragment : Fragment() {
             false
         )
         genreAdapter =
-            GenreAdapter(mutableListOf()) { genre -> searchMovies(genre) }
+            GenreAdapter(mutableListOf()) { genre -> searchShows(genre) }
         binding.genres.adapter = genreAdapter
     }
 
-    private fun setUpcomingMovies(movies: List<Movie>) {
-        upcomingMoviesAdapter?.appendMovies(movies)
-        upcomingMoviesAdapter?.notifyDataSetChanged()
+    private fun setUpcomingShows(shows: List<TVShow>) {
+        upcomingShowsAdapter?.appendShows(shows)
+        upcomingShowsAdapter?.notifyDataSetChanged()
     }
 
-    private fun setPlayingMovies(movies: List<Movie>) {
-        playingMoviesAdapter?.appendMovies(movies)
-        playingMoviesAdapter?.notifyDataSetChanged()
+    private fun setPlayingShows(shows: List<TVShow>) {
+        playingShowsAdapter?.appendShows(shows)
+        playingShowsAdapter?.notifyDataSetChanged()
     }
 
-    private fun setPopularMovies(movies: List<Movie>) {
-        popularMoviesAdapter?.appendMovies(movies)
-        popularMoviesAdapter?.notifyDataSetChanged()
+    private fun setPopularShows(shows: List<TVShow>) {
+        popularShowsAdapter?.appendShows(shows)
+        popularShowsAdapter?.notifyDataSetChanged()
     }
 
-    private fun setTopRatedMovies(movies: List<Movie>) {
-        topRatedMoviesAdapter?.appendMovies(movies)
-        topRatedMoviesAdapter?.notifyDataSetChanged()
+    private fun setTopRatedShows(shows: List<TVShow>) {
+        topRatedShowsAdapter?.appendShows(shows)
+        topRatedShowsAdapter?.notifyDataSetChanged()
     }
 
-    private fun setMovieGenres(genres: List<Genre>) {
+    private fun setShowGenres(genres: List<Genre>) {
         if (genreAdapter?.itemCount == 0) {
             genreAdapter?.appendGenre(genres)
             genreAdapter?.notifyDataSetChanged()
         }
     }
 
-    private fun showMovieDetails(movie: Movie) {
+    private fun showShowDetails(show: TVShow) {
         val intent = Intent(context, MovieDetailsActivity::class.java)
-        intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.id)
+        intent.putExtra(MovieDetailsActivity.MOVIE_ID, show.id)
         startActivity(intent)
     }
 
-    private fun searchMovies(genre: Genre) {
+    private fun searchShows(genre: Genre) {
         val intent = Intent(context, SearchActivity::class.java)
-        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Movies")
+        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Shows")
         intent.putExtra(SearchActivity.GENRE_ID, genre.id)
         startActivity(intent)
     }

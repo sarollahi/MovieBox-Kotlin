@@ -8,6 +8,7 @@
     <color name="cardBackground">#32404D</color>
     <color name="veryDarkGrayishBlue">#485460</color>
     <color name="playerBackground">#99171717</color>
+    <color name="color_error">#fa0000</color>
 
 
     <color name="purple_200">#FFBB86FC</color>

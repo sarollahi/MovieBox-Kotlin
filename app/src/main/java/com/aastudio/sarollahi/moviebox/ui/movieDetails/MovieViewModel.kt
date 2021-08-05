@@ -13,8 +13,9 @@ import com.aastudio.sarollahi.api.model.BaseMovie
 import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.Language
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.MoviesRepository
+import com.aastudio.sarollahi.api.repository.Repository
 import com.aastudio.sarollahi.moviebox.R
+import retrofit2.Call
 
 class MovieViewModel(private val application: Application) : ViewModel() {
 
@@ -27,7 +28,7 @@ class MovieViewModel(private val application: Application) : ViewModel() {
     val languageList = MutableLiveData<List<Language>>()
 
     fun getMovieDetails(movieId: Long) {
-        MoviesRepository.getMovieDetails(
+        Repository.getMovieDetails(
             movieId,
             ::onMovieDetailsFetched,
             ::onError
@@ -42,7 +43,7 @@ class MovieViewModel(private val application: Application) : ViewModel() {
 
         // Get Torrent
         movie.imdbId?.let {
-            MoviesRepository.torrent(
+            Repository.torrent(
                 it,
                 ::onMovieTorrentsFetched,
                 ::onTorrentError
@@ -58,7 +59,7 @@ class MovieViewModel(private val application: Application) : ViewModel() {
         }
     }
 
-    private fun onError() {
+    private fun onError(call: Call<Movie>, error: String) {
         Toast.makeText(
             application.applicationContext,
             application.applicationContext.getString(R.string.error_fetch_movies),

@@ -5,14 +5,38 @@
 
 package com.aastudio.sarollahi.moviebox.ui.nowPlayingMovies
 
-import androidx.lifecycle.LiveData
+import android.app.Application
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.repository.Repository
+import com.aastudio.sarollahi.api.response.GetMoviesResponse
+import retrofit2.Call
 
-class NowPlayingViewModel : ViewModel() {
+class NowPlayingViewModel(private val application: Application) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
+    val nowPlayingList = MutableLiveData<List<Movie>>()
+
+    fun getMovies(context: Context, page: Int) {
+        Repository.getNowPlayingMovies(
+            page,
+            "us",
+            ::onNowPlayingMoviesFetched,
+            ::onMovieError
+        )
     }
-    val text: LiveData<String> = _text
+
+    private fun onNowPlayingMoviesFetched(playingMovies: List<Movie>) {
+        nowPlayingList.value = playingMovies
+    }
+
+    private fun onMovieError(call: Call<GetMoviesResponse>, error: String) {
+        Toast.makeText(
+            application.applicationContext,
+            error,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }

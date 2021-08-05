@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/errorContainer"
+        android:visibility="gone"
+        android:background="@color/darkBlue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/errorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/errorContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/errorTitleTv"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/request_view_error_title_margin_bottom"
+                    android:layout_marginEnd="@dimen/request_view_error_text_margin_horizontal"
+                    android:layout_marginStart="@dimen/request_view_error_text_margin_horizontal"
+                    android:gravity="center"
+                    android:text="@string/error_message_general"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/errorImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_error_no_internet_connection"
+                    android:layout_marginBottom="@dimen/request_view_error_icon_bottom_margin" />
+
+                <TextView
+                    android:id="@+id/errorMessageTv"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_message_network"
+                    android:layout_marginBottom="@dimen/request_view_error_bottom_margin"
+                    android:layout_marginEnd="@dimen/request_view_error_text_margin_horizontal"
+                    android:layout_marginStart="@dimen/request_view_error_text_margin_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+
+                <include
+                    android:id="@+id/retryLayout"
+                    layout="@layout/retry_view_layout" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <ProgressBar
+            android:id="@+id/loadingPb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>

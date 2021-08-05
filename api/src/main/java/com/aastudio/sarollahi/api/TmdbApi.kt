@@ -20,25 +20,29 @@ interface TmdbApi {
     @GET("movie/popular")
     fun getPopularMovies(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetMoviesResponse>
 
     @GET("movie/top_rated")
     fun getTopRatedMovies(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetMoviesResponse>
 
     @GET("movie/upcoming")
     fun getUpcomingMovies(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetMoviesResponse>
 
     @GET("movie/now_playing")
     fun getNowPlayingMovies(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetMoviesResponse>
 
     @GET("movie/{movieId}")
@@ -65,25 +69,29 @@ interface TmdbApi {
     @GET("tv/popular")
     fun getPopularTVShows(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetTVShowResponse>
 
     @GET("tv/top_rated")
     fun getTopRatedTVShows(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetTVShowResponse>
 
     @GET("tv/on_the_air")
     fun getUpcomingTVShows(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetTVShowResponse>
 
     @GET("tv/airing_today")
     fun getNowPlayingTVShows(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("region") region: String
     ): Call<GetTVShowResponse>
 
     @GET("tv/{showId}")

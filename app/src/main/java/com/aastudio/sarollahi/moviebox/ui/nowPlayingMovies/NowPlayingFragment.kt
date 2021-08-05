@@ -10,25 +10,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.NOW_PLAYING_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.MoviesRepository
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentNowPlayingMoviesBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity.Companion.MOVIE_ID
 import com.facebook.ads.AdError
 import com.facebook.ads.NativeAdsManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
 
-    private lateinit var mNowPlayingViewModel: NowPlayingViewModel
+    private val viewModel by viewModel<NowPlayingViewModel>()
     private var _binding: FragmentNowPlayingMoviesBinding? = null
     private var nativeAdsManager: NativeAdsManager? = null
     private lateinit var nowPlayingMovies: RecyclerView
@@ -46,17 +44,13 @@ class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mNowPlayingViewModel =
-            ViewModelProvider(this).get(NowPlayingViewModel::class.java)
-
         _binding = FragmentNowPlayingMoviesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
         nativeAdsManager = NativeAdsManager(activity, NOW_PLAYING_ADS_PLACEMENT_ID, 5)
         nativeAdsManager?.loadAds()
         nativeAdsManager?.setListener(this)
 
-        nowPlayingMovies = root.findViewById(R.id.nowplaying_movies)
+        nowPlayingMovies = binding.nowplayingMovies
 
         nowPlayingMoviesLayoutMgr = LinearLayoutManager(
             context,
@@ -65,25 +59,19 @@ class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
         )
         nowPlayingMovies.layoutManager = nowPlayingMoviesLayoutMgr
 
-        return root
+        viewModel.apply {
+            observe(nowPlayingList) {
+                nowPlayingMoviesAdapter.appendMovies(it)
+                attachPopularMoviesOnScrollListener()
+            }
+        }
+
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getNowPlayingMovies() {
-        MoviesRepository.getNowPlayingMovies(
-            nowPlayingMoviesPage,
-            ::onNowPlayingMoviesFetched,
-            ::onError
-        )
-    }
-
-    private fun onNowPlayingMoviesFetched(movies: List<Movie>) {
-        nowPlayingMoviesAdapter.appendMovies(movies)
-        attachPopularMoviesOnScrollListener()
     }
 
     private fun attachPopularMoviesOnScrollListener() {
@@ -96,14 +84,10 @@ class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                     nowPlayingMovies.removeOnScrollListener(this)
                     nowPlayingMoviesPage++
-                    getNowPlayingMovies()
+                    viewModel.getMovies(requireActivity(), nowPlayingMoviesPage)
                 }
             }
         })
-    }
-
-    private fun onError() {
-        Toast.makeText(context, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
     }
 
     private fun showMovieDetails(movie: Movie) {
@@ -122,7 +106,7 @@ class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
             ) { movie -> showMovieDetails(movie) }
         nowPlayingMovies.adapter = nowPlayingMoviesAdapter
 
-        getNowPlayingMovies()
+        viewModel.getMovies(requireContext(), nowPlayingMoviesPage)
     }
 
     override fun onAdError(error: AdError) {
@@ -135,6 +119,6 @@ class NowPlayingFragment : Fragment(), NativeAdsManager.Listener {
             ) { movie -> showMovieDetails(movie) }
         nowPlayingMovies.adapter = nowPlayingMoviesAdapter
 
-        getNowPlayingMovies()
+        viewModel.getMovies(requireContext(), nowPlayingMoviesPage)
     }
 }

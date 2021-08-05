@@ -21,7 +21,7 @@
                 android:title="@null"
                 app:actionLayout="@layout/edit_text" />
             <item
-                android:id="@+id/navMovieSrearch"
+                android:id="@+id/navMovieSearch"
                 android:title="@null"
                 app:actionLayout="@layout/button" />
         </menu>
@@ -42,29 +42,5 @@
                 android:title="@null"
                 app:actionLayout="@layout/button" />
         </menu>
-
     </item>
-
-        <item android:title="@string/search_by_genre">
-            <menu>
-                <item
-                    android:icon="@drawable/ic_movies"
-                    android:title="@string/movies_search_title" />
-                <item
-                    android:id="@+id/navMovieGenres"
-                    android:title="@null"
-                    app:actionLayout="@layout/spinner" />
-
-                <item
-                    android:icon="@drawable/ic_tv"
-                    android:title="@string/tv_shows" />
-                <item
-                    android:id="@+id/navTVGenres"
-                    android:title="@null"
-                    app:actionLayout="@layout/spinner" />
-                <item
-                    android:title="@null"/>
-            </menu>
-        </item>
-
 </menu>

@@ -16,10 +16,10 @@ import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.databinding.RowMovieHorizontalSmallBinding
 import com.bumptech.glide.Glide
 
-class RootPopularMoviesAdapter(
+class MoviesHorizontalSmallAdapter(
     private var movies: MutableList<Movie>,
     private val onMovieClick: (movie: Movie) -> Unit
-) : RecyclerView.Adapter<RootPopularMoviesAdapter.MovieViewHolder>() {
+) : RecyclerView.Adapter<MoviesHorizontalSmallAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding = RowMovieHorizontalSmallBinding.inflate(

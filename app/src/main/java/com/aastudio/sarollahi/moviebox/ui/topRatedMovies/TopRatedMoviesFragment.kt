@@ -16,7 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.TOP_RATED_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.MoviesRepository
+import com.aastudio.sarollahi.api.repository.Repository
+import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentTopRatedMoviesBinding
@@ -24,6 +25,7 @@ import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity.Companion.MOVIE_ID
 import com.facebook.ads.AdError
 import com.facebook.ads.NativeAdsManager
+import retrofit2.Call
 
 class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
 
@@ -69,8 +71,10 @@ class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
     }
 
     private fun getTopRatedMovies() {
-        MoviesRepository.getTopRatedMovies(
+        val region = "us"
+        Repository.getTopRatedMovies(
             topRatedMoviesPage,
+            region,
             ::onTopRatedMoviesFetched,
             ::onError
         )
@@ -97,7 +101,7 @@ class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
         attachTopRatedMoviesOnScrollListener()
     }
 
-    private fun onError() {
+    private fun onError(call: Call<GetMoviesResponse>, error: String) {
         Toast.makeText(context, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
     }
 

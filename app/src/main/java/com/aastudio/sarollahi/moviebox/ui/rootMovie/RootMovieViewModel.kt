@@ -6,13 +6,15 @@
 package com.aastudio.sarollahi.moviebox.ui.rootMovie
 
 import android.app.Application
+import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.MoviesRepository
-import com.aastudio.sarollahi.moviebox.R
+import com.aastudio.sarollahi.api.repository.Repository
+import com.aastudio.sarollahi.api.response.GetMoviesResponse
+import retrofit2.Call
 
 class RootMovieViewModel(private val application: Application) : ViewModel() {
 
@@ -22,33 +24,38 @@ class RootMovieViewModel(private val application: Application) : ViewModel() {
     val topRatedList = MutableLiveData<List<Movie>>()
     val movieGenres = MutableLiveData<List<Genre>>()
 
-    fun getMovies() {
-        MoviesRepository.getUpcomingMovies(
+    fun getMovies(context: Context) {
+        val it = "us"
+        Repository.getUpcomingMovies(
             1,
+            it,
             ::onUpcomingMoviesFetched,
-            ::onError
+            ::onMovieError
         )
-        MoviesRepository.getNowPlayingMovies(
+        Repository.getNowPlayingMovies(
             1,
+            it,
             ::onNowPlayingMoviesFetched,
-            ::onError
+            ::onMovieError
         )
-        MoviesRepository.getPopularMovies(
+        Repository.getPopularMovies(
             1,
+            it,
             ::onPopularMoviesFetched,
-            ::onError
+            ::onMovieError
         )
-        MoviesRepository.getTopRatedMovies(
+        Repository.getTopRatedMovies(
             1,
+            it,
             ::onTopRatedMoviesFetched,
-            ::onError
+            ::onMovieError
         )
     }
 
     fun getGenres() {
-        MoviesRepository.getMovieGenres(
+        Repository.getMovieGenres(
             ::onMovieGenresFetched,
-            ::onError
+            ::onGenreError
         )
     }
 
@@ -72,10 +79,18 @@ class RootMovieViewModel(private val application: Application) : ViewModel() {
         movieGenres.value = genres
     }
 
-    private fun onError() {
+    private fun onGenreError(call: Call<Movie>, error: String) {
         Toast.makeText(
             application.applicationContext,
-            application.applicationContext.getString(R.string.error_fetch_movies),
+            error,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun onMovieError(call: Call<GetMoviesResponse>, error: String) {
+        Toast.makeText(
+            application.applicationContext,
+            error,
             Toast.LENGTH_SHORT
         ).show()
     }

@@ -11,59 +11,59 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
-import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.databinding.RowMovieHorizontalSmallBinding
 import com.bumptech.glide.Glide
 
-class RootPlayingMoviesAdapter(
-    private var movies: MutableList<Movie>,
-    private val onMovieClick: (movie: Movie) -> Unit
-) : RecyclerView.Adapter<RootPlayingMoviesAdapter.MovieViewHolder>() {
+class TVHorizontalSmallAdapter(
+    private var shows: MutableList<TVShow>,
+    private val onShowClick: (show: TVShow) -> Unit
+) : RecyclerView.Adapter<TVHorizontalSmallAdapter.TVShowViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TVShowViewHolder {
         val binding = RowMovieHorizontalSmallBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return MovieViewHolder(binding)
+        return TVShowViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = movies.size
+    override fun getItemCount(): Int = shows.size
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(movies[position])
+    override fun onBindViewHolder(holder: TVShowViewHolder, position: Int) {
+        holder.bind(shows[position])
     }
 
-    fun appendMovies(movies: List<Movie>) {
-        this.movies.addAll(movies)
+    fun appendShows(shows: List<TVShow>) {
+        this.shows.addAll(shows)
         notifyItemRangeInserted(
-            this.movies.size,
-            movies.size - 1
+            this.shows.size,
+            shows.size - 1
         )
     }
 
-    inner class MovieViewHolder(itemView: RowMovieHorizontalSmallBinding) :
+    inner class TVShowViewHolder(itemView: RowMovieHorizontalSmallBinding) :
         RecyclerView.ViewHolder(itemView.root) {
         private val poster: ImageView = itemView.imagePoster
         private var title: TextView = itemView.textTitle
         private var rating: TextView = itemView.textRating
 
-        fun bind(movie: Movie) {
-            if (!movie.posterPath.isNullOrEmpty()) {
+        fun bind(show: TVShow) {
+            if (!show.posterPath.isNullOrEmpty()) {
                 reuse()
                 Glide.with(itemView)
-                    .load("$IMAGE_ADDRESS${movie.posterPath}")
+                    .load("$IMAGE_ADDRESS${show.posterPath}")
                     .into(poster)
-                title.text = movie.title
-                if (movie.rating != null) {
-                    val rate = (movie.rating!! * 10).toInt()
+                title.text = show.name
+                if (show.rating != null) {
+                    val rate = (show.rating!!.toInt() * 10)
                     rating.text = itemView.context.getString(R.string.rating, rate, "%")
                 } else {
                     rating.text = "--"
                 }
-                itemView.setOnClickListener { onMovieClick.invoke(movie) }
+                itemView.setOnClickListener { onShowClick.invoke(show) }
             }
         }
 

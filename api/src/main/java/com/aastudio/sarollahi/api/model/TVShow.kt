@@ -14,12 +14,13 @@ data class TVShow(
     @SerializedName("name") val name: String?,
     @SerializedName("first_air_date") val firstAirDate: String?,
     @SerializedName("backdrop_path") val backdropPath: String?,
-    @SerializedName("genre_ids") val genre: List<Genre>?,
+    @SerializedName("genres") val genre: List<Genre>?,
     @SerializedName("original_language") val originalLanguage: String?,
-    @SerializedName("origin_country") val country: List<Country>?,
+    @SerializedName("origin_country") val country: List<String>?,
     @SerializedName("overview") val overview: String?,
     @SerializedName("poster_path") val posterPath: String?,
-    @SerializedName("vote_average") val vote: String?,
+    @SerializedName("vote_average") val rating: Float?,
+    @SerializedName("vote_count") val voteCount: Int?,
     @SerializedName("torrents") val torrents: List<BaseMovie.Torrent>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -29,10 +30,11 @@ data class TVShow(
         parcel.readString(),
         parcel.createTypedArrayList(Genre),
         parcel.readString(),
-        parcel.createTypedArrayList(Country),
+        parcel.createStringArrayList(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
+        parcel.readValue(Float::class.java.classLoader) as? Float,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.createTypedArrayList(BaseMovie.Torrent.CREATOR)
     )
 
@@ -43,10 +45,11 @@ data class TVShow(
         parcel.writeString(backdropPath)
         parcel.writeTypedList(genre)
         parcel.writeString(originalLanguage)
-        parcel.writeTypedList(country)
+        parcel.writeStringList(country)
         parcel.writeString(overview)
         parcel.writeString(posterPath)
-        parcel.writeString(vote)
+        parcel.writeValue(rating)
+        parcel.writeValue(voteCount)
         parcel.writeTypedList(torrents)
     }
 

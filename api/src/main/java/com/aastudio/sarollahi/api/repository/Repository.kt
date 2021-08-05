@@ -21,7 +21,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-object MoviesRepository {
+object Repository {
     private val TMDB_API: TmdbApi
     private val YTS_API: YtsApi
 
@@ -42,10 +42,11 @@ object MoviesRepository {
 
     fun getPopularMovies(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (movies: List<Movie>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetMoviesResponse>, error: String) -> Unit
     ) {
-        TMDB_API.getPopularMovies(page = page)
+        TMDB_API.getPopularMovies(page = page, region = region)
             .enqueue(object : Callback<GetMoviesResponse> {
                 override fun onResponse(
                     call: Call<GetMoviesResponse>,
@@ -56,25 +57,26 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
 
     fun getTopRatedMovies(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (movies: List<Movie>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetMoviesResponse>, error: String) -> Unit
     ) {
-        TMDB_API.getTopRatedMovies(page = page)
+        TMDB_API.getTopRatedMovies(page = page, region = region)
             .enqueue(object : Callback<GetMoviesResponse> {
                 override fun onResponse(
                     call: Call<GetMoviesResponse>,
@@ -85,25 +87,26 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
 
     fun getUpcomingMovies(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (movies: List<Movie>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetMoviesResponse>, error: String) -> Unit
     ) {
-        TMDB_API.getUpcomingMovies(page = page)
+        TMDB_API.getUpcomingMovies(page = page, region = region)
             .enqueue(object : Callback<GetMoviesResponse> {
                 override fun onResponse(
                     call: Call<GetMoviesResponse>,
@@ -114,44 +117,46 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
 
     fun getNowPlayingMovies(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (movies: List<Movie>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetMoviesResponse>, error: String) -> Unit
     ) {
-        TMDB_API.getNowPlayingMovies(page = page)
+        TMDB_API.getNowPlayingMovies(page = page, region = region)
             .enqueue(object : Callback<GetMoviesResponse> {
                 override fun onResponse(
                     call: Call<GetMoviesResponse>,
                     response: Response<GetMoviesResponse>
                 ) {
+                    val a = response
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
@@ -161,7 +166,7 @@ object MoviesRepository {
         sort: String,
         id: Int,
         onSuccess: (movies: List<Movie>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetMoviesResponse>, error: String) -> Unit
     ) {
         TMDB_API.findMoviesByGenre(page = page, sortBy = sort, genreId = id)
             .enqueue(object : Callback<GetMoviesResponse> {
@@ -174,15 +179,15 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.movies)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
@@ -190,7 +195,7 @@ object MoviesRepository {
     fun getMovieDetails(
         id: Long,
         onSuccess: (movies: Movie) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<Movie>, error: String) -> Unit
     ) {
         TMDB_API.getMovieDetails(movieId = id)
             .enqueue(object : Callback<Movie> {
@@ -203,22 +208,22 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<Movie>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
 
     fun getMovieGenres(
         onSuccess: (genre: List<Genre>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<Movie>, error: String) -> Unit
     ) {
         TMDB_API.getMovieGenres()
             .enqueue(object : Callback<Movie> {
@@ -231,15 +236,15 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<Movie>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
@@ -276,7 +281,7 @@ object MoviesRepository {
     fun getPersonDetails(
         id: Int,
         onSuccess: (person: Person) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<Person?>, error: String) -> Unit
     ) {
         TMDB_API.getPersonDetails(personId = id)
             .enqueue(object : Callback<Person?> {
@@ -289,25 +294,26 @@ object MoviesRepository {
                         if (person != null) {
                             onSuccess.invoke(person)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<Person?>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
 
     fun getPopularTVShows(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (show: List<TVShow>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetTVShowResponse>, error: String) -> Unit
     ) {
-        TMDB_API.getPopularTVShows(page = page)
+        TMDB_API.getPopularTVShows(page = page, region = region)
             .enqueue(object : Callback<GetTVShowResponse> {
                 override fun onResponse(
                     call: Call<GetTVShowResponse>,
@@ -319,25 +325,26 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
 
     fun getTopRatedTVShows(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (show: List<TVShow>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetTVShowResponse>, error: Throwable?) -> Unit
     ) {
-        TMDB_API.getTopRatedTVShows(page = page)
+        TMDB_API.getTopRatedTVShows(page = page, region = region)
             .enqueue(object : Callback<GetTVShowResponse> {
                 override fun onResponse(
                     call: Call<GetTVShowResponse>,
@@ -348,25 +355,26 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, null)
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, null)
                     }
                 }
 
                 override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t)
                 }
             })
     }
 
     fun getUpcomingTVShows(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (show: List<TVShow>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetTVShowResponse>, error: String) -> Unit
     ) {
-        TMDB_API.getUpcomingTVShows(page = page)
+        TMDB_API.getUpcomingTVShows(page = page, region = region)
             .enqueue(object : Callback<GetTVShowResponse> {
                 override fun onResponse(
                     call: Call<GetTVShowResponse>,
@@ -377,25 +385,26 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, "response.errorBody().toString()")
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, "response.errorBody().toString()")
                     }
                 }
 
                 override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTraceToString())
                 }
             })
     }
 
     fun getNowPlayingTVShows(
         page: Int = 1,
+        region: String = "us",
         onSuccess: (show: List<TVShow>) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<GetTVShowResponse>, error: String) -> Unit
     ) {
-        TMDB_API.getNowPlayingTVShows(page = page)
+        TMDB_API.getNowPlayingTVShows(page = page, region = region)
             .enqueue(object : Callback<GetTVShowResponse> {
                 override fun onResponse(
                     call: Call<GetTVShowResponse>,
@@ -406,15 +415,15 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
@@ -422,7 +431,7 @@ object MoviesRepository {
     fun getTVShowDetails(
         id: Long,
         onSuccess: (show: TVShow) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<TVShow>, error: String) -> Unit
     ) {
         TMDB_API.getTVShowDetails(showId = id)
             .enqueue(object : Callback<TVShow> {
@@ -435,15 +444,15 @@ object MoviesRepository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<TVShow>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
