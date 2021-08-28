@@ -6,16 +6,24 @@
 package com.aastudio.sarollahi.moviebox.ui.movieDetails
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Genre
@@ -29,11 +37,13 @@ import com.aastudio.sarollahi.moviebox.databinding.ActivityMovieDetailsBinding
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_TITLE
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_URL
+import com.aastudio.sarollahi.moviebox.ui.player.TrailerActivity
 import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.tabs.TabLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.ByteArrayOutputStream
 
 @Suppress("DEPRECATION")
 class MovieDetailsActivity : AppCompatActivity() {
@@ -126,29 +136,95 @@ class MovieDetailsActivity : AppCompatActivity() {
                     )
                 )
                 binding.detailTabs.addOnTabSelectedListener(object :
-                        TabLayout.OnTabSelectedListener {
-                        override fun onTabSelected(tab: TabLayout.Tab) {
-                            binding.viewPager.currentItem = tab.position
-                        }
+                    TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab) {
+                        binding.viewPager.currentItem = tab.position
+                    }
 
-                        override fun onTabUnselected(tab: TabLayout.Tab) {}
-                        override fun onTabReselected(tab: TabLayout.Tab) {}
-                    })
+                    override fun onTabUnselected(tab: TabLayout.Tab) {}
+                    override fun onTabReselected(tab: TabLayout.Tab) {}
+                })
+
+                if (!movie.trailer?.results.isNullOrEmpty()){
+                    binding.trailer.setOnClickListener {
+                        movie.trailer?.results?.get(0)?.key?.let { key ->
+                            playTrailer(key)
+                        }
+                    }
+                }
+
+                movie.externalIds?.imdbId?.let { imdbId ->
+                    binding.imdb.setOnClickListener {
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_VIEW
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                        intent.data = Uri.parse("https://www.imdb.com/title/$imdbId/")
+                        startActivity(intent)
+                    }
+                }
+
+                movie.externalIds?.facebookId?.let { facebookId ->
+                    binding.facebook.setOnClickListener {
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_VIEW
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                        intent.data = Uri.parse("https://www.facebook.com/$facebookId/")
+                        startActivity(intent)
+                    }
+                }
+
+                movie.externalIds?.instagramId?.let { instagramId ->
+                    binding.instagram.setOnClickListener {
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_VIEW
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                        intent.data = Uri.parse("https://www.instagram.com/$instagramId/")
+                        startActivity(intent)
+                    }
+                }
+
+                movie.externalIds?.twitterId?.let { twitterId ->
+                    binding.twitter.setOnClickListener {
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_VIEW
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE)
+                        intent.data = Uri.parse("https://twitter.com/$twitterId/")
+                        startActivity(intent)
+                    }
+                }
             }
             observe(torrentTv) {
                 if (it.isNotEmpty()) {
-                    binding.play.visibility = View.VISIBLE
+                    binding.playContainer.visibility = View.VISIBLE
                     qualityAdapter.appendQuality(it)
                     qualityAdapter.notifyDataSetChanged()
+                }
+            }
+            observe(loading) {
+                if (!it) {
+                    binding.loading.visibility = View.GONE
+                    binding.detailContainer.visibility = View.VISIBLE
                 }
             }
         }
 
         binding.watchList.setOnClickListener {
             if (isInWatchlist) updateWatchListBtn(
-                isInWatchlist = false,
-                animate = true
-            ) else updateWatchListBtn(isInWatchlist = true, animate = true)
+                isInWatchlist = false
+            ) else updateWatchListBtn(isInWatchlist = true)
+        }
+
+        binding.share.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SEND)
+            val bitmap = getBitmapFromView(binding.moviePoster)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.putExtra(
+                Intent.EXTRA_TEXT,
+                "${viewModel.movie.value?.title}\n${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=com.aastudio.sarollahi.moviebox"
+            )
+            intent.putExtra(Intent.EXTRA_STREAM, getImageURI(this@MovieDetailsActivity, bitmap))
+            intent.type = "image/*"
+            startActivity(Intent.createChooser(intent, getText(R.string.share)))
         }
     }
 
@@ -175,12 +251,12 @@ class MovieDetailsActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    private fun updateWatchListBtn(isInWatchlist: Boolean, animate: Boolean) {
+    private fun updateWatchListBtn(isInWatchlist: Boolean, animate: Boolean = true) {
         this.isInWatchlist = isInWatchlist
         val (rotation, tint) = if (isInWatchlist) {
             CROSS_ROTATION to Color.BLACK
         } else {
-            PLUS_ROTATION to Color.WHITE
+            PLUS_ROTATION to ContextCompat.getColor(this, R.color.duskYellow)
         }
         binding.watchList.apply {
             if (animate) rotatePlusIcon(rotation) else this.rotation = rotation
@@ -204,5 +280,36 @@ class MovieDetailsActivity : AppCompatActivity() {
         intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Movies")
         intent.putExtra(SearchActivity.GENRE_ID, genre.id)
         startActivity(intent)
+    }
+
+    private fun playTrailer(key: String) {
+        val intent = Intent(this, TrailerActivity::class.java)
+        intent.putExtra(TrailerActivity.KEY, key)
+        startActivity(intent)
+    }
+
+    private fun getBitmapFromView(view: ImageView): Bitmap {
+        val bitmap = createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
+    }
+
+    private fun getImageURI(context: Context, bitmap: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path =
+            MediaStore.Images.Media.insertImage(
+                context.contentResolver,
+                bitmap,
+                viewModel.movie.value?.title,
+                null
+            )
+        return Uri.parse(path)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

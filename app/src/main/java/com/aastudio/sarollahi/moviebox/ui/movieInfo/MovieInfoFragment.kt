@@ -142,10 +142,12 @@ class MovieInfoFragment : Fragment() {
         }
 
         movie?.apply {
-            binding.movieOverview.text = overview
-//            if (binding.movieOverview.lineCount ?: 1 >= 5) {
-//                setVisibility(binding.overviewArrow)
-//            }
+            binding.movieOverview.apply {
+                text = overview
+                if (lineCount >= 5) {
+                    setVisibility(binding.overviewArrow)
+                }
+            }
 
             credits?.castList?.let {
                 if (it.isNotEmpty() && castAdapter.itemCount == 0) {

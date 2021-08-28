@@ -136,4 +136,9 @@ class SearchActivity : AppCompatActivity(), NativeAdsManager.Listener {
 
         genreId?.let { id -> viewModel.findMovies(page, sort, id) }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
 }

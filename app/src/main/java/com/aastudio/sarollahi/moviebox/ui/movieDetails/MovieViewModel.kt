@@ -6,6 +6,7 @@
 package com.aastudio.sarollahi.moviebox.ui.movieDetails
 
 import android.app.Application
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,9 +20,7 @@ import retrofit2.Call
 
 class MovieViewModel(private val application: Application) : ViewModel() {
 
-    companion object {
-    }
-
+    private val tag = "MovieViewModel"
     val movie = MutableLiveData<Movie>()
     var loading = MutableLiveData<Boolean>()
     val torrentTv = MutableLiveData<List<BaseMovie.Torrent>>()
@@ -68,11 +67,7 @@ class MovieViewModel(private val application: Application) : ViewModel() {
     }
 
     private fun onTorrentError() {
-        Toast.makeText(
-            application.applicationContext,
-            "torrent Error",
-            Toast.LENGTH_SHORT
-        ).show()
+        Log.d(tag, "no play link!")
     }
 
     fun getGenres(genres: List<Genre?>?): String {

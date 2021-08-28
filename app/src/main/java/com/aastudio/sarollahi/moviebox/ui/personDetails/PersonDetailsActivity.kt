@@ -80,4 +80,9 @@ class PersonDetailsActivity : AppCompatActivity() {
         tabLayout = binding.detailTabs
         viewPager = binding.personDetailViewPager
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
 }

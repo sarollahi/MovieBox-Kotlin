@@ -39,6 +39,10 @@
     <string name="imdb">IMDB</string>
     <string name="quality">%1$s %2$s</string>
     <string name="rating">%1$d%2$s</string>
+    <string name="watchList">Watchlist</string>
+    <string name="trailer">Trailer</string>
+    <string name="share">Share</string>
+    <string name="play">Play</string>
 
     <string name="movieQuality">Select Quality</string>
     <string name="streamProgress">%1$.2f %2$s</string>
