@@ -17,13 +17,15 @@ import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.MoviesRepository
+import com.aastudio.sarollahi.api.repository.Repository
+import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.utils.TvBackgroundManager
 import com.aastudio.sarollahi.moviebox.views.activities.ErrorActivity
 import com.aastudio.sarollahi.moviebox.views.activities.MainActivity
 import com.aastudio.sarollahi.moviebox.views.activities.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.views.presenters.MovieViewPresenter
+import retrofit2.Call
 
 class MainFragment : BrowseSupportFragment() {
     private val tvBackgroundManager: TvBackgroundManager by lazy {
@@ -74,8 +76,9 @@ class MainFragment : BrowseSupportFragment() {
     }
 
     private fun getNowPlayingMovies() {
-        MoviesRepository.getNowPlayingMovies(
+        Repository.getNowPlayingMovies(
             nowPlayingMoviesPage,
+            "us",
             ::onNowPlayingMoviesFetched,
             ::onError
         )
@@ -111,7 +114,11 @@ class MainFragment : BrowseSupportFragment() {
 //        })
 //    }
 
-    private fun onError() {
-        Toast.makeText(context, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
+    private fun onError(call: Call<GetMoviesResponse>, error: String) {
+        Toast.makeText(
+            requireContext(),
+            error,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

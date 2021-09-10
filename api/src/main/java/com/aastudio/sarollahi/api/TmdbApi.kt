@@ -49,7 +49,7 @@ interface TmdbApi {
     fun getMovieDetails(
         @Path("movieId") movieId: Long,
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("append_to_response") append_to_response: String = "external_ids,credits,reviews,similar,recommendations"
+        @Query("append_to_response") append_to_response: String = "external_ids,credits,reviews,similar,recommendations,videos"
     ): Call<Movie>
 
     @GET("discover/movie")

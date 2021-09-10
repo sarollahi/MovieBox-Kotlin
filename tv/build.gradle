@@ -33,5 +33,5 @@ dependencies {
     implementation project(path: ':api')
 
     implementation "androidx.leanback:leanback:$leanbackVersion"
-    implementation "androidx.legacy:legacy-support-v4:$legacySupportV4"
+    implementation "androidx.legacy:legacy-support-v4:$tvLegacySupportV4"
 }

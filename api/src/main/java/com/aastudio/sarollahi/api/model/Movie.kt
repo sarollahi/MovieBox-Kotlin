@@ -31,6 +31,7 @@ data class Movie(
     @SerializedName("mpa_rating") val mpaRating: String?,
     @SerializedName("credits") val credits: Credits?,
     @SerializedName("reviews") val reviews: Reviews?,
+    @SerializedName("videos") val trailer: Trailers?,
     @SerializedName("external_ids") val externalIds: ExternalId?,
     @SerializedName("similar") val similar: SimilarAndRecommendationMovies?,
     @SerializedName("recommendations") val recommendations: SimilarAndRecommendationMovies?,
@@ -56,6 +57,7 @@ data class Movie(
         parcel.readString(),
         parcel.readValue(Credits::class.java.classLoader) as? Credits,
         parcel.readValue(Reviews::class.java.classLoader) as? Reviews,
+        parcel.readValue(Trailers::class.java.classLoader) as? Trailers,
         parcel.readValue(ExternalId::class.java.classLoader) as? ExternalId,
         parcel.readValue(SimilarAndRecommendationMovies::class.java.classLoader) as? SimilarAndRecommendationMovies,
         parcel.readValue(SimilarAndRecommendationMovies::class.java.classLoader) as? SimilarAndRecommendationMovies,
@@ -82,6 +84,7 @@ data class Movie(
         parcel.writeString(mpaRating)
         parcel.writeValue(credits)
         parcel.writeValue(reviews)
+        parcel.writeValue(trailer)
         parcel.writeValue(externalIds)
         parcel.writeValue(similar)
         parcel.writeValue(recommendations)

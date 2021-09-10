@@ -19,6 +19,7 @@ ext {
     appcompatVersion = '1.3.0'
     expressoVersion = "3.3.0"
     legacySupportV4 = '1.1.0'
+    tvLegacySupportV4 = '1.0.0'
     lifeCycleVersion = '2.3.1'
     navigationUiKtx = '2.3.5'
     navigationFragmentKtx = '2.3.5'
