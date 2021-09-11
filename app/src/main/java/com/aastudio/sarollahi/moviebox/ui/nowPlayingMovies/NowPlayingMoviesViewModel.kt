@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.aastudio.sarollahi.moviebox.ui.upcomingMovies
+package com.aastudio.sarollahi.moviebox.ui.nowPlayingMovies
 
 import android.app.Application
 import android.widget.Toast
@@ -14,21 +14,21 @@ import com.aastudio.sarollahi.api.repository.Repository
 import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import retrofit2.Call
 
-class UpcomingMoviesViewModel(private val application: Application) : ViewModel() {
+class NowPlayingMoviesViewModel(private val application: Application) : ViewModel() {
 
-    val upcomingList = MutableLiveData<List<Movie>>()
+    val nowPlayingList = MutableLiveData<List<Movie>>()
 
     fun getMovies(page: Int) {
-        Repository.getTopRatedMovies(
+        Repository.getNowPlayingMovies(
             page,
             "us",
-            ::onTopRatedMoviesFetched,
+            ::onNowPlayingMoviesFetched,
             ::onMovieError
         )
     }
 
-    private fun onTopRatedMoviesFetched(movies: List<Movie>) {
-        upcomingList.value = movies
+    private fun onNowPlayingMoviesFetched(playingMovies: List<Movie>) {
+        nowPlayingList.value = playingMovies
     }
 
     private fun onMovieError(call: Call<GetMoviesResponse>, error: String) {

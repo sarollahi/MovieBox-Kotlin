@@ -87,9 +87,15 @@ dependencies {
     // OpenSubtitles
     api "com.github.masterwok:open-subtitles-android:$openSubtitlesVersion"
 
-    // Facebook
+    // ADS
     api 'androidx.annotation:annotation:1.2.0'
-    api 'com.facebook.android:audience-network-sdk:6.5.0'
+    api 'com.mopub.mediation:facebookaudiencenetwork:6.5.1.0'
+    api 'com.facebook.android:audience-network-sdk:6.5.1'
+    api('com.mopub:mopub-sdk:+@aar') {
+        transitive = true
+    }
+
+    api 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
     api 'com.uncopt:android.justified:1.3'
 }

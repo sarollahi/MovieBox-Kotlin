@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.nowPlayingMovies.NowPlayingFragment">
+    tools:context=".ui.nowPlayingMovies.NowPlayingMoviesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/nowplaying_movies"
@@ -21,4 +21,10 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/networkError"
+        layout="@layout/view_request_status" />
 </androidx.constraintlayout.widget.ConstraintLayout>

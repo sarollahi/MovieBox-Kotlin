@@ -13,4 +13,8 @@
     <dimen name="request_view_error_button_width">290dp</dimen>
     <dimen name="request_view_retry_padding">16dp</dimen>
     <dimen name="request_view_retry_text_start_margin">4dp</dimen>
+    <!-- Mopub ADS view -->
+    <dimen name="button_text_size">13sp</dimen>
+    <dimen name="native_main_image_height">200dp</dimen>
+    <dimen name="button_height">36dp</dimen>
 </resources>

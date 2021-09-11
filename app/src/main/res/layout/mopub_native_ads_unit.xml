@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_rounded"
+    android:backgroundTint="@color/cardBackground"
+    android:layout_margin="9dp"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mopub_native_ad_layout">
+
+    <ImageView
+        android:id="@+id/mopub_native_ad_privacy"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="-5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="Privacy Information Icon image"
+        android:padding="10dp"
+        android:layout_marginRight="-5dp"
+        android:layout_alignParentRight="true"
+        app:tint="@android:color/black" />
+
+
+    <ImageView
+        android:id="@+id/mopub_native_ad_icon"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:id="@+id/mopub_ad_sponsored_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        android:layout_marginStart="10dp"
+        android:layout_below="@id/mopub_native_ad_icon"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp" />
+
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mopub_native_ad_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/mopub_native_ad_icon"
+        android:layout_marginStart="10dp"
+        android:layout_toStartOf="@id/mopub_native_ad_privacy"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="Lorem ipsum dolor sit amet, consectetur"
+        android:layout_marginEnd="10dp"
+        android:layout_alignTop="@id/mopub_native_ad_icon"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/mopub_native_ad_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mopub_native_ad_title"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toStartOf="@+id/mopub_native_ad_privacy"
+        android:layout_toEndOf="@id/mopub_native_ad_icon"
+        android:lines="2"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="3dp"/>
+
+    <ImageView
+        android:id="@+id/mopub_native_ad_main_imageview"
+        android:layout_below="@id/mopub_native_ad_text"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/native_main_image_height" />
+
+
+    <Button
+        android:id="@+id/mopub_native_ad_cta"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@id/mopub_native_ad_main_imageview"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:textAllCaps="false"
+        android:focusable="true"
+        android:text="Free to play"
+        android:textSize="@dimen/button_text_size"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:backgroundTint="#4286F4"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+</RelativeLayout>

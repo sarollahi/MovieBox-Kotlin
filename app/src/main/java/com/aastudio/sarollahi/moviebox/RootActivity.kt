@@ -125,12 +125,16 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onBackPressed() {
         val drawer: DrawerLayout = binding.drawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else if (drawer.isDrawerOpen(GravityCompat.END)) {
-            drawer.closeDrawer(GravityCompat.END)
-        } else {
-            super.onBackPressed()
+        when {
+            drawer.isDrawerOpen(GravityCompat.START) -> {
+                drawer.closeDrawer(GravityCompat.START)
+            }
+            drawer.isDrawerOpen(GravityCompat.END) -> {
+                drawer.closeDrawer(GravityCompat.END)
+            }
+            else -> {
+                super.onBackPressed()
+            }
         }
     }
 

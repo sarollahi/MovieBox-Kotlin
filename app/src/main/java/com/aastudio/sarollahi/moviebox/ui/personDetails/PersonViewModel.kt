@@ -9,7 +9,6 @@ import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.model.Person
 import com.aastudio.sarollahi.api.repository.Repository
 import com.aastudio.sarollahi.moviebox.R

@@ -10,30 +10,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.UPCOMING_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.Repository
-import com.aastudio.sarollahi.api.response.GetMoviesResponse
+import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentUpcomingMoviesBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity.Companion.MOVIE_ID
-import com.facebook.ads.AdError
-import com.facebook.ads.NativeAdsManager
-import retrofit2.Call
+import com.facebook.ads.AudienceNetworkAds
+import com.mopub.common.MoPub
+import com.mopub.common.SdkConfiguration
+import com.mopub.common.SdkInitializationListener
+import com.mopub.nativeads.FacebookAdRenderer
+import com.mopub.nativeads.MoPubRecyclerAdapter
+import com.mopub.nativeads.MoPubStaticNativeAdRenderer
+import com.mopub.nativeads.ViewBinder
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UpcomingMoviesFragment : Fragment(), NativeAdsManager.Listener {
-
-    private lateinit var upcomingMoviesViewModel: UpcomingMoviesViewModel
+class UpcomingMoviesFragment : Fragment() {
+    private val viewModel by viewModel<UpcomingMoviesViewModel>()
     private var _binding: FragmentUpcomingMoviesBinding? = null
-    private var nativeAdsManager: NativeAdsManager? = null
-    private lateinit var upcomingMovies: RecyclerView
     private lateinit var upcomingMoviesAdapter: MoviesAdapter
     private lateinit var upcomingMoviesLayoutMgr: LinearLayoutManager
 
@@ -48,26 +48,35 @@ class UpcomingMoviesFragment : Fragment(), NativeAdsManager.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        upcomingMoviesViewModel =
-            ViewModelProvider(this).get(UpcomingMoviesViewModel::class.java)
-
         _binding = FragmentUpcomingMoviesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        nativeAdsManager = NativeAdsManager(activity, UPCOMING_ADS_PLACEMENT_ID, 5)
-        nativeAdsManager?.loadAds()
-        nativeAdsManager?.setListener(this)
-
-        upcomingMovies = root.findViewById(R.id.upcoming_movies)
+        AudienceNetworkAds.initialize(requireContext())
+        val sdkOnFiguration = SdkConfiguration.Builder("")
+        MoPub.initializeSdk(requireContext(), sdkOnFiguration.build(), initSdkListener())
 
         upcomingMoviesLayoutMgr = LinearLayoutManager(
             context,
             LinearLayoutManager.VERTICAL,
             false
         )
-        upcomingMovies.layoutManager = upcomingMoviesLayoutMgr
+        binding.upcomingMovies.layoutManager = upcomingMoviesLayoutMgr
 
-        return root
+        upcomingMoviesAdapter =
+            MoviesAdapter(
+                mutableListOf()
+            ) { movie -> showMovieDetails(movie) }
+
+        viewModel.apply {
+            getMovies(upcomingMoviesPage)
+
+            observe(upcomingList) {
+                upcomingMoviesAdapter.appendMovies(it)
+                attachPopularMoviesOnScrollListener()
+            }
+        }
+        setUpRecyclerView(upcomingMoviesAdapter)
+
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -75,39 +84,24 @@ class UpcomingMoviesFragment : Fragment(), NativeAdsManager.Listener {
         _binding = null
     }
 
-    private fun getUpcomingMovies() {
-        val region = "us"
-        Repository.getUpcomingMovies(
-            upcomingMoviesPage,
-            region,
-            ::onUpcomingMoviesFetched,
-            ::onError
-        )
-    }
-
-    private fun onUpcomingMoviesFetched(movies: List<Movie>) {
-        upcomingMoviesAdapter.appendMovies(movies)
-        attachPopularMoviesOnScrollListener()
+    private fun initSdkListener(): SdkInitializationListener {
+        return SdkInitializationListener { }
     }
 
     private fun attachPopularMoviesOnScrollListener() {
-        upcomingMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.upcomingMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val totalItemCount = upcomingMoviesLayoutMgr.itemCount
                 val visibleItemCount = upcomingMoviesLayoutMgr.childCount
                 val firstVisibleItem = upcomingMoviesLayoutMgr.findFirstVisibleItemPosition()
 
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                    upcomingMovies.removeOnScrollListener(this)
+                    binding.upcomingMovies.removeOnScrollListener(this)
                     upcomingMoviesPage++
-                    getUpcomingMovies()
+                    viewModel.getMovies(upcomingMoviesPage)
                 }
             }
         })
-    }
-
-    private fun onError(call: Call<GetMoviesResponse>, error: String) {
-        Toast.makeText(context, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
     }
 
     private fun showMovieDetails(movie: Movie) {
@@ -116,29 +110,39 @@ class UpcomingMoviesFragment : Fragment(), NativeAdsManager.Listener {
         startActivity(intent)
     }
 
-    override fun onAdsLoaded() {
-        upcomingMoviesAdapter =
-            MoviesAdapter(
-                mutableListOf(),
-                true,
-                this.requireActivity(),
-                nativeAdsManager
-            ) { movie -> showMovieDetails(movie) }
-        upcomingMovies.adapter = upcomingMoviesAdapter
+    private fun setUpRecyclerView(adapter: MoviesAdapter) {
+        // Pass the recycler Adapter your original adapter.
+        val myMoPubAdapter = MoPubRecyclerAdapter(requireActivity(), adapter)
+        // Create an ad renderer and view binder that describe your native ad layout.
+        val myViewBinder = ViewBinder.Builder(R.layout.mopub_native_ads_unit)
+            .titleId(R.id.mopub_native_ad_title)
+            .textId(R.id.mopub_native_ad_text)
+            .mainImageId(R.id.mopub_native_ad_main_imageview)
+            .iconImageId(R.id.mopub_native_ad_icon)
+            .callToActionId(R.id.mopub_native_ad_cta)
+            .privacyInformationIconImageId(R.id.mopub_native_ad_privacy)
+            .sponsoredTextId(R.id.mopub_ad_sponsored_label)
+            .build()
 
-        getUpcomingMovies()
-    }
+        val myRenderer = MoPubStaticNativeAdRenderer(myViewBinder)
 
-    override fun onAdError(error: AdError) {
-        upcomingMoviesAdapter =
-            MoviesAdapter(
-                mutableListOf(),
-                false,
-                null,
-                null
-            ) { movie -> showMovieDetails(movie) }
-        upcomingMovies.adapter = upcomingMoviesAdapter
+        myMoPubAdapter.registerAdRenderer(myRenderer)
 
-        getUpcomingMovies()
+        val facebookAdRenderer = FacebookAdRenderer(
+            FacebookAdRenderer.FacebookViewBinder.Builder(R.layout.facebook_native_ads_unit)
+                .titleId(R.id.native_ad_title)
+                .textId(R.id.native_ad_body)
+                .mediaViewId(R.id.native_ad_media)
+                .adIconViewId(R.id.native_ad_icon)
+                .adChoicesRelativeLayoutId(R.id.ad_choices_container)
+                .advertiserNameId(R.id.native_ad_sponsored_label)
+                .callToActionId(R.id.native_ad_call_to_action)
+                .build()
+        )
+        myMoPubAdapter.registerAdRenderer(facebookAdRenderer)
+
+        // Set up the RecyclerView and start loading ads
+        binding.upcomingMovies.adapter = myMoPubAdapter
+        myMoPubAdapter.loadAds(UPCOMING_ADS_PLACEMENT_ID)
     }
 }

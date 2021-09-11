@@ -18,7 +18,7 @@ import com.masterwok.opensubtitlesandroid.services.OpenSubtitlesService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class StreamViewModel(private val service: OpenSubtitlesService, private val context: Context) :
+class StreamViewModel(private val service: OpenSubtitlesService) :
     ViewModel() {
 
     private val subtitleStatus = MutableLiveData<Resource<Uri>>()
@@ -46,7 +46,7 @@ class StreamViewModel(private val service: OpenSubtitlesService, private val con
         }
     }
 
-    fun downloadSubtitle(subtitle: OpenSubtitleItem, filePath: Uri) {
+    fun downloadSubtitle(context: Context, subtitle: OpenSubtitleItem, filePath: Uri) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = kotlin.runCatching {
                 service.downloadSubtitle(

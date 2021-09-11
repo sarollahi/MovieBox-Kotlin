@@ -10,28 +10,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.TOP_RATED_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.api.repository.Repository
-import com.aastudio.sarollahi.api.response.GetMoviesResponse
+import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentTopRatedMoviesBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity.Companion.MOVIE_ID
-import com.facebook.ads.AdError
-import com.facebook.ads.NativeAdsManager
-import retrofit2.Call
+import com.facebook.ads.AudienceNetworkAds
+import com.mopub.common.MoPub
+import com.mopub.common.SdkConfiguration
+import com.mopub.common.SdkInitializationListener
+import com.mopub.nativeads.FacebookAdRenderer
+import com.mopub.nativeads.MoPubRecyclerAdapter
+import com.mopub.nativeads.MoPubStaticNativeAdRenderer
+import com.mopub.nativeads.ViewBinder
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
-
+class TopRatedMoviesFragment : Fragment() {
+    private val viewModel by viewModel<TopRatedMoviesViewModel>()
     private var _binding: FragmentTopRatedMoviesBinding? = null
-    private var nativeAdsManager: NativeAdsManager? = null
-    private lateinit var topRatedMovies: RecyclerView
     private lateinit var topRatedMoviesAdapter: MoviesAdapter
     private lateinit var topRatedMoviesLayoutMgr: LinearLayoutManager
 
@@ -47,22 +49,34 @@ class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTopRatedMoviesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        nativeAdsManager = NativeAdsManager(activity, TOP_RATED_ADS_PLACEMENT_ID, 5)
-        nativeAdsManager?.loadAds()
-        nativeAdsManager?.setListener(this)
-
-        topRatedMovies = root.findViewById(R.id.top_rated_movies)
+        AudienceNetworkAds.initialize(requireContext())
+        val sdkOnFiguration = SdkConfiguration.Builder("")
+        MoPub.initializeSdk(requireContext(), sdkOnFiguration.build(), initSdkListener())
 
         topRatedMoviesLayoutMgr = LinearLayoutManager(
             context,
             LinearLayoutManager.VERTICAL,
             false
         )
-        topRatedMovies.layoutManager = topRatedMoviesLayoutMgr
+        binding.topRatedMovies.layoutManager = topRatedMoviesLayoutMgr
 
-        return root
+        topRatedMoviesAdapter =
+            MoviesAdapter(
+                mutableListOf()
+            ) { movie -> showMovieDetails(movie) }
+
+        viewModel.apply {
+            getMovies(topRatedMoviesPage)
+
+            observe(topRatedList) {
+                topRatedMoviesAdapter.appendMovies(it)
+                attachPopularMoviesOnScrollListener()
+            }
+        }
+        setUpRecyclerView(topRatedMoviesAdapter)
+
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -70,39 +84,24 @@ class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
         _binding = null
     }
 
-    private fun getTopRatedMovies() {
-        val region = "us"
-        Repository.getTopRatedMovies(
-            topRatedMoviesPage,
-            region,
-            ::onTopRatedMoviesFetched,
-            ::onError
-        )
+    private fun initSdkListener(): SdkInitializationListener {
+        return SdkInitializationListener { }
     }
 
-    private fun attachTopRatedMoviesOnScrollListener() {
-        topRatedMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    private fun attachPopularMoviesOnScrollListener() {
+        binding.topRatedMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val totalItemCount = topRatedMoviesLayoutMgr.itemCount
                 val visibleItemCount = topRatedMoviesLayoutMgr.childCount
                 val firstVisibleItem = topRatedMoviesLayoutMgr.findFirstVisibleItemPosition()
 
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                    topRatedMovies.removeOnScrollListener(this)
+                    binding.topRatedMovies.removeOnScrollListener(this)
                     topRatedMoviesPage++
-                    getTopRatedMovies()
+                    viewModel.getMovies(topRatedMoviesPage)
                 }
             }
         })
-    }
-
-    private fun onTopRatedMoviesFetched(movies: List<Movie>) {
-        topRatedMoviesAdapter.appendMovies(movies)
-        attachTopRatedMoviesOnScrollListener()
-    }
-
-    private fun onError(call: Call<GetMoviesResponse>, error: String) {
-        Toast.makeText(context, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT).show()
     }
 
     private fun showMovieDetails(movie: Movie) {
@@ -111,29 +110,39 @@ class TopRatedMoviesFragment : Fragment(), NativeAdsManager.Listener {
         startActivity(intent)
     }
 
-    override fun onAdsLoaded() {
-        topRatedMoviesAdapter =
-            MoviesAdapter(
-                mutableListOf(),
-                true,
-                this.requireActivity(),
-                nativeAdsManager
-            ) { movie -> showMovieDetails(movie) }
-        topRatedMovies.adapter = topRatedMoviesAdapter
+    private fun setUpRecyclerView(adapter: MoviesAdapter) {
+        // Pass the recycler Adapter your original adapter.
+        val myMoPubAdapter = MoPubRecyclerAdapter(requireActivity(), adapter)
+        // Create an ad renderer and view binder that describe your native ad layout.
+        val myViewBinder = ViewBinder.Builder(R.layout.mopub_native_ads_unit)
+            .titleId(R.id.mopub_native_ad_title)
+            .textId(R.id.mopub_native_ad_text)
+            .mainImageId(R.id.mopub_native_ad_main_imageview)
+            .iconImageId(R.id.mopub_native_ad_icon)
+            .callToActionId(R.id.mopub_native_ad_cta)
+            .privacyInformationIconImageId(R.id.mopub_native_ad_privacy)
+            .sponsoredTextId(R.id.mopub_ad_sponsored_label)
+            .build()
 
-        getTopRatedMovies()
-    }
+        val myRenderer = MoPubStaticNativeAdRenderer(myViewBinder)
 
-    override fun onAdError(error: AdError) {
-        topRatedMoviesAdapter =
-            MoviesAdapter(
-                mutableListOf(),
-                false,
-                null,
-                null
-            ) { movie -> showMovieDetails(movie) }
-        topRatedMovies.adapter = topRatedMoviesAdapter
+        myMoPubAdapter.registerAdRenderer(myRenderer)
 
-        getTopRatedMovies()
+        val facebookAdRenderer = FacebookAdRenderer(
+            FacebookAdRenderer.FacebookViewBinder.Builder(R.layout.facebook_native_ads_unit)
+                .titleId(R.id.native_ad_title)
+                .textId(R.id.native_ad_body)
+                .mediaViewId(R.id.native_ad_media)
+                .adIconViewId(R.id.native_ad_icon)
+                .adChoicesRelativeLayoutId(R.id.ad_choices_container)
+                .advertiserNameId(R.id.native_ad_sponsored_label)
+                .callToActionId(R.id.native_ad_call_to_action)
+                .build()
+        )
+        myMoPubAdapter.registerAdRenderer(facebookAdRenderer)
+
+        // Set up the RecyclerView and start loading ads
+        binding.topRatedMovies.adapter = myMoPubAdapter
+        myMoPubAdapter.loadAds(TOP_RATED_ADS_PLACEMENT_ID)
     }
 }

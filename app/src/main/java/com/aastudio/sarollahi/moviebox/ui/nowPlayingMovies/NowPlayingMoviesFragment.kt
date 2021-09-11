@@ -3,22 +3,26 @@
  * All rights reserved.
  */
 
-package com.aastudio.sarollahi.moviebox.ui.popularMovies
+package com.aastudio.sarollahi.moviebox.ui.nowPlayingMovies
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aastudio.sarollahi.api.POPULAR_ADS_PLACEMENT_ID
+import com.aastudio.sarollahi.api.NOW_PLAYING_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.response.GetMoviesResponse
+import com.aastudio.sarollahi.common.network.NetworkUtils
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter
-import com.aastudio.sarollahi.moviebox.databinding.FragmentPopularMoviesBinding
+import com.aastudio.sarollahi.moviebox.databinding.FragmentNowPlayingMoviesBinding
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity.Companion.MOVIE_ID
 import com.facebook.ads.AudienceNetworkAds
@@ -30,14 +34,15 @@ import com.mopub.nativeads.MoPubRecyclerAdapter
 import com.mopub.nativeads.MoPubStaticNativeAdRenderer
 import com.mopub.nativeads.ViewBinder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import retrofit2.Call
 
-class PopularMoviesFragment : Fragment() {
-    private val viewModel by viewModel<PopularMoviesViewModel>()
-    private var _binding: FragmentPopularMoviesBinding? = null
-    private lateinit var popularMoviesAdapter: MoviesAdapter
-    private lateinit var popularMoviesLayoutMgr: LinearLayoutManager
+class NowPlayingMoviesFragment : Fragment() {
+    private val viewModel by viewModel<NowPlayingMoviesViewModel>()
+    private var _binding: FragmentNowPlayingMoviesBinding? = null
+    private lateinit var nowPlayingMoviesAdapter: MoviesAdapter
+    private lateinit var nowPlayingMoviesLayoutMgr: LinearLayoutManager
 
-    private var popularMoviesPage = 1
+    private var nowPlayingMoviesPage = 1
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -48,33 +53,33 @@ class PopularMoviesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPopularMoviesBinding.inflate(inflater, container, false)
+        _binding = FragmentNowPlayingMoviesBinding.inflate(inflater, container, false)
 
         AudienceNetworkAds.initialize(requireContext())
         val sdkOnFiguration = SdkConfiguration.Builder("")
         MoPub.initializeSdk(requireContext(), sdkOnFiguration.build(), initSdkListener())
 
-        popularMoviesLayoutMgr = LinearLayoutManager(
+        nowPlayingMoviesLayoutMgr = LinearLayoutManager(
             context,
             LinearLayoutManager.VERTICAL,
             false
         )
-        binding.popularMovies.layoutManager = popularMoviesLayoutMgr
+        binding.nowplayingMovies.layoutManager = nowPlayingMoviesLayoutMgr
 
-        popularMoviesAdapter =
+        nowPlayingMoviesAdapter =
             MoviesAdapter(
                 mutableListOf()
             ) { movie -> showMovieDetails(movie) }
 
         viewModel.apply {
-            getMovies(popularMoviesPage)
+            getMovies(nowPlayingMoviesPage)
 
-            observe(popularList) {
-                popularMoviesAdapter.appendMovies(it)
+            observe(nowPlayingList) {
+                nowPlayingMoviesAdapter.appendMovies(it)
                 attachPopularMoviesOnScrollListener()
             }
         }
-        setUpRecyclerView(popularMoviesAdapter)
+        setUpRecyclerView(nowPlayingMoviesAdapter)
 
         return binding.root
     }
@@ -89,19 +94,46 @@ class PopularMoviesFragment : Fragment() {
     }
 
     private fun attachPopularMoviesOnScrollListener() {
-        binding.popularMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.nowplayingMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val totalItemCount = popularMoviesLayoutMgr.itemCount
-                val visibleItemCount = popularMoviesLayoutMgr.childCount
-                val firstVisibleItem = popularMoviesLayoutMgr.findFirstVisibleItemPosition()
+                val totalItemCount = nowPlayingMoviesLayoutMgr.itemCount
+                val visibleItemCount = nowPlayingMoviesLayoutMgr.childCount
+                val firstVisibleItem = nowPlayingMoviesLayoutMgr.findFirstVisibleItemPosition()
 
                 if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
-                    binding.popularMovies.removeOnScrollListener(this)
-                    popularMoviesPage++
-                    viewModel.getMovies(popularMoviesPage)
+                    binding.nowplayingMovies.removeOnScrollListener(this)
+                    nowPlayingMoviesPage++
+                    viewModel.getMovies(nowPlayingMoviesPage)
                 }
             }
         })
+    }
+
+    private fun onError(call: Call<GetMoviesResponse>, error: String) {
+        if (NetworkUtils.checkIsOnline(requireContext())) {
+            Log.d(tag, "ERROR CALL: $call")
+            Log.d(tag, "ERROR: $error")
+            Toast.makeText(context, getString(R.string.error_fetch_movies), Toast.LENGTH_SHORT)
+                .show()
+        } else {
+            binding.networkError.errorContainer.visibility = View.VISIBLE
+            binding.networkError.retryLayout.retryBtn.setOnClickListener {
+                binding.networkError.loadingPb.visibility = View.VISIBLE
+                if (NetworkUtils.checkIsOnline(requireContext())) {
+                    viewModel.apply {
+                        binding.networkError.errorContainer.visibility = View.GONE
+                        getMovies(nowPlayingMoviesPage)
+                    }
+                } else {
+                    binding.networkError.loadingPb.visibility = View.GONE
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.error_message_device_offline,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun showMovieDetails(movie: Movie) {
@@ -142,7 +174,7 @@ class PopularMoviesFragment : Fragment() {
         myMoPubAdapter.registerAdRenderer(facebookAdRenderer)
 
         // Set up the RecyclerView and start loading ads
-        binding.popularMovies.adapter = myMoPubAdapter
-        myMoPubAdapter.loadAds(POPULAR_ADS_PLACEMENT_ID)
+        binding.nowplayingMovies.adapter = myMoPubAdapter
+        myMoPubAdapter.loadAds(NOW_PLAYING_ADS_PLACEMENT_ID)
     }
 }

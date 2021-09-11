@@ -71,7 +71,7 @@ class StreamActivity : AppCompatActivity(), KoinComponent, TorrentListener, Play
         setContentView(binding.root)
 
         this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        viewModel = StreamViewModel(OpenSubtitlesService(), applicationContext)
+        viewModel = StreamViewModel(OpenSubtitlesService())
 
         setUpUI()
         val url = intent.getStringExtra(MOVIE_URL)

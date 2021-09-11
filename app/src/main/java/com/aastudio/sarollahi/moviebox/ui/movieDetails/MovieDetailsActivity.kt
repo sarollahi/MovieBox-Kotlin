@@ -136,16 +136,16 @@ class MovieDetailsActivity : AppCompatActivity() {
                     )
                 )
                 binding.detailTabs.addOnTabSelectedListener(object :
-                    TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab) {
-                        binding.viewPager.currentItem = tab.position
-                    }
+                        TabLayout.OnTabSelectedListener {
+                        override fun onTabSelected(tab: TabLayout.Tab) {
+                            binding.viewPager.currentItem = tab.position
+                        }
 
-                    override fun onTabUnselected(tab: TabLayout.Tab) {}
-                    override fun onTabReselected(tab: TabLayout.Tab) {}
-                })
+                        override fun onTabUnselected(tab: TabLayout.Tab) {}
+                        override fun onTabReselected(tab: TabLayout.Tab) {}
+                    })
 
-                if (!movie.trailer?.results.isNullOrEmpty()){
+                if (!movie.trailer?.results.isNullOrEmpty()) {
                     binding.trailer.setOnClickListener {
                         movie.trailer?.results?.get(0)?.key?.let { key ->
                             playTrailer(key)

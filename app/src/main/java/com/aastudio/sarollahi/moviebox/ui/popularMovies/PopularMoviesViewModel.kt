@@ -3,10 +3,9 @@
  * All rights reserved.
  */
 
-package com.aastudio.sarollahi.moviebox.ui.nowPlayingMovies
+package com.aastudio.sarollahi.moviebox.ui.popularMovies
 
 import android.app.Application
-import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,21 +14,21 @@ import com.aastudio.sarollahi.api.repository.Repository
 import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import retrofit2.Call
 
-class NowPlayingViewModel(private val application: Application) : ViewModel() {
+class PopularMoviesViewModel(private val application: Application) : ViewModel() {
 
-    val nowPlayingList = MutableLiveData<List<Movie>>()
+    val popularList = MutableLiveData<List<Movie>>()
 
-    fun getMovies(context: Context, page: Int) {
-        Repository.getNowPlayingMovies(
+    fun getMovies(page: Int) {
+        Repository.getPopularMovies(
             page,
             "us",
-            ::onNowPlayingMoviesFetched,
+            ::onPopularMoviesFetched,
             ::onMovieError
         )
     }
 
-    private fun onNowPlayingMoviesFetched(playingMovies: List<Movie>) {
-        nowPlayingList.value = playingMovies
+    private fun onPopularMoviesFetched(playingMovies: List<Movie>) {
+        popularList.value = playingMovies
     }
 
     private fun onMovieError(call: Call<GetMoviesResponse>, error: String) {

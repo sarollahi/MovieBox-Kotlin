@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.ui.player
 
 import android.os.Bundle
@@ -20,13 +25,13 @@ class TrailerActivity : AppCompatActivity() {
             lifecycle.addObserver(binding.youtubePlayerView)
 
             binding.youtubePlayerView.addYouTubePlayerListener(object :
-                AbstractYouTubePlayerListener() {
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    youTubePlayer.loadVideo(trailer!!, 0f)
-                    binding.youtubePlayerView.enterFullScreen()
-                    youTubePlayer.play()
-                }
-            })
+                    AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.loadVideo(trailer!!, 0f)
+                        binding.youtubePlayerView.enterFullScreen()
+                        youTubePlayer.play()
+                    }
+                })
         } else {
             finish()
         }
