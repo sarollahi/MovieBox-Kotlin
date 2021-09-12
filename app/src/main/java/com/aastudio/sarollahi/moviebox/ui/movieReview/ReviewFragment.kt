@@ -12,11 +12,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.model.Reviews
 import com.aastudio.sarollahi.moviebox.adapter.ReviewAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentReviewBinding
 
 class ReviewFragment : Fragment() {
-    private var movie: Movie? = null
+    private var reviews: Reviews? = null
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var reviewLayoutMgr: LinearLayoutManager
     private lateinit var binding: FragmentReviewBinding
@@ -25,7 +26,7 @@ class ReviewFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            movie = it.getParcelable(MOVIE_REVIEW)
+            reviews = it.getParcelable(REVIEWS)
         }
     }
 
@@ -46,7 +47,7 @@ class ReviewFragment : Fragment() {
         reviewAdapter = ReviewAdapter(mutableListOf())
         binding.reviewsRecyclerView.adapter = reviewAdapter
 
-        movie?.reviews?.results?.let {
+        reviews?.results?.let {
             if (it.isNotEmpty()) {
                 reviewAdapter.appendReview(it)
                 reviewAdapter.notifyDataSetChanged()
@@ -63,12 +64,12 @@ class ReviewFragment : Fragment() {
     }
 
     companion object {
-        private const val MOVIE_REVIEW = "movieReview"
+        private const val REVIEWS = "reviews"
 
-        fun newInstance(review: Movie): ReviewFragment {
+        fun newInstance(reviews: Reviews?): ReviewFragment {
             val fragment = ReviewFragment()
             val args = Bundle()
-            args.putParcelable(MOVIE_REVIEW, review)
+            args.putParcelable(REVIEWS, reviews)
             fragment.arguments = args
             return fragment
         }

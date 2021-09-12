@@ -11,16 +11,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.moviebox.databinding.RowCastBinding
+import com.aastudio.sarollahi.moviebox.databinding.RowPersonBinding
 import com.bumptech.glide.Glide
 
 class DirectorAdapter(
     private var crew: MutableList<Person>,
-    private val onCastClick: (crew: Person) -> Unit
+    private val onItemClick: (crew: Person) -> Unit
 ) : RecyclerView.Adapter<DirectorAdapter.PersonViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
-        val binding = RowCastBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PersonViewHolder(binding)
     }
 
@@ -38,20 +38,26 @@ class DirectorAdapter(
         )
     }
 
-    inner class PersonViewHolder(itemView: RowCastBinding) :
+    inner class PersonViewHolder(itemView: RowPersonBinding) :
         RecyclerView.ViewHolder(itemView.root) {
-        private val profilePath = itemView.castImage
-        private var name = itemView.castName
-        private var character = itemView.castCharacter
+        private val profilePath = itemView.profileImage
+        private var name = itemView.name
+        private var character = itemView.character
 
         fun bind(crew: Person) {
+            reuse()
             character.visibility = View.GONE
             Glide.with(itemView)
                 .load("$IMAGE_ADDRESS${crew.profilePath}")
                 .fitCenter()
                 .into(profilePath)
             name.text = crew.name
-            itemView.setOnClickListener { onCastClick.invoke(crew) }
+            itemView.setOnClickListener { onItemClick.invoke(crew) }
+        }
+
+        fun reuse(){
+            name.text = ""
+            profilePath.setImageResource(0)
         }
     }
 }

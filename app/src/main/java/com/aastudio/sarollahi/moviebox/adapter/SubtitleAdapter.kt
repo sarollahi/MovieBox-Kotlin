@@ -13,7 +13,7 @@ import com.masterwok.opensubtitlesandroid.models.OpenSubtitleItem
 
 class SubtitleAdapter(
     private val subtitleList: Array<OpenSubtitleItem>,
-    private val onCastClick: (item: OpenSubtitleItem) -> Unit
+    private val onItemClick: (item: OpenSubtitleItem) -> Unit
 ) : RecyclerView.Adapter<SubtitleAdapter.SubtitleViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubtitleViewHolder {
@@ -37,7 +37,7 @@ class SubtitleAdapter(
             movieSubName.text = item.SubFileName
             movieSubLanguage.text = item.LanguageName
             setOnClickListener {
-                itemView.setOnClickListener { onCastClick.invoke(item) }
+                itemView.setOnClickListener { onItemClick.invoke(item) }
             }
         }
 

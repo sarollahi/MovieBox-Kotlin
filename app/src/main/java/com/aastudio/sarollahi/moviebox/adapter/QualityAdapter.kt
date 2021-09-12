@@ -14,7 +14,7 @@ import com.aastudio.sarollahi.moviebox.databinding.RowMovieQualityBinding
 
 class QualityAdapter(
     private var movie: MutableList<BaseMovie.Torrent>,
-    private val onCastClick: (movie: BaseMovie.Torrent) -> Unit
+    private val onItemClick: (movie: BaseMovie.Torrent) -> Unit
 ) : RecyclerView.Adapter<QualityAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -44,7 +44,7 @@ class QualityAdapter(
         fun bind(movie: BaseMovie.Torrent) {
             reuse()
             quality.text = itemView.context.getString(R.string.quality, movie.type, movie.quality)
-            itemView.setOnClickListener { onCastClick.invoke(movie) }
+            itemView.setOnClickListener { onItemClick.invoke(movie) }
         }
 
         private fun reuse() {

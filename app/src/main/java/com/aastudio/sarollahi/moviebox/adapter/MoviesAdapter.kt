@@ -16,7 +16,7 @@ import java.util.Locale
 
 class MoviesAdapter(
     private var movies: MutableList<Movie>,
-    private val onMovieClick: (movie: Movie) -> Unit
+    private val onItemClick: (movie: Movie) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -67,7 +67,7 @@ class MoviesAdapter(
                 title.text = movie.title
                 overview.text = movie.overview
                 ratingNumber.text = movie.rating.toString()
-                itemView.setOnClickListener { onMovieClick.invoke(movie) }
+                itemView.setOnClickListener { onItemClick.invoke(movie) }
             }
         }
 

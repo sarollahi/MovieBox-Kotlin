@@ -13,7 +13,7 @@ import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class LanguageAdapter(
     private var language: MutableList<Language>,
-    private val onCastClick: (language: Language) -> Unit
+    private val onItemClick: (language: Language) -> Unit
 ) : RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageViewHolder {
@@ -42,7 +42,7 @@ class LanguageAdapter(
         fun bind(language: Language) {
             readyToReuse()
             this.language.text = language.name
-            itemView.setOnClickListener { onCastClick.invoke(language) }
+            itemView.setOnClickListener { onItemClick.invoke(language) }
         }
 
         private fun readyToReuse() {

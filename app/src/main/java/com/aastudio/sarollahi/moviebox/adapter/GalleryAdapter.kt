@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 
 class GalleryAdapter(
     private var gallery: MutableList<Images>,
-    private val onImageClick: (image: Images, position: Int) -> Unit
+    private val onItemClick: (image: Images, position: Int) -> Unit
 ) : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
@@ -46,7 +46,7 @@ class GalleryAdapter(
                     .load("$IMAGE_ADDRESS${image.path}")
                     .fitCenter()
                     .into(profilePath)
-                itemView.setOnClickListener { onImageClick.invoke(image, adapterPosition) }
+                itemView.setOnClickListener { onItemClick.invoke(image, adapterPosition) }
             }
         }
     }

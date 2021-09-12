@@ -23,8 +23,8 @@ import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
 import com.aastudio.sarollahi.moviebox.adapter.TVHorizontalLargeAdapter
 import com.aastudio.sarollahi.moviebox.adapter.TVHorizontalSmallAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentRootMovieBinding
-import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
 import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
+import com.aastudio.sarollahi.moviebox.ui.tvDetails.TVDetailsActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RootTVFragment : Fragment() {
@@ -199,8 +199,8 @@ class RootTVFragment : Fragment() {
     }
 
     private fun showShowDetails(show: TVShow) {
-        val intent = Intent(context, MovieDetailsActivity::class.java)
-        intent.putExtra(MovieDetailsActivity.MOVIE_ID, show.id)
+        val intent = Intent(context, TVDetailsActivity::class.java)
+        intent.putExtra(TVDetailsActivity.SHOW_ID, show.id)
         startActivity(intent)
     }
 

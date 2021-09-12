@@ -20,7 +20,7 @@ import java.util.Locale
 
 class MoviesHorizontalLargeAdapter(
     private var movies: MutableList<Movie>,
-    private val onMovieClick: (movie: Movie) -> Unit
+    private val onItemClick: (movie: Movie) -> Unit
 ) : RecyclerView.Adapter<MoviesHorizontalLargeAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -84,7 +84,7 @@ class MoviesHorizontalLargeAdapter(
                     "$infoText | ${movie.rating}"
                 }
                 info.text = infoText
-                itemView.setOnClickListener { onMovieClick.invoke(movie) }
+                itemView.setOnClickListener { onItemClick.invoke(movie) }
             }
         }
     }

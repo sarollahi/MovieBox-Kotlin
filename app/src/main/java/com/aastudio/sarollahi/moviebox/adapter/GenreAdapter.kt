@@ -13,7 +13,7 @@ import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class GenreAdapter(
     private var genre: MutableList<Genre>,
-    private val onCastClick: (genre: Genre) -> Unit
+    private val onItemClick: (genre: Genre) -> Unit
 ) : RecyclerView.Adapter<GenreAdapter.GenreViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenreViewHolder {
@@ -41,7 +41,7 @@ class GenreAdapter(
         fun bind(genre: Genre) {
             reuse()
             this.genre.text = genre.name
-            itemView.setOnClickListener { onCastClick.invoke(genre) }
+            itemView.setOnClickListener { onItemClick.invoke(genre) }
         }
 
         private fun reuse() {

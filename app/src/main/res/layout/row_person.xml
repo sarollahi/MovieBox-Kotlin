@@ -20,7 +20,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/castImage"
+                android:id="@+id/profileImage"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_alignParentTop="true"
@@ -28,10 +28,10 @@
                 android:scaleType="centerCrop" />
 
             <TextView
-                android:id="@+id/castCharacter"
+                android:id="@+id/character"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/castImage"
+                android:layout_alignBottom="@id/profileImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
@@ -45,7 +45,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/castName"
+        android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/movie_poster_card"

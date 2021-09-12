@@ -10,16 +10,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.moviebox.databinding.RowCastBinding
+import com.aastudio.sarollahi.moviebox.databinding.RowPersonBinding
 import com.bumptech.glide.Glide
 
 class CastAdapter(
     private var cast: MutableList<Person>,
-    private val onCastClick: (cast: Person) -> Unit
+    private val onItemClick: (cast: Person) -> Unit
 ) : RecyclerView.Adapter<CastAdapter.PersonViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
-        val binding = RowCastBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PersonViewHolder(binding)
     }
 
@@ -37,22 +37,27 @@ class CastAdapter(
         )
     }
 
-    inner class PersonViewHolder(itemView: RowCastBinding) :
+    inner class PersonViewHolder(itemView: RowPersonBinding) :
         RecyclerView.ViewHolder(itemView.root) {
-        private val profilePath = itemView.castImage
-        private var name = itemView.castName
-        private var character = itemView.castCharacter
+        private val profilePath = itemView.profileImage
+        private var name = itemView.name
+        private var character = itemView.character
 
         fun bind(cast: Person) {
-            if (!cast.profilePath.isNullOrEmpty()) {
+                reuse()
                 Glide.with(itemView)
                     .load("$IMAGE_ADDRESS${cast.profilePath}")
                     .fitCenter()
                     .into(profilePath)
                 name.text = cast.name
                 character.text = cast.character
-                itemView.setOnClickListener { onCastClick.invoke(cast) }
-            }
+                itemView.setOnClickListener { onItemClick.invoke(cast) }
+        }
+
+        fun reuse(){
+            name.text = ""
+            character.text = ""
+            profilePath.setImageResource(0)
         }
     }
 }

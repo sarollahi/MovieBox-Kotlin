@@ -16,7 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 
 class RecommendedMoviesAdapter(
     private var movies: MutableList<Movie>,
-    private val onMovieClick: (movie: Movie) -> Unit
+    private val onItemClick: (movie: Movie) -> Unit
 ) : RecyclerView.Adapter<RecommendedMoviesAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -48,7 +48,7 @@ class RecommendedMoviesAdapter(
                     .load("$IMAGE_ADDRESS${movie.posterPath}")
                     .transform(CenterCrop())
                     .into(poster)
-                itemView.setOnClickListener { onMovieClick.invoke(movie) }
+                itemView.setOnClickListener { onItemClick.invoke(movie) }
             }
         }
     }

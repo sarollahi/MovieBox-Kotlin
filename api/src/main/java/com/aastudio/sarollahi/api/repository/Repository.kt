@@ -20,6 +20,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.reflect.KFunction2
 
 object Repository {
     private val TMDB_API: TmdbApi
@@ -431,7 +432,7 @@ object Repository {
     fun getTVShowDetails(
         id: Long,
         onSuccess: (show: TVShow) -> Unit,
-        onError: (call: Call<TVShow>, error: String) -> Unit
+        onError: KFunction2<Call<TVShow>, String, Unit>
     ) {
         TMDB_API.getTVShowDetails(showId = id)
             .enqueue(object : Callback<TVShow> {

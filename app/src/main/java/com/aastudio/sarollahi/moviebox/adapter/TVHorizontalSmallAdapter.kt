@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 
 class TVHorizontalSmallAdapter(
     private var shows: MutableList<TVShow>,
-    private val onShowClick: (show: TVShow) -> Unit
+    private val onItemClick: (show: TVShow) -> Unit
 ) : RecyclerView.Adapter<TVHorizontalSmallAdapter.TVShowViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TVShowViewHolder {
@@ -63,7 +63,7 @@ class TVHorizontalSmallAdapter(
                 } else {
                     rating.text = "--"
                 }
-                itemView.setOnClickListener { onShowClick.invoke(show) }
+                itemView.setOnClickListener { onItemClick.invoke(show) }
             }
         }
 

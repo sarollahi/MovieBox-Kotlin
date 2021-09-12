@@ -35,7 +35,9 @@
     <string name="boxOffice">BoxOffice</string>
     <string name="production_companies">Production Companies</string>
     <string name="related_movies">Related Movies</string>
+    <string name="related_shows">Related TV Shows</string>
     <string name="recommended_movies">Recommended Movies</string>
+    <string name="recommended_shows">Recommended TV Shows</string>
     <string name="imdb">IMDB</string>
     <string name="quality">%1$s %2$s</string>
     <string name="rating">%1$d%2$s</string>

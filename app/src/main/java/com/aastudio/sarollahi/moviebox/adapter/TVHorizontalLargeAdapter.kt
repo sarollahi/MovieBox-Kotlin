@@ -17,7 +17,7 @@ import java.util.Locale
 
 class TVHorizontalLargeAdapter(
     private var shows: MutableList<TVShow>,
-    private val onMovieClick: (show: TVShow) -> Unit
+    private val onItemClick: (show: TVShow) -> Unit
 ) : RecyclerView.Adapter<TVHorizontalLargeAdapter.ShowViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
@@ -81,7 +81,7 @@ class TVHorizontalLargeAdapter(
                     "$infoText | ${show.rating}"
                 }
                 info.text = infoText
-                itemView.setOnClickListener { onMovieClick.invoke(show) }
+                itemView.setOnClickListener { onItemClick.invoke(show) }
             }
         }
     }

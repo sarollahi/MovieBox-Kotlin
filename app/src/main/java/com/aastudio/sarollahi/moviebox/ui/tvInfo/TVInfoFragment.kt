@@ -1,40 +1,25 @@
-/*
- * Copyright (C) 2021 Seyed Ahmad Sarollahi
- * All rights reserved.
- */
-
-package com.aastudio.sarollahi.moviebox.ui.movieInfo
+package com.aastudio.sarollahi.moviebox.ui.tvInfo
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.model.Person
+import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.moviebox.R
-import com.aastudio.sarollahi.moviebox.adapter.CastAdapter
-import com.aastudio.sarollahi.moviebox.adapter.CompanyAdapter
-import com.aastudio.sarollahi.moviebox.adapter.CountryAdapter
-import com.aastudio.sarollahi.moviebox.adapter.DirectorAdapter
-import com.aastudio.sarollahi.moviebox.adapter.LanguageAdapter
-import com.aastudio.sarollahi.moviebox.adapter.RecommendedMoviesAdapter
-import com.aastudio.sarollahi.moviebox.adapter.RelatedMoviesAdapter
-import com.aastudio.sarollahi.moviebox.adapter.WriterAdapter
-import com.aastudio.sarollahi.moviebox.databinding.FragmentMovieInfoBinding
-import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
-import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieViewModel
+import com.aastudio.sarollahi.moviebox.adapter.*
+import com.aastudio.sarollahi.moviebox.databinding.FragmentTvInfoBinding
 import com.aastudio.sarollahi.moviebox.ui.personDetails.PersonDetailsActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.aastudio.sarollahi.moviebox.ui.tvDetails.TVDetailsActivity
 
-class MovieInfoFragment : Fragment() {
-    lateinit var binding: FragmentMovieInfoBinding
-    private val viewModel by viewModel<MovieViewModel>()
-    private var movie: Movie? = null
+class TVInfoFragment : Fragment() {
+    lateinit var binding: FragmentTvInfoBinding
+    private var show: TVShow? = null
     private val cast = mutableSetOf<Person>()
     private val director = mutableSetOf<Person>()
     private val writer = mutableSetOf<Person>()
@@ -43,16 +28,16 @@ class MovieInfoFragment : Fragment() {
     private lateinit var writerAdapter: WriterAdapter
     private lateinit var directorAdapter: DirectorAdapter
     private lateinit var companyAdapter: CompanyAdapter
-    private lateinit var countryAdapter: CountryAdapter
+    private lateinit var countryAdapter: StringAdapter
     private lateinit var languageAdapter: LanguageAdapter
-    private lateinit var relatedAdapter: RelatedMoviesAdapter
-    private lateinit var recommendedAdapter: RecommendedMoviesAdapter
+    private lateinit var relatedAdapter: RelatedShowsAdapter
+    private lateinit var recommendedAdapter: RecommendedShowsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            movie = it.getParcelable(MOVIE_INFO)
+            show = it.getParcelable(SHOW_INFO)
         }
     }
 
@@ -61,7 +46,7 @@ class MovieInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMovieInfoBinding.inflate(inflater, container, false)
+        binding = FragmentTvInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -92,60 +77,51 @@ class MovieInfoFragment : Fragment() {
         writerAdapter = WriterAdapter(mutableListOf()) { person -> showPersonDetails(person) }
         binding.writerRecyclerView.adapter = writerAdapter
 
-        binding.movieCompany.layoutManager = LinearLayoutManager(
+        binding.showCompany.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
         companyAdapter = CompanyAdapter(mutableListOf()) {}
-        binding.movieCompany.adapter = companyAdapter
+        binding.showCompany.adapter = companyAdapter
 
-        binding.movieCountry.layoutManager = LinearLayoutManager(
+        binding.showCountry.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        countryAdapter = CountryAdapter(mutableListOf()) {}
-        binding.movieCountry.adapter = countryAdapter
+        countryAdapter = StringAdapter(mutableListOf()) {}
+        binding.showCountry.adapter = countryAdapter
 
-        binding.movieLanguage.layoutManager = LinearLayoutManager(
+        binding.showLanguage.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
         languageAdapter = LanguageAdapter(mutableListOf()) {}
-        binding.movieLanguage.adapter = languageAdapter
+        binding.showLanguage.adapter = languageAdapter
 
-        binding.movieRelated.layoutManager = LinearLayoutManager(
+        binding.relatedShow.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        relatedAdapter = RelatedMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
-        binding.movieRelated.adapter = relatedAdapter
+        relatedAdapter = RelatedShowsAdapter(mutableListOf()) { show -> showTVDetails(show) }
+        binding.relatedShow.adapter = relatedAdapter
 
-        binding.movieRecommended.layoutManager = LinearLayoutManager(
+        binding.recommendedShow.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
             false
         )
         recommendedAdapter =
-            RecommendedMoviesAdapter(mutableListOf()) { movie -> showMovieDetails(movie) }
-        binding.movieRecommended.adapter = recommendedAdapter
+            RecommendedShowsAdapter(mutableListOf()) { show -> showTVDetails(show) }
+        binding.recommendedShow.adapter = recommendedAdapter
 
-        val extras = activity?.intent?.getLongExtra(MovieDetailsActivity.MOVIE_ID, 0L)
-        if (extras != 0L) {
-            if (extras != null) {
-                viewModel.getMovieDetails(extras)
-            }
-        } else {
-            activity?.finish()
-        }
-
-        movie?.apply {
-            binding.movieOverview.apply {
+        show?.apply {
+            binding.showOverview.apply {
                 if (!overview.isNullOrEmpty()){
-                    setVisibility(binding.movieOverview)
+                    setVisibility(binding.showOverview)
                     text = overview
                     if (lineCount >= 5) {
                         setVisibility(binding.overviewArrow)
@@ -156,7 +132,7 @@ class MovieInfoFragment : Fragment() {
             credits?.castList?.let {
                 for (cast in it) {
                     if (cast.profilePath != null) {
-                        this@MovieInfoFragment.cast.add(cast)
+                        this@TVInfoFragment.cast.add(cast)
                     }
                 }
             }
@@ -167,16 +143,16 @@ class MovieInfoFragment : Fragment() {
                 castAdapter.notifyDataSetChanged()
             }
 
-            budget?.let {
-                if (it.isNotEmpty() && it != "0") {
-                    setVisibility(binding.movieBudget)
-                    binding.movieBudget.text = it
-                }
-            }
+//            budget?.let {
+//                if (it.isNotEmpty() && it != "0") {
+//                    setVisibility(binding.movieBudget)
+//                    binding.movieBudget.text = it
+//                }
+//            }
 
             language?.let {
                 if (it.isNotEmpty() && languageAdapter.itemCount == 0) {
-                    setVisibility(binding.movieLanguage)
+                    setVisibility(binding.showLanguage)
                     languageAdapter.appendLanguage(it)
                     languageAdapter.notifyDataSetChanged()
                 }
@@ -184,15 +160,15 @@ class MovieInfoFragment : Fragment() {
 
             country?.let {
                 if (it.isNotEmpty() && countryAdapter.itemCount == 0) {
-                    setVisibility(binding.movieCountry)
-                    countryAdapter.appendCountry(it)
+                    setVisibility(binding.showCountry)
+                    countryAdapter.appendString(it)
                     countryAdapter.notifyDataSetChanged()
                 }
             }
 
             company?.let {
                 if (it.isNotEmpty() && companyAdapter.itemCount == 0) {
-                    setVisibility(binding.movieCompany)
+                    setVisibility(binding.showCompany)
                     companyAdapter.appendCompany(it)
                     companyAdapter.notifyDataSetChanged()
                 }
@@ -200,16 +176,16 @@ class MovieInfoFragment : Fragment() {
 
             similar?.results?.let {
                 if (it.isNotEmpty() && relatedAdapter.itemCount == 0) {
-                    setVisibility(binding.movieRelated)
-                    relatedAdapter.appendRelatedMovies(it)
+                    setVisibility(binding.relatedShow)
+                    relatedAdapter.appendRelatedShows(it)
                     relatedAdapter.notifyDataSetChanged()
                 }
             }
 
             recommendations?.results?.let {
                 if (it.isNotEmpty() && recommendedAdapter.itemCount == 0) {
-                    setVisibility(binding.movieRecommended)
-                    recommendedAdapter.appendRecommendedMovies(it)
+                    setVisibility(binding.recommendedShow)
+                    recommendedAdapter.appendRecommendedShows(it)
                     recommendedAdapter.notifyDataSetChanged()
                 }
             }
@@ -244,17 +220,17 @@ class MovieInfoFragment : Fragment() {
 
     private fun setVisibility(view: View?) {
         when (view) {
-            binding.movieOverview -> {
+            binding.showOverview -> {
                 binding.OverviewTitle.visibility = View.VISIBLE
-                binding.movieOverview.visibility = View.VISIBLE
+                binding.showOverview.visibility = View.VISIBLE
             }
             binding.castRecyclerView -> {
                 binding.castTitle.visibility = View.VISIBLE
                 binding.castRecyclerView.visibility = View.VISIBLE
             }
-            binding.movieBudget -> {
+            binding.showBudget -> {
                 binding.budgetTitle.visibility = View.VISIBLE
-                binding.movieBudget.visibility = View.VISIBLE
+                binding.showBudget.visibility = View.VISIBLE
             }
             binding.writerRecyclerView -> {
                 binding.writerTitle.visibility = View.VISIBLE
@@ -267,25 +243,25 @@ class MovieInfoFragment : Fragment() {
             binding.overviewArrow -> {
                 binding.overviewArrow.visibility = View.VISIBLE
             }
-            binding.movieLanguage -> {
+            binding.showLanguage -> {
                 binding.languageTitle.visibility = View.VISIBLE
-                binding.movieLanguage.visibility = View.VISIBLE
+                binding.showLanguage.visibility = View.VISIBLE
             }
-            binding.movieCountry -> {
+            binding.showCountry -> {
                 binding.countryTitle.visibility = View.VISIBLE
-                binding.movieCountry.visibility = View.VISIBLE
+                binding.showCountry.visibility = View.VISIBLE
             }
-            binding.movieCompany -> {
+            binding.showCompany -> {
                 binding.companyTitle.visibility = View.VISIBLE
-                binding.movieCompany.visibility = View.VISIBLE
+                binding.showCompany.visibility = View.VISIBLE
             }
-            binding.movieRelated -> {
+            binding.relatedShow -> {
                 binding.relatedTitle.visibility = View.VISIBLE
-                binding.movieRelated.visibility = View.VISIBLE
+                binding.relatedShow.visibility = View.VISIBLE
             }
-            binding.movieRecommended -> {
+            binding.recommendedShow -> {
                 binding.recommendedTitle.visibility = View.VISIBLE
-                binding.movieRecommended.visibility = View.VISIBLE
+                binding.recommendedShow.visibility = View.VISIBLE
             }
         }
     }
@@ -294,7 +270,7 @@ class MovieInfoFragment : Fragment() {
     fun overViewStatus(down: Boolean) {
         if (down) {
             val animation = ObjectAnimator.ofInt(
-                binding.movieOverview,
+                binding.showOverview,
                 MAX_LINE,
                 25
             )
@@ -304,7 +280,7 @@ class MovieInfoFragment : Fragment() {
             binding.overviewArrow.setBackgroundResource(R.drawable.ic_arrow_up)
         } else {
             val animation = ObjectAnimator.ofInt(
-                binding.movieOverview,
+                binding.showOverview,
                 MAX_LINE,
                 4
             )
@@ -315,9 +291,9 @@ class MovieInfoFragment : Fragment() {
         }
     }
 
-    private fun showMovieDetails(movie: Movie) {
-        val intent = Intent(context, MovieDetailsActivity::class.java)
-        intent.putExtra(MovieDetailsActivity.MOVIE_ID, movie.id)
+    private fun showTVDetails(show: TVShow) {
+        val intent = Intent(context, TVDetailsActivity::class.java)
+        intent.putExtra(TVDetailsActivity.SHOW_ID, show.id)
         startActivity(intent)
         activity?.finish()
     }
@@ -331,14 +307,14 @@ class MovieInfoFragment : Fragment() {
 
     companion object {
         const val MAX_LINE = "maxLines"
-        private const val MOVIE_INFO = "movieInfo"
+        private const val SHOW_INFO = "showInfo"
         const val DIRECTOR = "Directing"
         const val WRITER = "Writing"
 
-        fun newInstance(movie: Movie): MovieInfoFragment {
-            val fragment = MovieInfoFragment()
+        fun newInstance(show: TVShow): TVInfoFragment {
+            val fragment = TVInfoFragment()
             val args = Bundle()
-            args.putParcelable(MOVIE_INFO, movie)
+            args.putParcelable(SHOW_INFO, show)
             fragment.arguments = args
             return fragment
         }

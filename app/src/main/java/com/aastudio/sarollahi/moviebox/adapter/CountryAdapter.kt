@@ -13,7 +13,7 @@ import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class CountryAdapter(
     private var country: MutableList<Country>,
-    private val onCastClick: (country: Country) -> Unit
+    private val onItemClick: (country: Country) -> Unit
 ) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
@@ -41,7 +41,7 @@ class CountryAdapter(
         fun bind(country: Country) {
             reuse()
             this.country.text = country.name
-            itemView.setOnClickListener { onCastClick.invoke(country) }
+            itemView.setOnClickListener { onItemClick.invoke(country) }
         }
 
         private fun reuse() {

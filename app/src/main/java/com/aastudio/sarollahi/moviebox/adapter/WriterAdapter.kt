@@ -11,16 +11,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.moviebox.databinding.RowCastBinding
+import com.aastudio.sarollahi.moviebox.databinding.RowPersonBinding
 import com.bumptech.glide.Glide
 
 class WriterAdapter(
     private var crew: MutableList<Person>,
-    private val onCastClick: (crew: Person) -> Unit
+    private val onItemClick: (crew: Person) -> Unit
 ) : RecyclerView.Adapter<WriterAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val binding = RowCastBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieViewHolder(binding)
     }
 
@@ -38,10 +38,10 @@ class WriterAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: RowCastBinding) : RecyclerView.ViewHolder(itemView.root) {
-        private val profilePath = itemView.castImage
-        private var name = itemView.castName
-        private var character = itemView.castCharacter
+    inner class MovieViewHolder(itemView: RowPersonBinding) : RecyclerView.ViewHolder(itemView.root) {
+        private val profilePath = itemView.profileImage
+        private var name = itemView.name
+        private var character = itemView.character
 
         fun bind(crew: Person) {
             reuse()
@@ -51,11 +51,12 @@ class WriterAdapter(
                 .fitCenter()
                 .into(profilePath)
             name.text = crew.name
-            itemView.setOnClickListener { onCastClick.invoke(crew) }
+            itemView.setOnClickListener { onItemClick.invoke(crew) }
         }
 
-        private fun reuse() {
+        fun reuse(){
             name.text = ""
+            profilePath.setImageResource(0)
         }
     }
 }

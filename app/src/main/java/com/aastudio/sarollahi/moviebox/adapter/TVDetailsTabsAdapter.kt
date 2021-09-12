@@ -8,24 +8,24 @@ package com.aastudio.sarollahi.moviebox.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.moviebox.ui.movieInfo.MovieInfoFragment
+import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.moviebox.ui.movieReview.ReviewFragment
+import com.aastudio.sarollahi.moviebox.ui.tvInfo.TVInfoFragment
 
 @Suppress("DEPRECATION")
-internal class DetailsTabsAdapter(
+internal class TVDetailsTabsAdapter(
     fm: FragmentManager,
     var totalTabs: Int,
-    var movie: Movie
+    var show: TVShow
 ) :
     FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                MovieInfoFragment.newInstance(movie)
+                TVInfoFragment.newInstance(show)
             }
             1 -> {
-                ReviewFragment.newInstance(movie.reviews)
+                ReviewFragment.newInstance(show.reviews)
             }
             else -> getItem(position)
         }

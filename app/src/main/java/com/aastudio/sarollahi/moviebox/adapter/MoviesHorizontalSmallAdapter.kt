@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 
 class MoviesHorizontalSmallAdapter(
     private var movies: MutableList<Movie>,
-    private val onMovieClick: (movie: Movie) -> Unit
+    private val onItemClick: (movie: Movie) -> Unit
 ) : RecyclerView.Adapter<MoviesHorizontalSmallAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -63,7 +63,7 @@ class MoviesHorizontalSmallAdapter(
                 } else {
                     rating.text = "--"
                 }
-                itemView.setOnClickListener { onMovieClick.invoke(movie) }
+                itemView.setOnClickListener { onItemClick.invoke(movie) }
             }
         }
 

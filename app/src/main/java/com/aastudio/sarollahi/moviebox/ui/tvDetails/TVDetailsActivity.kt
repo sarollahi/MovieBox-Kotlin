@@ -1,9 +1,4 @@
-/*
- * Copyright (C) 2021 Seyed Ahmad Sarollahi
- * All rights reserved.
- */
-
-package com.aastudio.sarollahi.moviebox.ui.movieDetails
+package com.aastudio.sarollahi.moviebox.ui.tvDetails
 
 import android.app.AlertDialog
 import android.content.Context
@@ -12,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -20,7 +16,6 @@ import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
@@ -34,10 +29,10 @@ import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.DetailsTabsAdapter
 import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
 import com.aastudio.sarollahi.moviebox.adapter.QualityAdapter
+import com.aastudio.sarollahi.moviebox.adapter.TVDetailsTabsAdapter
 import com.aastudio.sarollahi.moviebox.databinding.ActivityMovieDetailsBinding
+import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieViewModel
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity
-import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_TITLE
-import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_URL
 import com.aastudio.sarollahi.moviebox.ui.player.TrailerActivity
 import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
 import com.bumptech.glide.Glide
@@ -46,15 +41,15 @@ import com.google.android.material.tabs.TabLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.ByteArrayOutputStream
 
-class MovieDetailsActivity : AppCompatActivity() {
+class TVDetailsActivity : AppCompatActivity() {
     private lateinit var alertDialog: AlertDialog
     private lateinit var qualityAdapter: QualityAdapter
-    private val viewModel by viewModel<MovieViewModel>()
+    private val viewModel by viewModel<TVViewModel>()
     private lateinit var binding: ActivityMovieDetailsBinding
     private var isInWatchlist = false
 
     companion object {
-        const val MOVIE_ID = "extra_movie_id"
+        const val SHOW_ID = "extra_show_id"
         private const val PLUS_ROTATION = 0f
         private const val CROSS_ROTATION = 225f
         private const val ANIMATION_DURATION_MS = 500L
@@ -71,17 +66,17 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         binding.movieTitle.setSelected(true)
 
-        val extras = intent.getLongExtra(MOVIE_ID, 0L)
+        val extras = intent.getLongExtra(SHOW_ID, 0L)
         if (extras != 0L) {
-            viewModel.getMovieDetails(extras)
+            viewModel.getShowDetails(extras)
         } else {
             finish()
         }
 
         qualityAdapter = QualityAdapter(mutableListOf()) { movie ->
             val intent = Intent(this, StreamActivity::class.java)
-            intent.putExtra(MOVIE_URL, movie.url)
-            intent.putExtra(MOVIE_TITLE, viewModel.movie.value?.title)
+            intent.putExtra(StreamActivity.MOVIE_URL, movie.url)
+            intent.putExtra(StreamActivity.MOVIE_TITLE, viewModel.show.value?.name)
             startActivity(intent)
         }
 
@@ -90,28 +85,28 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
 
         viewModel.apply {
-            observe(movie) { movie ->
+            observe(show) { tvShow ->
                 Glide.with(applicationContext)
-                    .load("$IMAGE_ADDRESS${movie.backdropPath}")
+                    .load("$IMAGE_ADDRESS${tvShow.backdropPath}")
                     .transform(CenterCrop())
                     .into(binding.movieBackdrop)
 
                 Glide.with(applicationContext)
-                    .load("$IMAGE_ADDRESS${movie.posterPath}")
+                    .load("$IMAGE_ADDRESS${tvShow.posterPath}")
                     .into(binding.moviePoster)
-                binding.movieTitle.text = movie.title
-                movie.rating?.let { rating -> binding.movieRating.rating = rating }
-                binding.movieReleaseDate.text = movie.releaseDate
-                movie.runTime?.let { runTime -> binding.movieRuntime.text = refactorTime(runTime) }
+                binding.movieTitle.text = tvShow.name
+                tvShow.rating?.let { rating -> binding.movieRating.rating = rating }
+                binding.movieReleaseDate.text = "(${tvShow.firstAirDate} - ${tvShow.lastAirDate})"
+                tvShow.runTime?.let { runTime -> binding.movieRuntime.text = refactorTime(runTime[0].toInt()) }
 
                 binding.movieGenre.layoutManager = LinearLayoutManager(
-                    this@MovieDetailsActivity,
+                    this@TVDetailsActivity,
                     LinearLayoutManager.HORIZONTAL,
                     false
                 )
                 val genreAdapter = GenreAdapter(mutableListOf()) { genre -> searchMovies(genre) }
                 binding.movieGenre.adapter = genreAdapter
-                movie.genre?.let {
+                tvShow.genre?.let {
                     if (it.isNotEmpty() && genreAdapter.itemCount == 0) {
                         genreAdapter.appendGenre(it)
                         genreAdapter.notifyDataSetChanged()
@@ -123,10 +118,10 @@ class MovieDetailsActivity : AppCompatActivity() {
                 binding.detailTabs.newTab().setText(R.string.review)
                     .let { binding.detailTabs.addTab(it) }
                 val adapter = binding.detailTabs.tabCount.let {
-                    DetailsTabsAdapter(
+                    TVDetailsTabsAdapter(
                         supportFragmentManager,
                         it,
-                        movie
+                        tvShow
                     )
                 }
                 binding.viewPager.adapter = adapter
@@ -136,24 +131,24 @@ class MovieDetailsActivity : AppCompatActivity() {
                     )
                 )
                 binding.detailTabs.addOnTabSelectedListener(object :
-                        TabLayout.OnTabSelectedListener {
-                        override fun onTabSelected(tab: TabLayout.Tab) {
-                            binding.viewPager.currentItem = tab.position
-                        }
+                    TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab) {
+                        binding.viewPager.currentItem = tab.position
+                    }
 
-                        override fun onTabUnselected(tab: TabLayout.Tab) {}
-                        override fun onTabReselected(tab: TabLayout.Tab) {}
-                    })
+                    override fun onTabUnselected(tab: TabLayout.Tab) {}
+                    override fun onTabReselected(tab: TabLayout.Tab) {}
+                })
 
-                if (!movie.trailer?.results.isNullOrEmpty()) {
+                if (!tvShow.trailer?.results.isNullOrEmpty()) {
                     binding.trailer.setOnClickListener {
-                        movie.trailer?.results?.get(0)?.key?.let { key ->
+                        tvShow.trailer?.results?.get(0)?.key?.let { key ->
                             playTrailer(key)
                         }
                     }
                 }
 
-                movie.externalIds?.imdbId?.let { imdbId ->
+                tvShow.externalIds?.imdbId?.let { imdbId ->
                     binding.imdb.setOnClickListener {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
@@ -163,7 +158,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                     }
                 }
 
-                movie.externalIds?.facebookId?.let { facebookId ->
+                tvShow.externalIds?.facebookId?.let { facebookId ->
                     binding.facebook.setOnClickListener {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
@@ -173,7 +168,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                     }
                 }
 
-                movie.externalIds?.instagramId?.let { instagramId ->
+                tvShow.externalIds?.instagramId?.let { instagramId ->
                     binding.instagram.setOnClickListener {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
@@ -183,7 +178,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                     }
                 }
 
-                movie.externalIds?.twitterId?.let { twitterId ->
+                tvShow.externalIds?.twitterId?.let { twitterId ->
                     binding.twitter.setOnClickListener {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
@@ -220,9 +215,9 @@ class MovieDetailsActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(
                 Intent.EXTRA_TEXT,
-                "${viewModel.movie.value?.title}\n${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=com.aastudio.sarollahi.moviebox"
+                "${viewModel.show.value?.name}\n${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=com.aastudio.sarollahi.moviebox"
             )
-            intent.putExtra(Intent.EXTRA_STREAM, getImageURI(this@MovieDetailsActivity, bitmap))
+            intent.putExtra(Intent.EXTRA_STREAM, getImageURI(this@TVDetailsActivity, bitmap))
             intent.type = "image/*"
             startActivity(Intent.createChooser(intent, getText(R.string.share)))
         }
@@ -277,7 +272,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun searchMovies(genre: Genre) {
         val intent = Intent(this, SearchActivity::class.java)
-        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Movies")
+        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} TV Shows")
         intent.putExtra(SearchActivity.GENRE_ID, genre.id)
         startActivity(intent)
     }
@@ -302,7 +297,7 @@ class MovieDetailsActivity : AppCompatActivity() {
             MediaStore.Images.Media.insertImage(
                 context.contentResolver,
                 bitmap,
-                viewModel.movie.value?.title,
+                viewModel.show.value?.name,
                 null
             )
         return Uri.parse(path)

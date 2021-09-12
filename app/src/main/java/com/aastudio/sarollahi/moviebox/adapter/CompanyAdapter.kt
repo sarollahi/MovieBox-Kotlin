@@ -13,7 +13,7 @@ import com.aastudio.sarollahi.moviebox.databinding.RowTextBinding
 
 class CompanyAdapter(
     private var company: MutableList<Company>,
-    private val onCastClick: (company: Company) -> Unit
+    private val onItemClick: (company: Company) -> Unit
 ) : RecyclerView.Adapter<CompanyAdapter.CompanyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
@@ -42,7 +42,7 @@ class CompanyAdapter(
         fun bind(company: Company) {
             reuse()
             this.company.text = company.name
-            itemView.setOnClickListener { onCastClick.invoke(company) }
+            itemView.setOnClickListener { onItemClick.invoke(company) }
         }
 
         private fun reuse() {
