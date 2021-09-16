@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cardBackground"
+    android:padding="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="10dp"
+            android:text="@string/contact_alert_title"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/contact_alert_message"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:id="@+id/yes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/message"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/contact_alert_yes"/>
+
+    <Button
+        android:id="@+id/no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/message"
+        app:layout_constraintEnd_toStartOf="@id/yes"
+        android:background="?android:attr/selectableItemBackground"
+        android:layout_marginTop="10dp"
+        android:text="@string/contact_alert_no"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

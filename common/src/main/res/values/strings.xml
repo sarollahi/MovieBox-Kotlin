@@ -12,6 +12,8 @@
     <string name="now_playing">Now Playing</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="on_the_air">On TV</string>
+    <string name="airing_today">Airing Today</string>
     <string name="upcoming_movies">Upcoming Movies</string>
     <string name="now_playing_movies">Now Playing Movies</string>
     <string name="popular_movies">Popular Movies</string>
@@ -62,5 +64,8 @@
     <string name="about">About</string>
     <string name="utilities">UTILITIES</string>
     <string name="my_collection">MY COLLECTION</string>
+
+    <string name="onDate">on %1$s</string>
+
 
 </resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movies_navigation"
+    app:startDestination="@id/nav_root">
+
+    <fragment
+        android:id="@+id/nav_root"
+        android:name="com.aastudio.sarollahi.moviebox.ui.movie.RootMovieFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_root">
+        <action
+            android:id="@+id/action_nav_root_to_nav_upcoming"
+            app:destination="@id/nav_upcoming" />
+        <action
+            android:id="@+id/action_nav_root_to_nav_nowPlaying"
+            app:destination="@id/nav_nowPlaying" />
+        <action
+            android:id="@+id/action_nav_root_to_nav_popular"
+            app:destination="@id/nav_popular" />
+        <action
+            android:id="@+id/action_nav_root_to_nav_topRated"
+            app:destination="@id/nav_topRated" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_nowPlaying"
+        android:name="com.aastudio.sarollahi.moviebox.ui.movie.NowPlayingMoviesFragment"
+        android:label="@string/now_playing_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view"/>
+
+    <fragment
+        android:id="@+id/nav_upcoming"
+        android:name="com.aastudio.sarollahi.moviebox.ui.movie.UpcomingMoviesFragment"
+        android:label="@string/upcoming_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view" />
+
+    <fragment
+        android:id="@+id/nav_popular"
+        android:name="com.aastudio.sarollahi.moviebox.ui.movie.PopularMoviesFragment"
+        android:label="@string/popular_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view" />
+
+    <fragment
+        android:id="@+id/nav_topRated"
+        android:name="com.aastudio.sarollahi.moviebox.ui.movie.TopRatedMoviesFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view" />
+</navigation>

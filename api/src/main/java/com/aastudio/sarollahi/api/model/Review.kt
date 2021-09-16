@@ -35,16 +35,22 @@ data class Reviews(
 
 data class Review(
     @SerializedName("author") val name: String?,
-    @SerializedName("content") val review: String?
+    @SerializedName("content") val review: String?,
+    @SerializedName("updated_at") val date: String?,
+    @SerializedName("author_details") val authorDetails: Author?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readValue(Author::class.java.classLoader) as Author
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(review)
+        parcel.writeString(date)
+        parcel.writeValue(authorDetails)
     }
 
     override fun describeContents(): Int {
@@ -57,6 +63,31 @@ data class Review(
         }
 
         override fun newArray(size: Int): Array<Review?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+
+data class Author(
+    @SerializedName("avatar_path") val avatarPath: String?,
+) : Parcelable {
+    constructor(parcel: Parcel) : this(parcel.readString()) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(avatarPath)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Author> {
+        override fun createFromParcel(parcel: Parcel): Author {
+            return Author(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Author?> {
             return arrayOfNulls(size)
         }
     }

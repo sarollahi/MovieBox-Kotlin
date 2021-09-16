@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/rootRecyclerViewBackground"
+    tools:context=".ui.contact.ContactActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contact_title"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:paddingBottom="10dp"
+        android:layout_margin="10dp"
+        android:textStyle="bold"
+        android:textSize="25sp"/>
+
+    <TextView
+        android:id="@+id/nTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="20dp"
+        android:text="@string/contact_name_title"/>
+
+    <TextView
+        android:id="@+id/emptyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/nTitle"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:visibility="invisible"
+        android:layout_margin="20dp"
+        android:text="@string/contact_required"
+        android:textColor="@android:color/holo_red_light"/>
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/nTitle"
+        android:layout_margin="20dp"
+        android:textColor="@color/bodyText"
+        android:textColorHint="@color/bodyText"
+        android:hint="@string/contact_name_hint"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/eTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="20dp"
+        android:text="@string/contact_email_title"/>
+
+    <TextView
+        android:id="@+id/emptyEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/eTitle"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        android:visibility="invisible"
+        android:layout_margin="20dp"
+        android:text="@string/contact_required"
+        android:textColor="@android:color/holo_red_light"/>
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/eTitle"
+        android:layout_margin="20dp"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/bodyText"
+        android:textColorHint="@color/bodyText"
+        android:hint="@string/contact_email_hint"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/mTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="20dp"
+        android:text="@string/contact_message_title"/>
+
+    <TextView
+        android:id="@+id/emptyMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/mTitle"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        android:layout_margin="20dp"
+        android:visibility="invisible"
+        android:text="@string/contact_required"
+        android:textColor="@android:color/holo_red_light"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/message"
+        app:layout_constraintTop_toBottomOf="@id/mTitle"
+        app:layout_constraintBottom_toTopOf="@id/submit"
+        android:layout_margin="20dp"
+        android:textColor="@color/bodyText"
+        android:textColorHint="@color/bodyText"
+        android:inputType="textEmailAddress"
+        android:hint="@string/contact_message_hint"
+        android:gravity="top|start"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/darkBackground"
+        android:textColor="@color/bodyText"
+        android:text="@string/submit"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

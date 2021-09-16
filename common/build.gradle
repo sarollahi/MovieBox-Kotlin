@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -71,7 +71,14 @@ dependencies {
     api "com.github.bumptech.glide:glide:$glideVersion"
     api "androidx.coordinatorlayout:coordinatorlayout:$legacySupportV4"
     api "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "com.google.android.gms:play-services-measurement-api:$measurementApiVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Firebase
+    api "com.google.firebase:firebase-database:$firebaseDatabaseVersion"
+    api "com.google.firebase:firebase-crashlytics:$firebaseCrashlyticsVersion"
+    api "com.google.firebase:firebase-analytics:$firebaseAnalyticsVersion"
+    api "com.google.firebase:firebase-messaging:$firebaseMessagingVersion"
 
     // TorrentStream
     api "com.github.TorrentStream:TorrentStream-Android:$torrentstreamVersion"

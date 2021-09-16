@@ -5,19 +5,28 @@
 
 package com.aastudio.sarollahi.moviebox
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.aastudio.sarollahi.moviebox.databinding.ActivityRootBinding
-import com.aastudio.sarollahi.moviebox.ui.rootMovie.RootMovieFragment
-import com.aastudio.sarollahi.moviebox.ui.rootTV.RootTVFragment
+import com.aastudio.sarollahi.moviebox.databinding.ViewAboutBinding
+import com.aastudio.sarollahi.moviebox.ui.contact.ContactActivity
+import com.aastudio.sarollahi.moviebox.ui.movie.RootMovieFragment
+import com.aastudio.sarollahi.moviebox.ui.tv.RootTVFragment
+import com.aastudio.sarollahi.moviebox.util.FcmTokenRegistrationService
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -26,6 +35,7 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var binding: ActivityRootBinding
     private var drawerLayout: DrawerLayout? = null
+    private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +44,8 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         startKoin {
             androidContext(applicationContext)
@@ -116,8 +128,60 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_br -> {
             }
             R.id.nav_contact -> {
+                drawerLayout?.closeDrawer(GravityCompat.START)
+                startActivity(Intent(this, ContactActivity::class.java))
             }
             R.id.nav_about -> {
+                val builder = AlertDialog.Builder(this, R.style.CustomAlertDialog)
+                    .create()
+                val view: ViewAboutBinding = ViewAboutBinding.inflate(
+                    LayoutInflater.from(this),
+                    null,
+                    false
+                )
+                view.appVersion.text =
+                    getString(R.string.dialog_app_version_prefix, BuildConfig.VERSION_NAME)
+                builder.setView(view.root)
+                view.playStoreIcon.setOnClickListener {
+                    val appPackageName =
+                        packageName // getPackageName() from Context or Activity object
+                    try {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(getString(R.string.market_url, appPackageName))
+                            )
+                        )
+                    } catch (anfe: ActivityNotFoundException) {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(getString(R.string.play_url, appPackageName))
+                            )
+                        )
+                    }
+                }
+                view.txtInfoRate.setOnClickListener {
+                    val appPackageName =
+                        packageName // getPackageName() from Context or Activity object
+                    try {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(getString(R.string.market_url, appPackageName))
+                            )
+                        )
+                    } catch (anfe: ActivityNotFoundException) {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(getString(R.string.play_url, appPackageName))
+                            )
+                        )
+                    }
+                }
+                builder.setCanceledOnTouchOutside(true)
+                builder.show()
             }
         }
         return true
@@ -138,8 +202,18 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        sendFcmRegistrationToken()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         stopKoin()
+    }
+
+    private fun sendFcmRegistrationToken() {
+        val intent = Intent(this, FcmTokenRegistrationService::class.java)
+        startService(intent)
     }
 }

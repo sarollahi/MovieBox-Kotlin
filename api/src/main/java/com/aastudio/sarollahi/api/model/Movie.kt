@@ -23,7 +23,7 @@ data class Movie(
     @SerializedName("vote_count") val voteCount: Int?,
     @SerializedName("release_date") val releaseDate: String?,
     @SerializedName("original_language") val originalLanguage: String?,
-    @SerializedName("budget") val budget: String?,
+    @SerializedName("budget") val budget: Int?,
     @SerializedName("genres") val genre: List<Genre>?,
     @SerializedName("spoken_languages") val language: List<Language>?,
     @SerializedName("production_countries") val country: List<Country>?,
@@ -49,7 +49,7 @@ data class Movie(
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
+        parcel.readInt(),
         parcel.createTypedArrayList(Genre),
         parcel.createTypedArrayList(Language),
         parcel.createTypedArrayList(Country),
@@ -76,7 +76,7 @@ data class Movie(
         parcel.writeValue(voteCount)
         parcel.writeString(releaseDate)
         parcel.writeString(originalLanguage)
-        parcel.writeString(budget)
+        parcel.writeValue(budget)
         parcel.writeTypedList(genre)
         parcel.writeTypedList(language)
         parcel.writeTypedList(country)

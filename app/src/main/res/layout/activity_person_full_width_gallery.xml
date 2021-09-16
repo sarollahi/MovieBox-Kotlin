@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.personGallery.PersonFullWidthGalleryActivity">
+    tools:context=".ui.person.PersonFullWidthGalleryActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/gallery"
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/gallery"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/darkBackground" />-->
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/darkBackground" />
+        android:id="@+id/gallery"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

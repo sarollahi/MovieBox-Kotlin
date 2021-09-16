@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.aastudio.sarollahi.moviebox">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-
     <application
         android:allowBackup="true"
         android:configChanges="orientation|screenSize"
@@ -20,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Test">
         <activity
-            android:name=".ui.tvDetails.TVDetailsActivity"
+            android:name=".ui.contact.ContactActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.tv.TVDetailsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
@@ -39,11 +36,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Test.NoActionBar" />
         <activity
-            android:name=".ui.personGallery.PersonFullWidthGalleryActivity"
+            android:name=".ui.person.PersonFullWidthGalleryActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.personDetails.PersonDetailsActivity"
+            android:name=".ui.person.PersonDetailsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
@@ -51,7 +48,7 @@
             android:configChanges="orientation"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.movieDetails.MovieDetailsActivity"
+            android:name=".ui.movie.MovieDetailsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
@@ -67,6 +64,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".util.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".util.FcmTokenRegistrationService" />
     </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

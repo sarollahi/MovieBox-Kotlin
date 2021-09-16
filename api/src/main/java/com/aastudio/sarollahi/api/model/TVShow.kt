@@ -16,6 +16,7 @@ data class TVShow(
     @SerializedName("last_air_date") val lastAirDate: String?,
     @SerializedName("backdrop_path") val backdropPath: String?,
     @SerializedName("genres") val genre: List<Genre>?,
+    @SerializedName("seasons") val season: List<Season>?,
     @SerializedName("original_language") val originalLanguage: String?,
     @SerializedName("origin_country") val country: List<String>?,
     @SerializedName("overview") val overview: String?,
@@ -31,6 +32,7 @@ data class TVShow(
     @SerializedName("production_companies") val company: List<Company>?,
     @SerializedName("similar") val similar: SimilarAndRecommendationShows?,
     @SerializedName("recommendations") val recommendations: SimilarAndRecommendationShows?,
+    @SerializedName("episodes") val episodes: List<Episode>?,
     @SerializedName("torrents") val torrents: List<BaseMovie.Torrent>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -40,6 +42,7 @@ data class TVShow(
         parcel.readString(),
         parcel.readString(),
         parcel.createTypedArrayList(Genre),
+        parcel.createTypedArrayList(Season),
         parcel.readString(),
         parcel.createStringArrayList(),
         parcel.readString(),
@@ -55,6 +58,7 @@ data class TVShow(
         parcel.createTypedArrayList(Company),
         parcel.readValue(SimilarAndRecommendationShows::class.java.classLoader) as? SimilarAndRecommendationShows,
         parcel.readValue(SimilarAndRecommendationShows::class.java.classLoader) as? SimilarAndRecommendationShows,
+        parcel.createTypedArrayList(Episode),
         parcel.createTypedArrayList(BaseMovie.Torrent.CREATOR)
     )
 
@@ -65,6 +69,7 @@ data class TVShow(
         parcel.writeString(lastAirDate)
         parcel.writeString(backdropPath)
         parcel.writeTypedList(genre)
+        parcel.writeTypedList(season)
         parcel.writeString(originalLanguage)
         parcel.writeStringList(country)
         parcel.writeString(overview)
@@ -80,6 +85,7 @@ data class TVShow(
         parcel.writeTypedList(company)
         parcel.writeValue(similar)
         parcel.writeValue(recommendations)
+        parcel.writeTypedList(episodes)
         parcel.writeTypedList(torrents)
     }
 

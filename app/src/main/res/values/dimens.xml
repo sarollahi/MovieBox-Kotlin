@@ -17,4 +17,6 @@
     <dimen name="button_text_size">13sp</dimen>
     <dimen name="native_main_image_height">200dp</dimen>
     <dimen name="button_height">36dp</dimen>
+    <!-- About view -->
+    <dimen name="paddingHorizontalDetailsText">16.0dip</dimen>
 </resources>

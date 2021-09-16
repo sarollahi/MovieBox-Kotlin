@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.aastudio.sarollahi.api.model.Movie
-import com.aastudio.sarollahi.moviebox.ui.movieInfo.MovieInfoFragment
-import com.aastudio.sarollahi.moviebox.ui.movieReview.ReviewFragment
+import com.aastudio.sarollahi.moviebox.ui.movie.MovieInfoFragment
+import com.aastudio.sarollahi.moviebox.ui.review.ReviewFragment
 
 @Suppress("DEPRECATION")
 internal class DetailsTabsAdapter(

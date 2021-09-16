@@ -18,9 +18,14 @@
     <string name="now_playing_movies">Now Playing Movies</string>
     <string name="popular_movies">Popular Movies</string>
     <string name="top_rated_movies">Top Rated Movies</string>
+    <string name="upcoming_tv">Upcoming TV Shows</string>
+    <string name="now_playing_tv">Now Playing TV Shows</string>
+    <string name="popular_tv">Popular TV Shows</string>
+    <string name="top_rated_tv">Top Rated TV Shows</string>
     <string name="error_fetch_movies">Please check your internet connection</string>
     <!--tabs-->
     <string name="info">Info</string>
+    <string name="episodes">Episodes</string>
     <string name="review">Review</string>
     <string name="biography">Biography</string>
     <string name="images">Images</string>
@@ -53,7 +58,6 @@
     <string name="noSubtitle">No subtitles found to this movie..</string>
     <string name="subtitleError">Error with adding subtitle, Please try again..</string>
     <string name="view_all">View All</string>
-    <string name="home">Home</string>
     <!--facebook-->
     <string name="sponsored">Sponsored</string>
     <!--search-->
@@ -85,13 +89,45 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_search">SearchActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- About -->
+    <string name="hint_tmdb_sentence" translatable="false">This product uses the TMDb API but is not endorsed or certified by TMDb</string>
+    <string name="rate" translatable="false">"Rate positive"</string>
+    <string name="dialog_app_version_prefix" translatable="false">Version: %1$s</string>
+    <string name="dialog_developer_information" translatable="false"><span>\nDeveloped and designed by</span>\n\n<span><small>Seyed Ahmad Sarollahi\nmoviebox@sarollahi.ir</small></span></string>
+
+    <!-- Contact -->
+    <string name="contact_title">Drop us a line</string>
+    <string name="contact_name_title">Full Name</string>
+    <string name="contact_required">(Required)</string>
+    <string name="contact_name_hint">What\'s your full name?</string>
+    <string name="contact_email_title">Email address</string>
+    <string name="contact_email_hint">you@example.com</string>
+    <string name="contact_message_title">Message</string>
+    <string name="contact_message_hint">Write your message for the team here</string>
+    <string name="submit">Submit</string>
+
+    <!-- Alert -->
+    <string name="contact_alert_title">Message Received Successfully!</string>
+    <string name="contact_alert_message">Do you want to back to the start page?</string>
+    <string name="contact_alert_yes">Yes</string>
+    <string name="contact_alert_no">No</string>
+
+    <string name="play_url">http://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="market_url">market://details?id=%1$s</string>
+
+
+    <!-- Details -->
+    <string name="tv_release_date"> | %1$s - %2$s</string>
+    <string name="imdb_url">https://www.imdb.com/title/%1$s/</string>
+    <string name="facebook_url">https://www.facebook.com/%1$s/</string>
+    <string name="instagram_url">https://www.instagram.com/%1$s/</string>
+    <string name="twitter_url">https://twitter.com/%1$s/</string>
+
+
+
 
 </resources>

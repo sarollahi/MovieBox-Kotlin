@@ -98,8 +98,23 @@ interface TmdbApi {
     fun getTVShowDetails(
         @Path("showId") showId: Long,
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("append_to_response") append_to_response: String = "external_ids,credits,reviews,similar,recommendations,episode_groups"
+        @Query("append_to_response") append_to_response: String = "external_ids,credits,reviews,similar,recommendations"
     ): Call<TVShow>
+
+    @GET("tv/{showId}/season/{seasonNumber}")
+    fun getEpisodes(
+        @Path("showId") showId: Long,
+        @Path("seasonNumber") seasonNumber: Int,
+        @Query("api_key") apiKey: String = API_KEY
+    ): Call<TVShow>
+
+    @GET("discover/tv")
+    fun findTVByGenre(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("sort_by") sortBy: String,
+        @Query("with_genres") genreId: Int,
+        @Query("page") page: Int
+    ): Call<GetTVShowResponse>
 
     @GET("genre/tv/list")
     fun getTVGenres(

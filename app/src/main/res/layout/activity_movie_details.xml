@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/darkBackground"
         android:fillViewport="true"
-        tools:context=".ui.movieDetails.MovieDetailsActivity">
+        tools:context=".ui.movie.MovieDetailsActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -278,14 +278,6 @@
                         android:textColor="@color/bodyText"
                         android:textSize="12sp"
                         tools:text="1 H 42 min" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="5dp"
-                        android:textColor="@color/bodyText"
-                        android:textSize="12sp"
-                        android:text="|"/>
 
                     <TextView
                         android:id="@+id/movieReleaseDate"

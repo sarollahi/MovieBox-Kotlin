@@ -40,4 +40,9 @@ ext {
     exoplayerVersion = '2.14.2'
     torrentstreamVersion = "2.7.0"
     openSubtitlesVersion = "0.0.8"
+    firebaseDatabaseVersion = "20.0.2"
+    firebaseCrashlyticsVersion = "18.2.1"
+    firebaseAnalyticsVersion = "19.0.1"
+    firebaseMessagingVersion = "22.0.0"
+    measurementApiVersion = "19.0.1"
 }

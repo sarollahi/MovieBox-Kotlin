@@ -44,17 +44,17 @@ class CastAdapter(
         private var character = itemView.character
 
         fun bind(cast: Person) {
-                reuse()
-                Glide.with(itemView)
-                    .load("$IMAGE_ADDRESS${cast.profilePath}")
-                    .fitCenter()
-                    .into(profilePath)
-                name.text = cast.name
-                character.text = cast.character
-                itemView.setOnClickListener { onItemClick.invoke(cast) }
+            reuse()
+            Glide.with(itemView)
+                .load("$IMAGE_ADDRESS${cast.profilePath}")
+                .fitCenter()
+                .into(profilePath)
+            name.text = cast.name
+            character.text = cast.character
+            itemView.setOnClickListener { onItemClick.invoke(cast) }
         }
 
-        fun reuse(){
+        fun reuse() {
             name.text = ""
             character.text = ""
             profilePath.setImageResource(0)

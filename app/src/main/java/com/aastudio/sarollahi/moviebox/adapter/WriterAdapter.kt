@@ -54,7 +54,7 @@ class WriterAdapter(
             itemView.setOnClickListener { onItemClick.invoke(crew) }
         }
 
-        fun reuse(){
+        fun reuse() {
             name.text = ""
             profilePath.setImageResource(0)
         }

@@ -10,19 +10,25 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class BaseMovie {
-    @SerializedName("status") val status: String? = null
-    @SerializedName("status_message") val statusMessage: String? = null
-    @SerializedName("data") val data: Data? = null
+    @SerializedName("status")
+    val status: String? = null
+    @SerializedName("status_message")
+    val statusMessage: String? = null
+    @SerializedName("data")
+    val data: Data? = null
 
     class Torrent() : Parcelable {
 
-        @SerializedName("url") val url: String? = null
-        @SerializedName("quality") val quality: String? = null
-        @SerializedName("type") val type: String? = null
-        @SerializedName("size") val size: String? = null
+        @SerializedName("url")
+        val url: String? = null
+        @SerializedName("quality")
+        val quality: String? = null
+        @SerializedName("type")
+        val type: String? = null
+        @SerializedName("size")
+        val size: String? = null
 
-        constructor(parcel: Parcel) : this() {
-        }
+        constructor(parcel: Parcel) : this()
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
         }
@@ -43,10 +49,12 @@ class BaseMovie {
     }
 
     class Movie {
-        @SerializedName("torrents") val torrents: List<Torrent>? = null
+        @SerializedName("torrents")
+        val torrents: List<Torrent>? = null
     }
 
     class Data {
-        @SerializedName("movies") val movies: List<Movie>? = null
+        @SerializedName("movies")
+        val movies: List<Movie>? = null
     }
 }

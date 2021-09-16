@@ -9,8 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.aastudio.sarollahi.api.model.TVShow
-import com.aastudio.sarollahi.moviebox.ui.movieReview.ReviewFragment
-import com.aastudio.sarollahi.moviebox.ui.tvInfo.TVInfoFragment
+import com.aastudio.sarollahi.moviebox.ui.review.ReviewFragment
+import com.aastudio.sarollahi.moviebox.ui.tv.TVInfoFragment
+import com.aastudio.sarollahi.moviebox.ui.tv.TVSeasonFragment
 
 @Suppress("DEPRECATION")
 internal class TVDetailsTabsAdapter(
@@ -25,6 +26,9 @@ internal class TVDetailsTabsAdapter(
                 TVInfoFragment.newInstance(show)
             }
             1 -> {
+                TVSeasonFragment.newInstance(show)
+            }
+            2 -> {
                 ReviewFragment.newInstance(show.reviews)
             }
             else -> getItem(position)

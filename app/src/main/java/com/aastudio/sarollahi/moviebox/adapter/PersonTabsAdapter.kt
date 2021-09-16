@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.moviebox.ui.personGallery.PersonGalleryFragment
-import com.aastudio.sarollahi.moviebox.ui.personInfo.PersonInfoFragment
+import com.aastudio.sarollahi.moviebox.ui.person.PersonGalleryFragment
+import com.aastudio.sarollahi.moviebox.ui.person.PersonInfoFragment
 
 @Suppress("DEPRECATION")
 internal class PersonTabsAdapter(

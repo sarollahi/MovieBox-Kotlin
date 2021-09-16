@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "318678541073",
+    "firebase_url": "https://movie-box-da908-default-rtdb.firebaseio.com",
+    "project_id": "movie-box-da908",
+    "storage_bucket": "movie-box-da908.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318678541073:android:5f350cdaab46b6dc18a2b0",
+        "android_client_info": {
+          "package_name": "com.aastudio.sarollahi.moviebox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318678541073-unb9fb811uv2s8u3e4ke6t8o42jtb5di.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aastudio.sarollahi.moviebox",
+            "certificate_hash": "b91ef5fe2bdff595c7747f9863c3f56c3b68d9c4"
+          }
+        },
+        {
+          "client_id": "318678541073-3lp9cftdklp4pfs0st0j024a8fvdfguq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYsm1ibrFR2gFwjWOzj-uPkaGrZWZ7U_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318678541073-3lp9cftdklp4pfs0st0j024a8fvdfguq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

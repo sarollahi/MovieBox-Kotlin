@@ -8,6 +8,7 @@ package com.aastudio.sarollahi.api.repository
 import com.aastudio.sarollahi.api.TmdbApi
 import com.aastudio.sarollahi.api.YtsApi
 import com.aastudio.sarollahi.api.model.BaseMovie
+import com.aastudio.sarollahi.api.model.Episode
 import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.model.Person
@@ -143,7 +144,6 @@ object Repository {
                     call: Call<GetMoviesResponse>,
                     response: Response<GetMoviesResponse>
                 ) {
-                    val a = response
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         if (responseBody != null) {
@@ -253,7 +253,7 @@ object Repository {
     fun torrent(
         imdbId: String,
         onSuccess: (movies: List<BaseMovie.Movie>?) -> Unit,
-        onError: () -> Unit
+        onError: (call: Call<BaseMovie>, error: String) -> Unit
     ) {
         YTS_API.getMoviesList(imdbId)
             .enqueue(object : Callback<BaseMovie> {
@@ -266,15 +266,15 @@ object Repository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody)
                         } else {
-                            onError.invoke()
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke()
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<BaseMovie>, t: Throwable) {
-                    onError.invoke()
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
@@ -343,7 +343,7 @@ object Repository {
         page: Int = 1,
         region: String = "us",
         onSuccess: (show: List<TVShow>) -> Unit,
-        onError: (call: Call<GetTVShowResponse>, error: Throwable?) -> Unit
+        onError: (call: Call<GetTVShowResponse>, error: String) -> Unit
     ) {
         TMDB_API.getTopRatedTVShows(page = page, region = region)
             .enqueue(object : Callback<GetTVShowResponse> {
@@ -356,15 +356,15 @@ object Repository {
                         if (responseBody != null) {
                             onSuccess.invoke(responseBody.tvShows)
                         } else {
-                            onError.invoke(call, null)
+                            onError.invoke(call, response.errorBody().toString())
                         }
                     } else {
-                        onError.invoke(call, null)
+                        onError.invoke(call, response.errorBody().toString())
                     }
                 }
 
                 override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
-                    onError.invoke(call, t)
+                    onError.invoke(call, t.stackTrace.toString())
                 }
             })
     }
@@ -453,6 +453,67 @@ object Repository {
                 }
 
                 override fun onFailure(call: Call<TVShow>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
+    fun getEpisodes(
+        id: Long,
+        season: Int,
+        onSuccess: (episodes: List<Episode>?) -> Unit,
+        onError: KFunction2<Call<TVShow>, String, Unit>
+    ) {
+        TMDB_API.getEpisodes(showId = id, seasonNumber = season)
+            .enqueue(object : Callback<TVShow> {
+                override fun onResponse(
+                    call: Call<TVShow>,
+                    response: Response<TVShow>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            onSuccess.invoke(responseBody.episodes)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<TVShow>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
+    fun findTVByGenre(
+        page: Int = 1,
+        sort: String,
+        id: Int,
+        onSuccess: (shows: List<TVShow>) -> Unit,
+        onError: (call: Call<GetTVShowResponse>, error: String) -> Unit
+    ) {
+        TMDB_API.findTVByGenre(page = page, sortBy = sort, genreId = id)
+            .enqueue(object : Callback<GetTVShowResponse> {
+                override fun onResponse(
+                    call: Call<GetTVShowResponse>,
+                    response: Response<GetTVShowResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            onSuccess.invoke(responseBody.tvShows)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
                     onError.invoke(call, t.stackTrace.toString())
                 }
             })

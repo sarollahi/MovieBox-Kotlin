@@ -11,11 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Movie
+import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter
+import com.aastudio.sarollahi.moviebox.adapter.TVShowsAdapter
 import com.aastudio.sarollahi.moviebox.databinding.ActivitySearchBinding
-import com.aastudio.sarollahi.moviebox.ui.movieDetails.MovieDetailsActivity
+import com.aastudio.sarollahi.moviebox.ui.movie.MovieDetailsActivity
+import com.aastudio.sarollahi.moviebox.ui.tv.TVDetailsActivity
 import com.facebook.ads.AudienceNetworkAds
 import com.google.android.material.snackbar.Snackbar
 import com.mopub.common.MoPub
@@ -31,14 +34,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private val viewModel by viewModel<SearchViewModel>()
     private lateinit var moviesAdapter: MoviesAdapter
+    private lateinit var tvAdapter: TVShowsAdapter
     private lateinit var moviesLayoutMgr: LinearLayoutManager
     private var genreId: Int? = null
     private var page = 1
     private var sort = "popularity.desc"
+    private var isMovie = true
 
     companion object {
         const val GENRE_ID = "extra_genre_id"
         const val GENRE_NAME = "extra_genre_name"
+        const val IS_MOVIE = "extra_is_movie"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +69,11 @@ class SearchActivity : AppCompatActivity() {
                 mutableListOf()
             ) { movie -> showMovieDetails(movie) }
 
+        tvAdapter =
+            TVShowsAdapter(
+                mutableListOf()
+            ) { show -> showTVDetails(show) }
+
         moviesLayoutMgr = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL,
@@ -71,18 +82,27 @@ class SearchActivity : AppCompatActivity() {
         binding.searchContent.searchContainer.layoutManager = moviesLayoutMgr
 
         genreId = intent.getIntExtra(GENRE_ID, -1)
+        isMovie = intent.getBooleanExtra(IS_MOVIE, true)
         if (genreId != null && genreId != -1) {
-            viewModel.findMovies(page, sort, genreId!!)
+            if (isMovie) {
+                viewModel.findMovies(page, sort, genreId!!)
+                setUpRecyclerView(moviesAdapter)
+            } else {
+                viewModel.findTVShows(page, sort, genreId!!)
+                setUpRecyclerView(tvAdapter)
+            }
         } else {
             finish()
         }
 
-        setUpRecyclerView(moviesAdapter)
-
         viewModel.apply {
             observe(moviesList) {
                 moviesAdapter.appendMovies(it)
-                attachPopularMoviesOnScrollListener()
+                attachMoreOnScrollListener()
+            }
+            observe(showsList) {
+                tvAdapter.appendMovies(it)
+                attachMoreOnScrollListener()
             }
         }
 
@@ -96,7 +116,7 @@ class SearchActivity : AppCompatActivity() {
         return SdkInitializationListener { }
     }
 
-    private fun attachPopularMoviesOnScrollListener() {
+    private fun attachMoreOnScrollListener() {
         binding.searchContent.searchContainer.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -107,7 +127,13 @@ class SearchActivity : AppCompatActivity() {
                     if (firstVisibleItem + visibleItemCount >= totalItemCount / 2) {
                         binding.searchContent.searchContainer.removeOnScrollListener(this)
                         page++
-                        genreId?.let { id -> viewModel.findMovies(page, sort, id) }
+                        genreId?.let { id ->
+                            if (isMovie) {
+                                viewModel.findMovies(page, sort, id)
+                            } else {
+                                viewModel.findTVShows(page, sort, id)
+                            }
+                        }
                     }
                 }
             })
@@ -119,12 +145,18 @@ class SearchActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun showTVDetails(show: TVShow) {
+        val intent = Intent(this, TVDetailsActivity::class.java)
+        intent.putExtra(TVDetailsActivity.SHOW_ID, show.id)
+        startActivity(intent)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
     }
 
-    private fun setUpRecyclerView(adapter: MoviesAdapter) {
+    private fun setUpRecyclerView(adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) {
         // Pass the recycler Adapter your original adapter.
         val myMoPubAdapter = MoPubRecyclerAdapter(this, adapter)
         // Create an ad renderer and view binder that describe your native ad layout.
