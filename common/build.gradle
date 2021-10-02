@@ -76,9 +76,12 @@ dependencies {
 
     // Firebase
     api "com.google.firebase:firebase-database:$firebaseDatabaseVersion"
+    api "com.firebaseui:firebase-ui-database:$firebaseDatabaseUIVersion"
     api "com.google.firebase:firebase-crashlytics:$firebaseCrashlyticsVersion"
     api "com.google.firebase:firebase-analytics:$firebaseAnalyticsVersion"
     api "com.google.firebase:firebase-messaging:$firebaseMessagingVersion"
+    api "com.google.firebase:firebase-auth-ktx:$firebaseAuthktxVersion"
+    api "com.google.firebase:firebase-storage-ktx:$firebaseStorageKtxVersion"
 
     // TorrentStream
     api "com.github.TorrentStream:TorrentStream-Android:$torrentstreamVersion"

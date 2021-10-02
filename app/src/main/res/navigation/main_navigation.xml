@@ -47,4 +47,53 @@
         android:name="com.aastudio.sarollahi.moviebox.ui.movie.TopRatedMoviesFragment"
         android:label="@string/top_rated_movies"
         tools:layout="@layout/fragment_vertical_recycler_view" />
+
+    <fragment
+        android:id="@+id/nav_root_tv"
+        android:name="com.aastudio.sarollahi.moviebox.ui.tv.RootTVFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_root" >
+        <action
+            android:id="@+id/action_nav_root_tv_to_nav_nowPlaying_tv"
+            app:destination="@id/nav_nowPlaying_tv" />
+        <action
+            android:id="@+id/action_nav_root_tv_to_nav_upcoming_tv"
+            app:destination="@id/nav_upcoming_tv" />
+        <action
+            android:id="@+id/action_nav_root_tv_to_nav_popular_tv"
+            app:destination="@id/nav_popular_tv" />
+        <action
+            android:id="@+id/action_nav_root_tv_to_nav_topRated_tv"
+            app:destination="@id/nav_topRated_tv" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_nowPlaying_tv"
+        android:name="com.aastudio.sarollahi.moviebox.ui.tv.NowPlayingTVShowsFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view" />
+
+    <fragment
+        android:id="@+id/nav_upcoming_tv"
+        android:name="com.aastudio.sarollahi.moviebox.ui.tv.UpcomingTVShowsFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view" />
+
+    <fragment
+        android:id="@+id/nav_popular_tv"
+        android:name="com.aastudio.sarollahi.moviebox.ui.tv.PopularTVShowsFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view" />
+
+    <fragment
+        android:id="@+id/nav_topRated_tv"
+        android:name="com.aastudio.sarollahi.moviebox.ui.tv.TopRatedTVShowsFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_vertical_recycler_view" />
+
+    <fragment
+        android:id="@+id/nav_root_watchList"
+        android:name="com.aastudio.sarollahi.moviebox.ui.watchList.TestFragment"
+        android:label="@string/top_rated_movies"
+        tools:layout="@layout/fragment_test" />
 </navigation>

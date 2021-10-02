@@ -30,17 +30,6 @@
         android:layout_margin="20dp"
         android:text="@string/contact_name_title"/>
 
-    <TextView
-        android:id="@+id/emptyName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/nTitle"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        android:visibility="invisible"
-        android:layout_margin="20dp"
-        android:text="@string/contact_required"
-        android:textColor="@android:color/holo_red_light"/>
-
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
@@ -61,17 +50,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="20dp"
         android:text="@string/contact_email_title"/>
-
-    <TextView
-        android:id="@+id/emptyEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/eTitle"
-        app:layout_constraintTop_toBottomOf="@id/name"
-        android:visibility="invisible"
-        android:layout_margin="20dp"
-        android:text="@string/contact_required"
-        android:textColor="@android:color/holo_red_light"/>
 
     <EditText
         android:id="@+id/email"
@@ -94,17 +72,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="20dp"
         android:text="@string/contact_message_title"/>
-
-    <TextView
-        android:id="@+id/emptyMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/mTitle"
-        app:layout_constraintTop_toBottomOf="@id/email"
-        android:layout_margin="20dp"
-        android:visibility="invisible"
-        android:text="@string/contact_required"
-        android:textColor="@android:color/holo_red_light"/>
 
     <EditText
         android:layout_width="match_parent"

@@ -76,6 +76,7 @@ class TVShowsAdapter(
             release.text = ""
             overview.text = ""
             ratingNumber.text = ""
+            poster.setImageDrawable(null)
         }
     }
 }

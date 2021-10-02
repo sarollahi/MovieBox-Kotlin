@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.moviebox.databinding.RowPersonBinding
+import com.aastudio.sarollahi.moviebox.databinding.RowCreditsBinding
 import com.bumptech.glide.Glide
 
 class CastAdapter(
@@ -19,7 +19,7 @@ class CastAdapter(
 ) : RecyclerView.Adapter<CastAdapter.PersonViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
-        val binding = RowPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowCreditsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PersonViewHolder(binding)
     }
 
@@ -37,7 +37,7 @@ class CastAdapter(
         )
     }
 
-    inner class PersonViewHolder(itemView: RowPersonBinding) :
+    inner class PersonViewHolder(itemView: RowCreditsBinding) :
         RecyclerView.ViewHolder(itemView.root) {
         private val profilePath = itemView.profileImage
         private var name = itemView.name

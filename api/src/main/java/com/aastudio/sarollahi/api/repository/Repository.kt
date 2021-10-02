@@ -12,8 +12,11 @@ import com.aastudio.sarollahi.api.model.Episode
 import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.model.Person
+import com.aastudio.sarollahi.api.model.PersonMovies
+import com.aastudio.sarollahi.api.model.PersonTVShows
 import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.api.response.GetMoviesResponse
+import com.aastudio.sarollahi.api.response.GetPersonResponse
 import com.aastudio.sarollahi.api.response.GetTVShowResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -250,6 +253,34 @@ object Repository {
             })
     }
 
+    fun getTVGenres(
+        onSuccess: (genre: List<Genre>) -> Unit,
+        onError: (call: Call<TVShow>, error: String) -> Unit
+    ) {
+        TMDB_API.getTVGenres()
+            .enqueue(object : Callback<TVShow> {
+                override fun onResponse(
+                    call: Call<TVShow>,
+                    response: Response<TVShow>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()?.genre
+                        if (responseBody != null) {
+                            onSuccess.invoke(responseBody)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<TVShow>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
     fun torrent(
         imdbId: String,
         onSuccess: (movies: List<BaseMovie.Movie>?) -> Unit,
@@ -303,6 +334,64 @@ object Repository {
                 }
 
                 override fun onFailure(call: Call<Person?>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
+    fun getPersonMovies(
+        id: Int,
+        onSuccess: (movies: List<Movie>) -> Unit,
+        onError: (call: Call<PersonMovies?>, error: String) -> Unit
+    ) {
+        TMDB_API.getPersonMovies(personId = id)
+            .enqueue(object : Callback<PersonMovies?> {
+                override fun onResponse(
+                    call: Call<PersonMovies?>,
+                    response: Response<PersonMovies?>
+                ) {
+                    if (response.isSuccessful) {
+                        val movies: List<Movie>? = response.body()?.castList
+                        if (movies != null) {
+                            onSuccess.invoke(movies)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<PersonMovies?>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
+    fun getPersonTVs(
+        id: Int,
+        onSuccess: (movies: List<TVShow>) -> Unit,
+        onError: (call: Call<PersonTVShows?>, error: String) -> Unit
+    ) {
+        TMDB_API.getPersonTVs(personId = id)
+            .enqueue(object : Callback<PersonTVShows?> {
+                override fun onResponse(
+                    call: Call<PersonTVShows?>,
+                    response: Response<PersonTVShows?>
+                ) {
+                    if (response.isSuccessful) {
+                        val shows: List<TVShow>? = response.body()?.castList
+                        if (shows != null) {
+                            onSuccess.invoke(shows)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<PersonTVShows?>, t: Throwable) {
                     onError.invoke(call, t.stackTrace.toString())
                 }
             })
@@ -514,6 +603,98 @@ object Repository {
                 }
 
                 override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
+    fun searchMovies(
+        page: Int = 1,
+        query: String,
+        year: String,
+        onSuccess: (movies: List<Movie>) -> Unit,
+        onError: (call: Call<GetMoviesResponse>, error: String) -> Unit
+    ) {
+        TMDB_API.searchMovie(page = page, query = query, year = year)
+            .enqueue(object : Callback<GetMoviesResponse> {
+                override fun onResponse(
+                    call: Call<GetMoviesResponse>,
+                    response: Response<GetMoviesResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            onSuccess.invoke(responseBody.movies)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<GetMoviesResponse>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
+    fun searchTVShows(
+        page: Int = 1,
+        query: String,
+        year: String,
+        onSuccess: (shows: List<TVShow>) -> Unit,
+        onError: (call: Call<GetTVShowResponse>, error: String) -> Unit
+    ) {
+        TMDB_API.searchTVShow(page = page, query = query, year = year)
+            .enqueue(object : Callback<GetTVShowResponse> {
+                override fun onResponse(
+                    call: Call<GetTVShowResponse>,
+                    response: Response<GetTVShowResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            onSuccess.invoke(responseBody.tvShows)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<GetTVShowResponse>, t: Throwable) {
+                    onError.invoke(call, t.stackTrace.toString())
+                }
+            })
+    }
+
+    fun searchPerson(
+        page: Int = 1,
+        query: String,
+        onSuccess: (shows: List<Person>) -> Unit,
+        onError: (call: Call<GetPersonResponse>, error: String) -> Unit
+    ) {
+        TMDB_API.searchPerson(page = page, query = query)
+            .enqueue(object : Callback<GetPersonResponse> {
+                override fun onResponse(
+                    call: Call<GetPersonResponse>,
+                    response: Response<GetPersonResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            onSuccess.invoke(responseBody.people)
+                        } else {
+                            onError.invoke(call, response.errorBody().toString())
+                        }
+                    } else {
+                        onError.invoke(call, response.errorBody().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<GetPersonResponse>, t: Throwable) {
                     onError.invoke(call, t.stackTrace.toString())
                 }
             })

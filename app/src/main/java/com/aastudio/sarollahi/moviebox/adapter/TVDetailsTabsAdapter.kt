@@ -7,35 +7,28 @@ package com.aastudio.sarollahi.moviebox.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.moviebox.ui.review.ReviewFragment
 import com.aastudio.sarollahi.moviebox.ui.tv.TVInfoFragment
 import com.aastudio.sarollahi.moviebox.ui.tv.TVSeasonFragment
 
-@Suppress("DEPRECATION")
 internal class TVDetailsTabsAdapter(
-    fm: FragmentManager,
-    var totalTabs: Int,
-    var show: TVShow
-) :
-    FragmentPagerAdapter(fm) {
-    override fun getItem(position: Int): Fragment {
-        return when (position) {
-            0 -> {
-                TVInfoFragment.newInstance(show)
-            }
-            1 -> {
-                TVSeasonFragment.newInstance(show)
-            }
-            2 -> {
-                ReviewFragment.newInstance(show.reviews)
-            }
-            else -> getItem(position)
-        }
+    fragmentManager: FragmentManager,
+    private var totalTabs: Int,
+    var show: TVShow,
+    lifecycle: Lifecycle
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
+    override fun getItemCount(): Int {
+        return totalTabs
     }
 
-    override fun getCount(): Int {
-        return totalTabs
+    override fun createFragment(position: Int): Fragment {
+        when (position) {
+            0 -> return TVInfoFragment.newInstance(show)
+            1 -> return TVSeasonFragment.newInstance(show)
+        }
+        return ReviewFragment.newInstance(show.reviews)
     }
 }

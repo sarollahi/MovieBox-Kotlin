@@ -37,12 +37,15 @@ ext {
     koinVersion = "2.1.5"
     rxKotlinVersion = "2.2.0"
     rxAndroidVersion = "2.1.1"
-    exoplayerVersion = '2.14.2'
+    exoplayerVersion = '2.15.1'
     torrentstreamVersion = "2.7.0"
     openSubtitlesVersion = "0.0.8"
     firebaseDatabaseVersion = "20.0.2"
+    firebaseDatabaseUIVersion = "6.2.1"
     firebaseCrashlyticsVersion = "18.2.1"
     firebaseAnalyticsVersion = "19.0.1"
     firebaseMessagingVersion = "22.0.0"
+    firebaseAuthktxVersion = "21.0.1"
+    firebaseStorageKtxVersion = "20.0.0"
     measurementApiVersion = "19.0.1"
 }

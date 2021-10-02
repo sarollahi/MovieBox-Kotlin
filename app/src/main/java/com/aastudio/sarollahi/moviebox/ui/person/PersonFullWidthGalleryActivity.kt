@@ -21,14 +21,19 @@ class PersonFullWidthGalleryActivity : AppCompatActivity() {
     private var position: Int = 0
     private var imageList: List<Images> = emptyList()
 
+    companion object {
+        const val PERSON = "person"
+        const val POSITION = "position"
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonFullWidthGalleryBinding.inflate(layoutInflater, null, false)
         setContentView(binding.root)
 
-        person = intent.getParcelableExtra("person")
-        position = intent.getIntExtra("pos", -1)
+        person = intent.getParcelableExtra(PERSON)
+        position = intent.getIntExtra(POSITION, -1)
 
         person?.apply {
             images?.let {

@@ -29,6 +29,7 @@
     <string name="review">Review</string>
     <string name="biography">Biography</string>
     <string name="images">Images</string>
+    <string name="movies">Movies</string>
     <!--info-->
     <string name="overview">Story Line</string>
     <string name="cast">Cast List</string>
@@ -73,7 +74,7 @@
     <string name="search">Search</string>
     <string name="search_drawer">Search Drawer</string>
     <!--menu-->
-    <string name="favorites">Favorites</string>
+    <string name="my_watch_list">My Watchlist</string>
     <string name="downloads">My Downloads</string>
     <string name="updates">Updates</string>
     <string name="backup_restore"><![CDATA[Backup & restore]]></string>
@@ -81,6 +82,7 @@
     <string name="about">About</string>
     <string name="utilities">UTILITIES</string>
     <string name="my_collection">MY COLLECTION</string>
+    <string name="auth">Sign in</string>
 
 
     <string name="streamSeeds">Seeds: %d</string>
@@ -121,13 +123,14 @@
 
 
     <!-- Details -->
-    <string name="tv_release_date"> | %1$s - %2$s</string>
+    <string name="tv_release_date">%1$s - %2$s</string>
+    <string name="movie_release_date">%1$s</string>
+    <string name="runtime_hour_min">%d H %02d Min |\u0020</string>
+    <string name="runtime_min">%d Min |\u0020</string>
     <string name="imdb_url">https://www.imdb.com/title/%1$s/</string>
     <string name="facebook_url">https://www.facebook.com/%1$s/</string>
     <string name="instagram_url">https://www.instagram.com/%1$s/</string>
     <string name="twitter_url">https://twitter.com/%1$s/</string>
-
-
-
+    <string name="person_death_date">\u0020- %1$s</string>
 
 </resources>

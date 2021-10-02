@@ -19,7 +19,9 @@
             <item
                 android:id="@+id/navYear"
                 android:title="@null"
-                app:actionLayout="@layout/edit_text" />
+                android:inputType="number"
+                android:maxLength="4"
+                app:actionLayout="@layout/number_edit_text" />
             <item
                 android:id="@+id/navMovieSearch"
                 android:title="@null"

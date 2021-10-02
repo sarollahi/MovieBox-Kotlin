@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aastudio.sarollahi.api.TOP_RATED_ADS_PLACEMENT_ID
+import com.aastudio.sarollahi.api.UPCOMING_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R
@@ -143,6 +143,6 @@ class UpcomingTVShowsFragment : Fragment() {
 
         // Set up the RecyclerView and start loading ads
         binding.recyclerView.adapter = myMoPubAdapter
-        myMoPubAdapter.loadAds(TOP_RATED_ADS_PLACEMENT_ID)
+        myMoPubAdapter.loadAds(UPCOMING_ADS_PLACEMENT_ID)
     }
 }

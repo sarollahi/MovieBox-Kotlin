@@ -14,6 +14,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,19 +30,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
+import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.common.observe
+import com.aastudio.sarollahi.common.util.FirebaseUtils
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
 import com.aastudio.sarollahi.moviebox.adapter.QualityAdapter
 import com.aastudio.sarollahi.moviebox.adapter.TVDetailsTabsAdapter
 import com.aastudio.sarollahi.moviebox.databinding.ActivityTvDetailsBinding
+import com.aastudio.sarollahi.moviebox.ui.authentication.AuthActivity
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity
 import com.aastudio.sarollahi.moviebox.ui.player.TrailerActivity
-import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
+import com.aastudio.sarollahi.moviebox.ui.search.GenreSearchActivity
 import com.aastudio.sarollahi.moviebox.ui.tv.viewModel.TVViewModel
+import com.aastudio.sarollahi.moviebox.util.ViewPager2ViewHeightAnimator
+import com.aastudio.sarollahi.moviebox.util.createDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.ByteArrayOutputStream
 
@@ -49,6 +60,7 @@ class TVDetailsActivity : AppCompatActivity() {
     private lateinit var alertDialog: AlertDialog
     private lateinit var qualityAdapter: QualityAdapter
     private val viewModel by viewModel<TVViewModel>()
+    private var show: TVShow? = null
     private lateinit var binding: ActivityTvDetailsBinding
     private var isInWatchlist = false
 
@@ -70,7 +82,7 @@ class TVDetailsActivity : AppCompatActivity() {
 
         binding.movieTitle.setSelected(true)
 
-        val extras = intent.getLongExtra(SHOW_ID, 0L)
+        val extras = intent.getStringExtra(SHOW_ID)?.toLong() ?: 0L
         if (extras != 0L) {
             viewModel.getShowDetails(extras)
         } else {
@@ -90,6 +102,8 @@ class TVDetailsActivity : AppCompatActivity() {
 
         viewModel.apply {
             observe(show) { tvShow ->
+                this@TVDetailsActivity.show = tvShow
+                checkWatchList()
                 Glide.with(applicationContext)
                     .load("$IMAGE_ADDRESS${tvShow.backdropPath}")
                     .transform(CenterCrop())
@@ -102,8 +116,10 @@ class TVDetailsActivity : AppCompatActivity() {
                 tvShow.rating?.let { rating -> binding.movieRating.rating = rating }
                 binding.movieReleaseDate.text =
                     getString(R.string.tv_release_date, tvShow.firstAirDate, tvShow.lastAirDate)
-                tvShow.runTime?.let { runTime ->
-                    binding.movieRuntime.text = refactorTime(runTime[0].toInt())
+                if (!tvShow.runTime.isNullOrEmpty()) {
+                    tvShow.runTime?.get(0)?.let {
+                        binding.movieRuntime.text = refactorTime(this@TVDetailsActivity, it.toInt())
+                    }
                 }
 
                 binding.movieGenre.layoutManager = LinearLayoutManager(
@@ -120,34 +136,27 @@ class TVDetailsActivity : AppCompatActivity() {
                     }
                 }
 
-                binding.detailTabs.newTab().setText(R.string.info)
-                    .let { binding.detailTabs.addTab(it) }
-                binding.detailTabs.newTab().setText(R.string.episodes)
-                    .let { binding.detailTabs.addTab(it) }
-                binding.detailTabs.newTab().setText(R.string.review)
-                    .let { binding.detailTabs.addTab(it) }
-                val adapter = binding.detailTabs.tabCount.let {
-                    TVDetailsTabsAdapter(
-                        supportFragmentManager,
-                        it,
-                        tvShow
+                val tabArrayList =
+                    arrayListOf(
+                        getString(R.string.info),
+                        getString(R.string.episodes),
+                        getString(R.string.review)
                     )
-                }
-                binding.viewPager.adapter = adapter
-                binding.viewPager.addOnPageChangeListener(
-                    TabLayout.TabLayoutOnPageChangeListener(
-                        binding.detailTabs
-                    )
+                val adapter = TVDetailsTabsAdapter(
+                    supportFragmentManager,
+                    3,
+                    tvShow,
+                    lifecycle
                 )
-                binding.detailTabs.addOnTabSelectedListener(object :
-                        TabLayout.OnTabSelectedListener {
-                        override fun onTabSelected(tab: TabLayout.Tab) {
-                            binding.viewPager.currentItem = tab.position
-                        }
+                binding.viewPager.adapter = adapter
 
-                        override fun onTabUnselected(tab: TabLayout.Tab) {}
-                        override fun onTabReselected(tab: TabLayout.Tab) {}
-                    })
+                TabLayoutMediator(binding.detailTabs, binding.viewPager) { tab, position ->
+                    tab.text = tabArrayList[position]
+                }.attach()
+
+                val fixPager2ViewHeightAnimator = ViewPager2ViewHeightAnimator()
+                fixPager2ViewHeightAnimator.viewPager2 = binding.viewPager
+                fixPager2ViewHeightAnimator.recalculate(binding.detailTabs.selectedTabPosition)
 
                 if (!tvShow.trailer?.results.isNullOrEmpty()) {
                     binding.trailer.setOnClickListener {
@@ -172,7 +181,7 @@ class TVDetailsActivity : AppCompatActivity() {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
                         intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                        intent.data = Uri.parse(getString(R.string.imdb_url, facebookId))
+                        intent.data = Uri.parse(getString(R.string.facebook_url, facebookId))
                         startActivity(intent)
                     }
                 }
@@ -182,7 +191,7 @@ class TVDetailsActivity : AppCompatActivity() {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
                         intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                        intent.data = Uri.parse(getString(R.string.imdb_url, instagramId))
+                        intent.data = Uri.parse(getString(R.string.instagram_url, instagramId))
                         startActivity(intent)
                     }
                 }
@@ -192,7 +201,7 @@ class TVDetailsActivity : AppCompatActivity() {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
                         intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                        intent.data = Uri.parse(getString(R.string.imdb_url, twitterId))
+                        intent.data = Uri.parse(getString(R.string.twitter_url, twitterId))
                         startActivity(intent)
                     }
                 }
@@ -213,9 +222,51 @@ class TVDetailsActivity : AppCompatActivity() {
         }
 
         binding.watchList.setOnClickListener {
-            if (isInWatchlist) updateWatchListBtn(
-                isInWatchlist = false
-            ) else updateWatchListBtn(isInWatchlist = true)
+            if (isInWatchlist) {
+                val ref = FirebaseDatabase.getInstance().reference
+                val applesQuery: Query =
+                    ref.child("watchList").child("${FirebaseUtils.firebaseAuth.currentUser?.uid}")
+                        .orderByChild("id").equalTo(show?.id)
+
+                applesQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (show in dataSnapshot.children) {
+                            show.ref.removeValue()
+                            updateWatchListBtn(isInWatchlist = false)
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+            } else {
+                if (FirebaseUtils.firebaseAuth.currentUser != null) {
+                    val ref = FirebaseDatabase.getInstance()
+                        .getReference("watchList")
+                        .child("${FirebaseUtils.firebaseAuth.currentUser?.uid}").push()
+                    ref.child("id").setValue(show?.id)
+                    ref.child("title").setValue(show?.name)
+                    ref.child("releaseDate").setValue(show?.firstAirDate)
+                    ref.child("rating").setValue(show?.rating.toString())
+                    ref.child("overview").setValue(show?.overview)
+                    ref.child("posterPath").setValue(show?.posterPath)
+                    ref.child("originalLanguage").setValue(show?.originalLanguage)
+                    ref.child("type").setValue("Show")
+                    updateWatchListBtn(isInWatchlist = true)
+                } else {
+                    createDialog(
+                        this,
+                        getString(R.string.access_denied),
+                        getString(R.string.access_denied_message),
+                        {
+                            startActivity(Intent(this, AuthActivity::class.java))
+                            it.dismiss()
+                        },
+                        {
+                            it.dismiss()
+                        }
+                    )
+                }
+            }
         }
 
         binding.share.setOnClickListener {
@@ -224,7 +275,12 @@ class TVDetailsActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(
                 Intent.EXTRA_TEXT,
-                "${viewModel.show.value?.name}\n${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=com.aastudio.sarollahi.moviebox"
+                "${viewModel.show.value?.name}\n${getString(R.string.app_name)}\n${
+                getString(
+                    R.string.play_url,
+                    packageName
+                )
+                }"
             )
             intent.putExtra(Intent.EXTRA_STREAM, getImageURI(this@TVDetailsActivity, bitmap))
             intent.type = "image/*"
@@ -288,9 +344,9 @@ class TVDetailsActivity : AppCompatActivity() {
     }
 
     private fun searchMovies(genre: Genre) {
-        val intent = Intent(this, SearchActivity::class.java)
-        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} TV Shows")
-        intent.putExtra(SearchActivity.GENRE_ID, genre.id)
+        val intent = Intent(this, GenreSearchActivity::class.java)
+        intent.putExtra(GenreSearchActivity.GENRE_NAME, "${genre.name} TV Shows")
+        intent.putExtra(GenreSearchActivity.GENRE_ID, genre.id)
         startActivity(intent)
     }
 
@@ -323,5 +379,24 @@ class TVDetailsActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
+    }
+
+    private fun checkWatchList() {
+        val ref = FirebaseDatabase.getInstance().reference
+        val applesQuery: Query =
+            ref.child("watchList").child("${FirebaseUtils.firebaseAuth.currentUser?.uid}")
+                .orderByChild("id").equalTo(show?.id)
+
+        applesQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (show in dataSnapshot.children) {
+                    updateWatchListBtn(show.exists())
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("iamhere", "onCancelled", databaseError.toException())
+            }
+        })
     }
 }

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.aastudio.sarollahi.moviebox">
+    package="com.aastudio.sarollahi.moviebox" >
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +18,28 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_foreground"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Test">
+        android:theme="@style/Theme.Test" >
+        <activity
+            android:name=".ui.person.PersonActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.person.PersonCreditsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.watchList.WatchListActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.authentication.AuthActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".ui.contact.ContactActivity"
             android:exported="true" />
@@ -30,7 +57,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Test.NoActionBar" />
         <activity
-            android:name=".ui.search.SearchActivity"
+            android:name=".ui.search.GenreSearchActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_search"
             android:screenOrientation="portrait"
@@ -57,7 +84,8 @@
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Test.NoActionBar">
+            android:theme="@style/Theme.Test.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,18 +93,13 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".util.MyFirebaseMessagingService">
+        <service android:name=".util.MyFirebaseMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service android:name=".util.FcmTokenRegistrationService" />
     </application>
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

@@ -24,7 +24,7 @@ import com.aastudio.sarollahi.moviebox.adapter.MoviesHorizontalLargeAdapter
 import com.aastudio.sarollahi.moviebox.adapter.MoviesHorizontalSmallAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentRootBinding
 import com.aastudio.sarollahi.moviebox.ui.movie.viewModel.RootMovieViewModel
-import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
+import com.aastudio.sarollahi.moviebox.ui.search.GenreSearchActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RootMovieFragment : Fragment() {
@@ -205,9 +205,9 @@ class RootMovieFragment : Fragment() {
     }
 
     private fun searchMovies(genre: Genre) {
-        val intent = Intent(context, SearchActivity::class.java)
-        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Movies")
-        intent.putExtra(SearchActivity.GENRE_ID, genre.id)
+        val intent = Intent(context, GenreSearchActivity::class.java)
+        intent.putExtra(GenreSearchActivity.GENRE_NAME, "${genre.name} Movies")
+        intent.putExtra(GenreSearchActivity.GENRE_ID, genre.id)
         startActivity(intent)
     }
 }

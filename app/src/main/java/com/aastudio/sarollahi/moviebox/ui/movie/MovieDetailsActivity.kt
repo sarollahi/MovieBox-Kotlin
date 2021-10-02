@@ -14,6 +14,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,21 +30,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Genre
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
+import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.common.observe
+import com.aastudio.sarollahi.common.util.FirebaseUtils
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.DetailsTabsAdapter
 import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
 import com.aastudio.sarollahi.moviebox.adapter.QualityAdapter
 import com.aastudio.sarollahi.moviebox.databinding.ActivityMovieDetailsBinding
+import com.aastudio.sarollahi.moviebox.ui.authentication.AuthActivity
 import com.aastudio.sarollahi.moviebox.ui.movie.viewModel.MovieViewModel
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_TITLE
 import com.aastudio.sarollahi.moviebox.ui.player.StreamActivity.Companion.MOVIE_URL
 import com.aastudio.sarollahi.moviebox.ui.player.TrailerActivity
-import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
+import com.aastudio.sarollahi.moviebox.ui.search.GenreSearchActivity
+import com.aastudio.sarollahi.moviebox.util.createDialog
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
+import com.google.firebase.database.ValueEventListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.ByteArrayOutputStream
 
@@ -52,6 +62,7 @@ class MovieDetailsActivity : AppCompatActivity() {
     private lateinit var qualityAdapter: QualityAdapter
     private val viewModel by viewModel<MovieViewModel>()
     private lateinit var binding: ActivityMovieDetailsBinding
+    private var movie: Movie? = null
     private var isInWatchlist = false
 
     companion object {
@@ -72,7 +83,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         binding.movieTitle.setSelected(true)
 
-        val extras = intent.getLongExtra(MOVIE_ID, 0L)
+        val extras = intent.getStringExtra(MOVIE_ID)?.toLong() ?: 0L
         if (extras != 0L) {
             viewModel.getMovieDetails(extras)
         } else {
@@ -92,6 +103,8 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         viewModel.apply {
             observe(movie) { movie ->
+                this@MovieDetailsActivity.movie = movie
+                checkWatchList()
                 Glide.with(applicationContext)
                     .load("$IMAGE_ADDRESS${movie.backdropPath}")
                     .transform(CenterCrop())
@@ -102,8 +115,11 @@ class MovieDetailsActivity : AppCompatActivity() {
                     .into(binding.moviePoster)
                 binding.movieTitle.text = movie.title
                 movie.rating?.let { rating -> binding.movieRating.rating = rating }
-                binding.movieReleaseDate.text = " | ${movie.releaseDate}"
-                movie.runTime?.let { runTime -> binding.movieRuntime.text = refactorTime(runTime) }
+                binding.movieReleaseDate.text =
+                    getString(R.string.movie_release_date, movie.releaseDate)
+                movie.runTime?.let { runTime ->
+                    binding.movieRuntime.text = refactorTime(this@MovieDetailsActivity, runTime)
+                }
 
                 binding.movieGenre.layoutManager = LinearLayoutManager(
                     this@MovieDetailsActivity,
@@ -115,7 +131,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                 movie.genre?.let {
                     if (it.isNotEmpty() && genreAdapter.itemCount == 0) {
                         genreAdapter.appendGenre(it)
-                        genreAdapter.notifyDataSetChanged()
+                        genreAdapter.notifyItemRangeChanged(0, it.size - 1)
                     }
                 }
 
@@ -159,7 +175,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
                         intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                        intent.data = Uri.parse("https://www.imdb.com/title/$imdbId/")
+                        intent.data = Uri.parse(getString(R.string.imdb_url, imdbId))
                         startActivity(intent)
                     }
                 }
@@ -169,7 +185,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
                         intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                        intent.data = Uri.parse("https://www.facebook.com/$facebookId/")
+                        intent.data = Uri.parse(getString(R.string.facebook_url, facebookId))
                         startActivity(intent)
                     }
                 }
@@ -179,7 +195,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
                         intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                        intent.data = Uri.parse("https://www.instagram.com/$instagramId/")
+                        intent.data = Uri.parse(getString(R.string.instagram_url, instagramId))
                         startActivity(intent)
                     }
                 }
@@ -189,7 +205,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                         val intent = Intent()
                         intent.action = Intent.ACTION_VIEW
                         intent.addCategory(Intent.CATEGORY_BROWSABLE)
-                        intent.data = Uri.parse("https://twitter.com/$twitterId/")
+                        intent.data = Uri.parse(getString(R.string.twitter_url, twitterId))
                         startActivity(intent)
                     }
                 }
@@ -198,7 +214,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                 if (it.isNotEmpty()) {
                     binding.playContainer.visibility = View.VISIBLE
                     qualityAdapter.appendQuality(it)
-                    qualityAdapter.notifyDataSetChanged()
+                    qualityAdapter.notifyItemRangeChanged(0, it.size - 1)
                 }
             }
             observe(loading) {
@@ -210,9 +226,52 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
 
         binding.watchList.setOnClickListener {
-            if (isInWatchlist) updateWatchListBtn(
-                isInWatchlist = false
-            ) else updateWatchListBtn(isInWatchlist = true)
+            if (isInWatchlist) {
+                val ref = FirebaseDatabase.getInstance().reference
+                val applesQuery: Query =
+                    ref.child("watchList").child(
+                        "${FirebaseUtils.firebaseAuth.currentUser?.uid}"
+                    ).orderByChild("id").equalTo(movie?.id)
+
+                applesQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (movie in dataSnapshot.children) {
+                            movie.ref.removeValue()
+                            updateWatchListBtn(isInWatchlist = false)
+                        }
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {}
+                })
+            } else {
+                if (FirebaseUtils.firebaseAuth.currentUser != null) {
+                    val ref = FirebaseDatabase.getInstance()
+                        .getReference("watchList")
+                        .child("${FirebaseUtils.firebaseAuth.currentUser?.uid}").push()
+                    ref.child("id").setValue(movie?.id)
+                    ref.child("title").setValue(movie?.title)
+                    ref.child("releaseDate").setValue(movie?.releaseDate)
+                    ref.child("rating").setValue(movie?.rating.toString())
+                    ref.child("overview").setValue(movie?.overview)
+                    ref.child("posterPath").setValue(movie?.posterPath)
+                    ref.child("originalLanguage").setValue(movie?.originalLanguage)
+                    ref.child("type").setValue("Movie")
+                    updateWatchListBtn(isInWatchlist = true)
+                } else {
+                    createDialog(
+                        this,
+                        getString(R.string.access_denied),
+                        getString(R.string.access_denied_message),
+                        {
+                            startActivity(Intent(this, AuthActivity::class.java))
+                            it.dismiss()
+                        },
+                        {
+                            it.dismiss()
+                        }
+                    )
+                }
+            }
         }
 
         binding.share.setOnClickListener {
@@ -221,7 +280,12 @@ class MovieDetailsActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             intent.putExtra(
                 Intent.EXTRA_TEXT,
-                "${viewModel.movie.value?.title}\n${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=com.aastudio.sarollahi.moviebox"
+                "${viewModel.movie.value?.title}\n${getString(R.string.app_name)}\n${
+                getString(
+                    R.string.play_url,
+                    packageName
+                )
+                }"
             )
             intent.putExtra(Intent.EXTRA_STREAM, getImageURI(this@MovieDetailsActivity, bitmap))
             intent.type = "image/*"
@@ -242,7 +306,12 @@ class MovieDetailsActivity : AppCompatActivity() {
             val dialogTitle = titleView.findViewById<TextView>(R.id.generalText)
             dialogTitle.text = resources.getString(R.string.movieQuality)
             dialogTitle.setTextColor(ContextCompat.getColor(context, R.color.white))
-            dialogTitle.setBackgroundColor(ContextCompat.getColor(context, R.color.bodyTextBackground))
+            dialogTitle.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.bodyTextBackground
+                )
+            )
             setCustomTitle(titleView)
             setView(dialogView)
             alertDialog = create()
@@ -262,7 +331,10 @@ class MovieDetailsActivity : AppCompatActivity() {
         binding.watchList.apply {
             if (animate) rotatePlusIcon(rotation) else this.rotation = rotation
             isSelected = isInWatchlist
-            drawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(tint, BlendModeCompat.SRC_IN)
+            drawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                tint,
+                BlendModeCompat.SRC_IN
+            )
         }
     }
 
@@ -277,9 +349,9 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     private fun searchMovies(genre: Genre) {
-        val intent = Intent(this, SearchActivity::class.java)
-        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Movies")
-        intent.putExtra(SearchActivity.GENRE_ID, genre.id)
+        val intent = Intent(this, GenreSearchActivity::class.java)
+        intent.putExtra(GenreSearchActivity.GENRE_NAME, "${genre.name} Movies")
+        intent.putExtra(GenreSearchActivity.GENRE_ID, genre.id)
         startActivity(intent)
     }
 
@@ -312,5 +384,24 @@ class MovieDetailsActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true
+    }
+
+    private fun checkWatchList() {
+        val ref = FirebaseDatabase.getInstance().reference
+        val applesQuery: Query =
+            ref.child("watchList").child("${FirebaseUtils.firebaseAuth.currentUser?.uid}")
+                .orderByChild("id").equalTo(movie?.id)
+
+        applesQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (movie in dataSnapshot.children) {
+                    updateWatchListBtn(movie.exists())
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("iamhere", "onCancelled", databaseError.toException())
+            }
+        })
     }
 }

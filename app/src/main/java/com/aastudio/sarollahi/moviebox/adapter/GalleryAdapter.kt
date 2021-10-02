@@ -46,7 +46,7 @@ class GalleryAdapter(
                     .load("$IMAGE_ADDRESS${image.path}")
                     .fitCenter()
                     .into(profilePath)
-                itemView.setOnClickListener { onItemClick.invoke(image, adapterPosition) }
+                itemView.setOnClickListener { onItemClick.invoke(image, bindingAdapterPosition) }
             }
         }
     }

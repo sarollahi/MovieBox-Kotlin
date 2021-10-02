@@ -29,3 +29,7 @@ const val TV_SEARCH_ERROR = "TV_Search_Error"
 // General
 const val TORRENT_ERROR = "Torrent_Error"
 const val PERSON_ERROR = "Person_Error"
+const val PERSON_CREDITS_ERROR = "Person_Credits_Error"
+
+// Watchlist
+const val WATCHLIST_ERROR = "Watchlist_Error"

@@ -64,8 +64,18 @@
     <string name="about">About</string>
     <string name="utilities">UTILITIES</string>
     <string name="my_collection">MY COLLECTION</string>
-
+    <!--review-->
     <string name="onDate">on %1$s</string>
+    <!--auth-->
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_google">Sign In with Google</string>
+    <string name="sign_in_facebook">Sign In with Facebook</string>
+    <string name="sign_out">sign Out</string>
+    <string name="create_account">Create Account</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="password_confirmation_hint">Password Confirmation</string>
+    <string name="or">or</string>
 
 
 </resources>

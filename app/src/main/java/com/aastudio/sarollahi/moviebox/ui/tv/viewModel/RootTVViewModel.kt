@@ -10,7 +10,6 @@ import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aastudio.sarollahi.api.model.Genre
-import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.api.repository.Repository
 import com.aastudio.sarollahi.api.response.GetTVShowResponse
@@ -57,7 +56,7 @@ class RootTVViewModel(application: Application) : ViewModel() {
     }
 
     fun getGenres() {
-        Repository.getMovieGenres(
+        Repository.getTVGenres(
             ::onTVGenresFetched,
             ::onGenreError
         )
@@ -83,7 +82,7 @@ class RootTVViewModel(application: Application) : ViewModel() {
         movieGenres.value = genres
     }
 
-    private fun onGenreError(call: Call<Movie>, error: String) {
+    private fun onGenreError(call: Call<TVShow>, error: String) {
         val bundle = Bundle()
         bundle.putString("Call", call.toString())
         bundle.putString("Error", error)

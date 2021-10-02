@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.IMAGE_ADDRESS
 import com.aastudio.sarollahi.api.model.Person
-import com.aastudio.sarollahi.moviebox.databinding.RowPersonBinding
+import com.aastudio.sarollahi.moviebox.databinding.RowCreditsBinding
 import com.bumptech.glide.Glide
 
 class WriterAdapter(
@@ -20,7 +20,7 @@ class WriterAdapter(
 ) : RecyclerView.Adapter<WriterAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val binding = RowPersonBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowCreditsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MovieViewHolder(binding)
     }
 
@@ -38,7 +38,7 @@ class WriterAdapter(
         )
     }
 
-    inner class MovieViewHolder(itemView: RowPersonBinding) : RecyclerView.ViewHolder(itemView.root) {
+    inner class MovieViewHolder(itemView: RowCreditsBinding) : RecyclerView.ViewHolder(itemView.root) {
         private val profilePath = itemView.profileImage
         private var name = itemView.name
         private var character = itemView.character

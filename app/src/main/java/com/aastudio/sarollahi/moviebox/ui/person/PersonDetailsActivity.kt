@@ -12,8 +12,9 @@ import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.PersonTabsAdapter
 import com.aastudio.sarollahi.moviebox.databinding.ActivityPersonDetailsBinding
 import com.aastudio.sarollahi.moviebox.ui.person.viewModel.PersonViewModel
-import com.aastudio.sarollahi.moviebox.util.CustomViewPager
+import com.aastudio.sarollahi.moviebox.util.ViewPager2ViewHeightAnimator
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PersonDetailsActivity : AppCompatActivity() {
@@ -21,7 +22,6 @@ class PersonDetailsActivity : AppCompatActivity() {
     private val viewModel by viewModel<PersonViewModel>()
     lateinit var binding: ActivityPersonDetailsBinding
     private var tabLayout: TabLayout? = null
-    private var viewPager: CustomViewPager? = null
 
     companion object {
         const val PERSON_ID = "person_id"
@@ -48,26 +48,26 @@ class PersonDetailsActivity : AppCompatActivity() {
 
         viewModel.apply {
             observe(personInfo) { person ->
-                tabLayout?.newTab()?.setText(R.string.biography)?.let { tabLayout?.addTab(it) }
-                tabLayout?.newTab()?.setText(R.string.images)?.let { tabLayout?.addTab(it) }
-                val adapter = tabLayout?.tabCount?.let {
-                    PersonTabsAdapter(
-                        this@PersonDetailsActivity,
-                        supportFragmentManager,
-                        it,
-                        person
+                val tabArrayList =
+                    arrayListOf(
+                        getString(R.string.biography),
+                        getString(R.string.images)
                     )
-                }
-                viewPager?.adapter = adapter
-                viewPager?.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-                tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab) {
-                        viewPager?.currentItem = tab.position
-                    }
+                val adapter = PersonTabsAdapter(
+                    supportFragmentManager,
+                    2,
+                    person,
+                    lifecycle
+                )
+                binding.viewPager.adapter = adapter
 
-                    override fun onTabUnselected(tab: TabLayout.Tab) {}
-                    override fun onTabReselected(tab: TabLayout.Tab) {}
-                })
+                TabLayoutMediator(binding.detailTabs, binding.viewPager) { tab, position ->
+                    tab.text = tabArrayList[position]
+                }.attach()
+
+                val fixPager2ViewHeightAnimator = ViewPager2ViewHeightAnimator()
+                fixPager2ViewHeightAnimator.viewPager2 = binding.viewPager
+                fixPager2ViewHeightAnimator.recalculate(binding.detailTabs.selectedTabPosition)
             }
         }
     }
@@ -79,7 +79,6 @@ class PersonDetailsActivity : AppCompatActivity() {
 
     private fun setUpUI() {
         tabLayout = binding.detailTabs
-        viewPager = binding.personDetailViewPager
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -12,17 +12,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.aastudio.sarollahi.api.model.Person
 import com.aastudio.sarollahi.common.calculateNoOfColumns
 import com.aastudio.sarollahi.moviebox.adapter.GalleryAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentPersonGalleryBinding
+import com.aastudio.sarollahi.moviebox.ui.person.PersonFullWidthGalleryActivity.Companion.PERSON
+import com.aastudio.sarollahi.moviebox.ui.person.PersonFullWidthGalleryActivity.Companion.POSITION
 
 class PersonGalleryFragment : Fragment() {
 
     lateinit var binding: FragmentPersonGalleryBinding
     private var person: Person? = null
-    private var personGallery: RecyclerView? = null
     private lateinit var galleryAdapter: GalleryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,20 +58,18 @@ class PersonGalleryFragment : Fragment() {
     }
 
     private fun setUpUI() {
-        personGallery = binding.gallery
-
         val mNoOfColumns: Int = calculateNoOfColumns(requireContext(), 128f)
-        personGallery?.setHasFixedSize(true)
-        personGallery?.layoutManager = GridLayoutManager(activity, mNoOfColumns)
+        binding.gallery.setHasFixedSize(true)
+        binding.gallery.layoutManager = GridLayoutManager(activity, mNoOfColumns)
         galleryAdapter = GalleryAdapter(mutableListOf()) { _, position ->
             person?.let {
-                val intent = Intent(requireActivity(), PersonFullWidthGalleryActivity().javaClass)
-                intent.putExtra("person", it)
-                intent.putExtra("pos", position)
+                val intent = Intent(requireActivity(), PersonFullWidthGalleryActivity::class.java)
+                intent.putExtra(PERSON, it)
+                intent.putExtra(POSITION, position)
                 startActivity(intent)
             }
         }
-        personGallery?.adapter = galleryAdapter
+        binding.gallery.adapter = galleryAdapter
     }
 
     companion object {

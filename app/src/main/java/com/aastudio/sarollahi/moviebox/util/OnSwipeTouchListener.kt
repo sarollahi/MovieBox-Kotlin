@@ -49,7 +49,7 @@ open class OnSwipeTouchListener(context: Context) : View.OnTouchListener {
                         }
                     }
                 } else {
-                     onTouch(e1)
+                    onTouch(e1)
                 }
             } catch (exception: Exception) {
                 exception.printStackTrace()

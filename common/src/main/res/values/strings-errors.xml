@@ -3,4 +3,12 @@
     <string name="error_message_device_offline">We could not detect an internet connection</string>
     <string name="error_message_network">Please try again. The Internet connection is not available.</string>
     <string name="error_retry">Retry</string>
+    <string name="error_email">Email is required</string>
+    <string name="error_name">Name is required</string>
+    <string name="error_password">Password is required</string>
+    <string name="error_password_confirmation">Password Confirmation is required</string>
+    <string name="error_message">Message is required</string>
+    <string name="error_signin">Sign in failed</string>
+    <string name="access_denied">Access Denied</string>
+    <string name="access_denied_message">To use this feature you need to sign in first.\nDo you want to sign in?</string>
 </resources>

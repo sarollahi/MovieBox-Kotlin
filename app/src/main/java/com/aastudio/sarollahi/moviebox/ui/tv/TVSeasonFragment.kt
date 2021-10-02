@@ -85,7 +85,7 @@ class TVSeasonFragment : Fragment() {
     private fun getEpisodes(season: Int) {
         viewModel.apply {
             show?.id?.let {
-                getEpisodes(it, season)
+                getEpisodes(it.toLong(), season)
             }
 
             observe(episodesList) { list ->

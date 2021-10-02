@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-package com.aastudio.sarollahi.moviebox.ui.search
+package com.aastudio.sarollahi.moviebox.ui.search.viewModel
 
 import android.app.Application
 import android.os.Bundle
@@ -14,6 +14,7 @@ import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.api.repository.Repository
 import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import com.aastudio.sarollahi.api.response.GetTVShowResponse
+import com.aastudio.sarollahi.common.CombinedLiveData
 import com.aastudio.sarollahi.common.logEvent
 import com.aastudio.sarollahi.common.tracker.MOVIE_SEARCH_ERROR
 import com.aastudio.sarollahi.common.tracker.TV_SEARCH_ERROR
@@ -22,10 +23,36 @@ import retrofit2.Call
 class SearchViewModel(application: Application) : ViewModel() {
 
     private val context = application
-    val moviesList = MutableLiveData<List<Movie>>()
-    val showsList = MutableLiveData<List<TVShow>>()
+    val moviesList = MutableLiveData<ArrayList<Movie>>()
+    val showsList = MutableLiveData<ArrayList<TVShow>>()
 
-    fun findMovies(page: Int, sort: String, id: Int) {
+    var loading = MutableLiveData<Boolean>()
+
+    val result = CombinedLiveData(moviesList, showsList) { movies, shows ->
+        hashMapOf(Pair("movies", movies), Pair("shows", shows))
+    }
+
+    fun searchMovie(page: Int, title: String, year: String) {
+        Repository.searchMovies(
+            page,
+            title,
+            year,
+            ::onMoviesFetched,
+            ::onMovieError
+        )
+    }
+
+    fun searchTV(page: Int, title: String, year: String) {
+        Repository.searchTVShows(
+            page,
+            title,
+            year,
+            ::onTVFetched,
+            ::onTVError
+        )
+    }
+
+    fun findMoviesByGenre(page: Int, sort: String, id: Int) {
         Repository.findMoviesByGenre(
             page,
             sort,
@@ -35,7 +62,7 @@ class SearchViewModel(application: Application) : ViewModel() {
         )
     }
 
-    fun findTVShows(page: Int, sort: String, id: Int) {
+    fun findTVShowsByGenre(page: Int, sort: String, id: Int) {
         Repository.findTVByGenre(
             page,
             sort,
@@ -46,11 +73,13 @@ class SearchViewModel(application: Application) : ViewModel() {
     }
 
     private fun onMoviesFetched(movies: List<Movie>) {
-        moviesList.value = movies
+        moviesList.value = movies.toTypedArray().toCollection(ArrayList())
+        loading.value = false
     }
 
     private fun onTVFetched(shows: List<TVShow>) {
-        showsList.value = shows
+        showsList.value = shows.toTypedArray().toCollection(ArrayList())
+        loading.value = false
     }
 
     private fun onMovieError(call: Call<GetMoviesResponse>, error: String) {

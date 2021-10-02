@@ -23,7 +23,7 @@ import com.aastudio.sarollahi.moviebox.adapter.GenreAdapter
 import com.aastudio.sarollahi.moviebox.adapter.TVHorizontalLargeAdapter
 import com.aastudio.sarollahi.moviebox.adapter.TVHorizontalSmallAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentRootBinding
-import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
+import com.aastudio.sarollahi.moviebox.ui.search.GenreSearchActivity
 import com.aastudio.sarollahi.moviebox.ui.tv.viewModel.RootTVViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -104,20 +104,20 @@ class RootTVFragment : Fragment() {
         }
 
         binding.upcomingMore.setOnClickListener {
-            Navigation.findNavController(requireActivity(), it.id)
-                .navigate(R.id.action_nav_root_to_nav_upcoming)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_nav_root_tv_to_nav_upcoming_tv)
         }
         binding.nowPlayingMore.setOnClickListener {
-            Navigation.findNavController(requireActivity(), it.id)
-                .navigate(R.id.action_nav_root_to_nav_nowPlaying)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_nav_root_tv_to_nav_nowPlaying_tv)
         }
         binding.popularMore.setOnClickListener {
-            Navigation.findNavController(requireActivity(), it.id)
-                .navigate(R.id.action_nav_root_to_nav_popular)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_nav_root_tv_to_nav_popular_tv)
         }
         binding.topRatedMore.setOnClickListener {
-            Navigation.findNavController(requireActivity(), it.id)
-                .navigate(R.id.action_nav_root_to_nav_topRated)
+            Navigation.findNavController(it)
+                .navigate(R.id.action_nav_root_tv_to_nav_topRated_tv)
         }
 
         return binding.root
@@ -213,10 +213,10 @@ class RootTVFragment : Fragment() {
     }
 
     private fun searchShows(genre: Genre) {
-        val intent = Intent(context, SearchActivity::class.java)
-        intent.putExtra(SearchActivity.GENRE_NAME, "${genre.name} Shows")
-        intent.putExtra(SearchActivity.GENRE_ID, genre.id)
-        intent.putExtra(SearchActivity.IS_MOVIE, false)
+        val intent = Intent(context, GenreSearchActivity::class.java)
+        intent.putExtra(GenreSearchActivity.GENRE_NAME, "${genre.name} Shows")
+        intent.putExtra(GenreSearchActivity.GENRE_ID, genre.id)
+        intent.putExtra(GenreSearchActivity.IS_MOVIE, false)
         startActivity(intent)
     }
 }

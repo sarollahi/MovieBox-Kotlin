@@ -9,10 +9,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
-const val IMAGE_ADDRESS = "https://image.tmdb.org/t/p/original"
+const val IMAGE_ADDRESS = "https://image.tmdb.org/t/p/w780"
 
 data class Movie(
-    @SerializedName("id") val id: Long,
+    @SerializedName("id") val id: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("runtime") val runTime: Int?,
     @SerializedName("overview") val overview: String?,
@@ -38,7 +38,7 @@ data class Movie(
     @SerializedName("torrents") val torrents: List<BaseMovie.Torrent>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readLong(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
@@ -65,7 +65,7 @@ data class Movie(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
+        parcel.writeString(id)
         parcel.writeString(title)
         parcel.writeValue(runTime)
         parcel.writeString(overview)

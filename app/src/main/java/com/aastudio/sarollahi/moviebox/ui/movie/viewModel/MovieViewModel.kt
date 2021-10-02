@@ -6,6 +6,7 @@
 package com.aastudio.sarollahi.moviebox.ui.movie.viewModel
 
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ import com.aastudio.sarollahi.api.repository.Repository
 import com.aastudio.sarollahi.common.logEvent
 import com.aastudio.sarollahi.common.tracker.MOVIE_DETAILS_ERROR
 import com.aastudio.sarollahi.common.tracker.TORRENT_ERROR
+import com.aastudio.sarollahi.moviebox.R
 import retrofit2.Call
 
 class MovieViewModel(application: Application) : ViewModel() {
@@ -70,15 +72,15 @@ class MovieViewModel(application: Application) : ViewModel() {
         logEvent(context, TORRENT_ERROR, bundle)
     }
 
-    fun refactorTime(time: Int): String {
+    fun refactorTime(context: Context, time: Int): String {
         return if (time != 0) {
             val runtime: String
             val hours: Int = time / 60 // since both are ints, you get an int
             val minutes: Int = time % 60
             runtime = if (hours == 0) {
-                String.format("%d Min", minutes)
+                context.getString(R.string.runtime_min, minutes)
             } else {
-                String.format("%d H %02d Min", hours, minutes)
+                context.getString(R.string.runtime_hour_min, hours, minutes)
             }
             runtime
         } else {

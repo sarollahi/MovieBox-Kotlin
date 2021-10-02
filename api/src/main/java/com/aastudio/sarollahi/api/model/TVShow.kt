@@ -10,7 +10,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class TVShow(
-    @SerializedName("id") val id: Long,
+    @SerializedName("id") val id: String?,
     @SerializedName("name") val name: String?,
     @SerializedName("first_air_date") val firstAirDate: String?,
     @SerializedName("last_air_date") val lastAirDate: String?,
@@ -36,7 +36,7 @@ data class TVShow(
     @SerializedName("torrents") val torrents: List<BaseMovie.Torrent>?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readLong(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -63,7 +63,7 @@ data class TVShow(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(id)
+        parcel.writeString(id)
         parcel.writeString(name)
         parcel.writeString(firstAirDate)
         parcel.writeString(lastAirDate)

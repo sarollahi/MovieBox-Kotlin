@@ -7,8 +7,11 @@ package com.aastudio.sarollahi.api
 
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.model.Person
+import com.aastudio.sarollahi.api.model.PersonMovies
+import com.aastudio.sarollahi.api.model.PersonTVShows
 import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.api.response.GetMoviesResponse
+import com.aastudio.sarollahi.api.response.GetPersonResponse
 import com.aastudio.sarollahi.api.response.GetTVShowResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -17,6 +20,14 @@ import retrofit2.http.Query
 
 interface TmdbApi {
     // MOVIES
+    @GET("search/movie")
+    fun searchMovie(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("query") query: String,
+        @Query("year") year: String,
+        @Query("page") page: Int
+    ): Call<GetMoviesResponse>
+
     @GET("movie/popular")
     fun getPopularMovies(
         @Query("api_key") apiKey: String = API_KEY,
@@ -66,6 +77,14 @@ interface TmdbApi {
     ): Call<Movie>
 
     // TV SHOWS
+    @GET("search/tv")
+    fun searchTVShow(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("query") query: String,
+        @Query("first_air_date_year") year: String,
+        @Query("page") page: Int
+    ): Call<GetTVShowResponse>
+
     @GET("tv/popular")
     fun getPopularTVShows(
         @Query("api_key") apiKey: String = API_KEY,
@@ -119,14 +138,32 @@ interface TmdbApi {
     @GET("genre/tv/list")
     fun getTVGenres(
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("page") page: Int
-    ): Call<GetTVShowResponse>
+    ): Call<TVShow>
 
     // PEOPLE
+    @GET("search/person")
+    fun searchPerson(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("query") query: String,
+        @Query("page") page: Int
+    ): Call<GetPersonResponse>
+
     @GET("person/{person_id}")
     fun getPersonDetails(
         @Path("person_id") personId: Int,
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("append_to_response") append_to_response: String = "external_ids,images"
+        @Query("append_to_response") append_to_response: String = "external_ids,images,movie_credits,tv_credits"
     ): Call<Person>
+
+    @GET("person/{person_id}/movie_credits")
+    fun getPersonMovies(
+        @Path("person_id") personId: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+    ): Call<PersonMovies>
+
+    @GET("person/{person_id}/tv_credits")
+    fun getPersonTVs(
+        @Path("person_id") personId: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+    ): Call<PersonTVShows>
 }
