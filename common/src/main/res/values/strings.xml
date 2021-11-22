@@ -70,7 +70,7 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_in_google">Sign In with Google</string>
     <string name="sign_in_facebook">Sign In with Facebook</string>
-    <string name="sign_out">sign Out</string>
+    <string name="sign_out">Sign Out</string>
     <string name="create_account">Create Account</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>

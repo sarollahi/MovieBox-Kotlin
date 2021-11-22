@@ -25,7 +25,6 @@
     <string name="error_fetch_movies">Please check your internet connection</string>
     <!--tabs-->
     <string name="info">Info</string>
-    <string name="episodes">Episodes</string>
     <string name="review">Review</string>
     <string name="biography">Biography</string>
     <string name="images">Images</string>
@@ -35,6 +34,8 @@
     <string name="cast">Cast List</string>
     <string name="director">Director</string>
     <string name="writer">Writer</string>
+    <string name="seasons">Seasons</string>
+    <string name="episodes">%1$s Episode(s)</string>
     <string name="language">Language</string>
     <string name="country">Country</string>
     <string name="budget">Budget</string>

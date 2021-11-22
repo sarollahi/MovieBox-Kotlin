@@ -11,18 +11,24 @@ import com.google.gson.annotations.SerializedName
 
 data class Season(
     @SerializedName("id") val id: Int,
+    @SerializedName("episode_count") val episodeCount: Int?,
     @SerializedName("name") val name: String?,
+    @SerializedName("poster_path") val posterPath: String?,
     @SerializedName("season_number") val seasonNumber: Int?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
+        parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
+        parcel.writeValue(episodeCount)
         parcel.writeString(name)
+        parcel.writeString(posterPath)
         parcel.writeValue(seasonNumber)
     }
 

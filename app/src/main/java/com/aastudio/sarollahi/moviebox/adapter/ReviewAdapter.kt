@@ -5,6 +5,7 @@
 
 package com.aastudio.sarollahi.moviebox.adapter
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -19,7 +20,9 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ReviewAdapter(
-    private var reviews: MutableList<Review>
+    private var reviews: MutableList<Review>,
+    private var error: Boolean = false,
+    private var errorIcon: Drawable? = null
 ) : RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
@@ -33,8 +36,10 @@ class ReviewAdapter(
         holder.bind(reviews[position])
     }
 
-    fun appendReview(review: List<Review>) {
+    fun appendReview(review: List<Review>, error: Boolean = false, icon: Drawable? = null) {
         this.reviews.addAll(review)
+        this.error = error
+        this.errorIcon = icon
         notifyItemRangeInserted(
             this.reviews.size,
             review.size - 1
@@ -62,6 +67,13 @@ class ReviewAdapter(
                 .load("$IMAGE_ADDRESS${review.authorDetails?.avatarPath}")
                 .circleCrop()
                 .into(profileImage)
+
+            if (error) {
+                Glide.with(itemView)
+                    .load(errorIcon)
+                    .fitCenter()
+                    .into(profileImage)
+            }
         }
 
         private fun reuse() {

@@ -103,7 +103,9 @@ class TVDetailsActivity : AppCompatActivity() {
         viewModel.apply {
             observe(show) { tvShow ->
                 this@TVDetailsActivity.show = tvShow
-                checkWatchList()
+                if (FirebaseUtils.firebaseAuth.currentUser != null) {
+                    checkWatchList()
+                }
                 Glide.with(applicationContext)
                     .load("$IMAGE_ADDRESS${tvShow.backdropPath}")
                     .transform(CenterCrop())
@@ -139,12 +141,11 @@ class TVDetailsActivity : AppCompatActivity() {
                 val tabArrayList =
                     arrayListOf(
                         getString(R.string.info),
-                        getString(R.string.episodes),
                         getString(R.string.review)
                     )
                 val adapter = TVDetailsTabsAdapter(
                     supportFragmentManager,
-                    3,
+                    2,
                     tvShow,
                     lifecycle
                 )

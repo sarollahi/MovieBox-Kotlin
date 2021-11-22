@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aastudio.sarollahi.api.model.Person
+import com.aastudio.sarollahi.api.model.Season
 import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.CastAdapter
@@ -23,6 +24,7 @@ import com.aastudio.sarollahi.moviebox.adapter.DirectorAdapter
 import com.aastudio.sarollahi.moviebox.adapter.LanguageAdapter
 import com.aastudio.sarollahi.moviebox.adapter.RecommendedShowsAdapter
 import com.aastudio.sarollahi.moviebox.adapter.RelatedShowsAdapter
+import com.aastudio.sarollahi.moviebox.adapter.SeasonAdapter
 import com.aastudio.sarollahi.moviebox.adapter.StringAdapter
 import com.aastudio.sarollahi.moviebox.adapter.WriterAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentTvInfoBinding
@@ -37,6 +39,7 @@ class TVInfoFragment : Fragment() {
     private var arrowDown: Boolean = false
     private lateinit var castAdapter: CastAdapter
     private lateinit var writerAdapter: WriterAdapter
+    private lateinit var seasonAdapter: SeasonAdapter
     private lateinit var directorAdapter: DirectorAdapter
     private lateinit var companyAdapter: CompanyAdapter
     private lateinit var countryAdapter: StringAdapter
@@ -61,9 +64,8 @@ class TVInfoFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         binding.castRecyclerView.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
@@ -71,6 +73,14 @@ class TVInfoFragment : Fragment() {
         )
         castAdapter = CastAdapter(mutableListOf()) { person -> showPersonDetails(person) }
         binding.castRecyclerView.adapter = castAdapter
+
+        binding.seasonRecyclerView.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        seasonAdapter = SeasonAdapter(mutableListOf(), null) { season -> showEpisodes(season) }
+        binding.seasonRecyclerView.adapter = seasonAdapter
 
         binding.directorRecyclerView.layoutManager = LinearLayoutManager(
             context,
@@ -222,6 +232,22 @@ class TVInfoFragment : Fragment() {
                 writerAdapter.appendCrew(writer.toList())
                 writerAdapter.notifyItemRangeChanged(0, writer.size - 1)
             }
+
+            credits?.crewList?.let {
+                for (crew in it) {
+                    if (crew.profilePath != null && crew.department == DIRECTOR) {
+                        director.add(crew)
+                    } else if (crew.profilePath != null && crew.department == WRITER) {
+                        writer.add(crew)
+                    }
+                }
+            }
+
+            if (!season.isNullOrEmpty() && seasonAdapter.itemCount == 0) {
+                setVisibility(binding.seasonRecyclerView)
+                seasonAdapter.appendSeason(season!!, show?.posterPath)
+                seasonAdapter.notifyItemRangeChanged(0, season!!.size - 1)
+            }
         }
 
         binding.overviewArrow.setOnClickListener {
@@ -274,6 +300,10 @@ class TVInfoFragment : Fragment() {
                 binding.recommendedTitle.visibility = View.VISIBLE
                 binding.recommendedShow.visibility = View.VISIBLE
             }
+            binding.seasonRecyclerView -> {
+                binding.seasonTitle.visibility = View.VISIBLE
+                binding.seasonRecyclerView.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -314,6 +344,13 @@ class TVInfoFragment : Fragment() {
         intent.putExtra(PersonDetailsActivity.PERSON_ID, person.id)
         intent.putExtra(PersonDetailsActivity.PERSON_NAME, person.name)
         startActivity(intent)
+    }
+
+    private fun showEpisodes(season: Season) {
+//        val intent = Intent(context, PersonDetailsActivity::class.java)
+//        intent.putExtra(PersonDetailsActivity.PERSON_ID, person.id)
+//        intent.putExtra(PersonDetailsActivity.PERSON_NAME, person.name)
+//        startActivity(intent)
     }
 
     companion object {
