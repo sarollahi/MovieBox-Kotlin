@@ -12,7 +12,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.aastudio.sarollahi.api.model.TVShow
 import com.aastudio.sarollahi.moviebox.ui.review.ReviewFragment
 import com.aastudio.sarollahi.moviebox.ui.tv.TVInfoFragment
-import com.aastudio.sarollahi.moviebox.ui.tv.TVSeasonFragment
 
 internal class TVDetailsTabsAdapter(
     fragmentManager: FragmentManager,
@@ -27,7 +26,6 @@ internal class TVDetailsTabsAdapter(
     override fun createFragment(position: Int): Fragment {
         when (position) {
             0 -> return TVInfoFragment.newInstance(show)
-            1 -> return TVSeasonFragment.newInstance(show)
         }
         return ReviewFragment.newInstance(show.reviews)
     }

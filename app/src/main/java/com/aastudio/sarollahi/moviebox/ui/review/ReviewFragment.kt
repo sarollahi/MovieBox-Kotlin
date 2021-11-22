@@ -11,7 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aastudio.sarollahi.api.model.Review
 import com.aastudio.sarollahi.api.model.Reviews
+import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.ReviewAdapter
 import com.aastudio.sarollahi.moviebox.databinding.FragmentReviewBinding
 
@@ -20,6 +22,7 @@ class ReviewFragment : Fragment() {
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var reviewLayoutMgr: LinearLayoutManager
     private lateinit var binding: FragmentReviewBinding
+    private val noReview = listOf(Review("No Reviews Found!", "unfortunately we couldn't find any review in our database!", null, null))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +41,8 @@ class ReviewFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         setUpUI()
         binding.reviewsRecyclerView.layoutManager = reviewLayoutMgr
         reviewAdapter = ReviewAdapter(mutableListOf())
@@ -49,6 +51,9 @@ class ReviewFragment : Fragment() {
         reviews?.results?.let {
             if (it.isNotEmpty()) {
                 reviewAdapter.appendReview(it)
+                reviewAdapter.notifyDataSetChanged()
+            } else {
+                reviewAdapter.appendReview(noReview, true, context?.resources?.getDrawable(R.drawable.ic_error))
                 reviewAdapter.notifyDataSetChanged()
             }
         }

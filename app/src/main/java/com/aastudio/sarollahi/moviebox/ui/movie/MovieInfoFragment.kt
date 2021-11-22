@@ -64,9 +64,8 @@ class MovieInfoFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         binding.castRecyclerView.layoutManager = LinearLayoutManager(
             context,
             LinearLayoutManager.HORIZONTAL,
