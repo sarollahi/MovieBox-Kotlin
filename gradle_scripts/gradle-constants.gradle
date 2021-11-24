@@ -25,6 +25,8 @@ ext {
     navigationFragmentKtx = '2.3.5'
     coreKtx = '1.5.0'
     leanbackVersion = "1.0.0"
+    playCoreVersion = "1.10.2"
+    playCoreKTXVersion = "1.8.1"
 
     // Versions of third-party libraries
     junitVersion = '4.13.2'

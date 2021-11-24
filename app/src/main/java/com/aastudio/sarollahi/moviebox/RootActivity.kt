@@ -35,6 +35,7 @@ import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
 import com.aastudio.sarollahi.moviebox.ui.watchList.WatchListActivity
 import com.aastudio.sarollahi.moviebox.util.FcmTokenRegistrationService
 import com.aastudio.sarollahi.moviebox.util.createDialog
+import com.aastudio.sarollahi.moviebox.util.inAppReview
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.android.ext.koin.androidContext
@@ -121,6 +122,8 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     return false
                 }
             })
+
+        inAppReview(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
