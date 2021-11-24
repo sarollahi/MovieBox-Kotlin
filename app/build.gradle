@@ -45,7 +45,6 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.google.android.material:material:$googleMaterialVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "com.github.skydoves:powerspinner:1.1.9"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
@@ -54,6 +53,10 @@ dependencies {
     // Glide
     // https://github.com/bumptech/glide
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    // Play Core Library
+    implementation "com.google.android.play:core:$rootProject.ext.playCoreVersion"
+    implementation "com.google.android.play:core-ktx:$rootProject.ext.playCoreKTXVersion"
 
     // Testing
     testImplementation "junit:junit:$junitVersion"
