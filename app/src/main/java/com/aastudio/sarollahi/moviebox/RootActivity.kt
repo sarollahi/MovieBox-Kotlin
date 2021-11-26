@@ -34,6 +34,7 @@ import com.aastudio.sarollahi.moviebox.ui.person.PersonActivity
 import com.aastudio.sarollahi.moviebox.ui.search.SearchActivity
 import com.aastudio.sarollahi.moviebox.ui.watchList.WatchListActivity
 import com.aastudio.sarollahi.moviebox.util.FcmTokenRegistrationService
+import com.aastudio.sarollahi.moviebox.util.InAppUpdate
 import com.aastudio.sarollahi.moviebox.util.createDialog
 import com.aastudio.sarollahi.moviebox.util.inAppReview
 import com.google.android.material.navigation.NavigationView
@@ -45,6 +46,7 @@ import org.koin.core.context.stopKoin
 class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityRootBinding
+    private lateinit var inAppUpdate: InAppUpdate
     private var drawerLayout: DrawerLayout? = null
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
@@ -56,6 +58,8 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        inAppUpdate = InAppUpdate(this)
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
@@ -229,6 +233,7 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onResume() {
         super.onResume()
+        inAppUpdate.onResume()
         sendFcmRegistrationToken()
 
         if (firebaseAuth.currentUser != null) {
@@ -243,6 +248,7 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onDestroy() {
         super.onDestroy()
+        inAppUpdate.onDestroy()
         stopKoin()
     }
 
@@ -341,5 +347,10 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(intent)
             drawerLayout?.closeDrawer(GravityCompat.END)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        inAppUpdate.onActivityResult(requestCode,resultCode, data)
     }
 }

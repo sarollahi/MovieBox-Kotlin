@@ -51,9 +51,11 @@ class MovieViewModel(application: Application) : ViewModel() {
     }
 
     private fun onMovieTorrentsFetched(list: List<BaseMovie.Movie>?) {
-        if (list != null) {
-            for (torrentList in list) {
-                torrentTv.value = torrentList.torrents
+        list?.let {
+            for (torrentList in it) {
+                torrentList.torrents?.let { torrents ->
+                    torrentTv.value = torrents
+                }
             }
         }
     }

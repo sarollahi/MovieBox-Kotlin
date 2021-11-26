@@ -143,6 +143,6 @@ class UpcomingTVShowsFragment : Fragment() {
 
         // Set up the RecyclerView and start loading ads
         binding.recyclerView.adapter = myMoPubAdapter
-        myMoPubAdapter.loadAds(UPCOMING_ADS_PLACEMENT_ID)
+        myMoPubAdapter.loadAds(System.getenv("ADS_PLACEMENT_ID") ?: "")
     }
 }

@@ -1,4 +1,9 @@
 /build
 .idea
 .gradle
-api/src/main/java/com/aastudio/sarollahi/api/Key.kt
+Key.kt
+*.jks
+*.keystore
+key.json
+.DS_Store
+/DS_Store

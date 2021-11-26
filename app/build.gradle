@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.github.triplet.play'
+    id 'com.google.firebase.appdistribution'
 }
 
 android {
@@ -14,25 +16,50 @@ android {
         applicationId "com.aastudio.sarollahi.moviebox"
         minSdkVersion rootProject.ext.defaultMinSdkVersion
         targetSdkVersion rootProject.ext.defaultTargetSdkVersion
-        versionCode 1
+        versionCode 2
         versionName rootProject.ext.appVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("moviebox_upload_cert.jks")
+            storePassword System.getenv("MOVIEBOX_STORE_PASS")
+            keyAlias System.getenv("keyalias")
+            keyPassword System.getenv("MOVIEBOX_KEY_PASS")
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE") ?: "keystore.jks")
+            storePassword System.getenv("MOVIEBOX_STORE_PASS")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("MOVIEBOX_KEY_PASS")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    play {
+        serviceAccountCredentials.set(file(System.getenv("PUBLISHER_ACCT_JSON_FILE") ?: "publisher.json"))
+        track = 'internal'
+        updatePriority.set(5)
+        defaultToAppBundles.set(true)
+    }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
+
     buildFeatures {
         viewBinding true
     }
