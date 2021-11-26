@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aastudio.sarollahi.api.NOW_PLAYING_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.api.response.GetMoviesResponse
 import com.aastudio.sarollahi.common.network.NetworkUtils

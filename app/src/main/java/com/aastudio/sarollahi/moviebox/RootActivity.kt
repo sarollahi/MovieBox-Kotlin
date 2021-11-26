@@ -351,6 +351,6 @@ class RootActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        inAppUpdate.onActivityResult(requestCode,resultCode, data)
+        inAppUpdate.onActivityResult(requestCode, resultCode, data)
     }
 }

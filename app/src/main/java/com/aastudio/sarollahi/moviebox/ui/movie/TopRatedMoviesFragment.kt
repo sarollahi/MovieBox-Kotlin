@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.aastudio.sarollahi.api.TOP_RATED_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.common.observe
 import com.aastudio.sarollahi.moviebox.R

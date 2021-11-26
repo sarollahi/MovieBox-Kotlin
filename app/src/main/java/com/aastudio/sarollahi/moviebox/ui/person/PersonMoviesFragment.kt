@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.aastudio.sarollahi.api.PERSON_MOVIE_ADS_PLACEMENT_ID
 import com.aastudio.sarollahi.api.model.Movie
 import com.aastudio.sarollahi.moviebox.R
 import com.aastudio.sarollahi.moviebox.adapter.MoviesAdapter

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2021 Seyed Ahmad Sarollahi
+ * All rights reserved.
+ */
+
 package com.aastudio.sarollahi.moviebox.util
 
 import android.app.Activity
@@ -91,7 +96,6 @@ class InAppUpdate(activity: Activity) : InstallStateUpdatedListener {
         appUpdateManager.registerListener(this)
     }
 
-
     private fun startUpdate(info: AppUpdateInfo, type: Int) {
         appUpdateManager.startUpdateFlowForResult(info, type, parentActivity, MY_REQUEST_CODE)
         currentType = type
@@ -142,5 +146,4 @@ class InAppUpdate(activity: Activity) : InstallStateUpdatedListener {
             flexibleUpdateDownloadCompleted()
         }
     }
-
 }
