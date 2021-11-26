@@ -52,9 +52,6 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      # run tests & code coc!
-      - run: ./gradlew testDebugUnitTest jacocoTestDebugUnitTestReport
-
       # build release
       - run: ./gradlew assembleRelease
 
@@ -71,14 +68,6 @@ jobs:
       - store_artifacts:
           path: app/build/outputs/apk/
           destination: apk
-
-      - store_artifacts:
-          path: app/build/reports/jacoco/debug/
-          destination: coverage_report
-
-      - store_artifacts:
-          path: app/build/reports/tests/
-          destination: test_results
 
       - store_artifacts:
           path: app/build/docs/javadoc
