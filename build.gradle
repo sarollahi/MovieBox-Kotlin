@@ -1,15 +1,21 @@
 buildscript {
-    ext.kotlin_version = '1.5.21'
+    ext.kotlin_version = '1.5.31'
     ext.ktlint = '0.41.0'
+    ext.firebase_crashlytics = '2.5.2'
+    ext.google_services = '4.3.10'
+    ext.play_publisher = '3.6.0'
     repositories {
         google()
+        mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31'
-        classpath 'com.google.gms:google-services:4.3.10'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
+        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.gms:google-services:$google_services"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:$firebase_crashlytics"
+        classpath "com.github.triplet.gradle:play-publisher:$play_publisher"
+        classpath "com.google.firebase:firebase-appdistribution-gradle:2.2.0"
     }
 }
 
@@ -21,8 +27,9 @@ apply from: 'gradle_scripts/gradle-constants.gradle'
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }
+        jcenter()
     }
 }
 
