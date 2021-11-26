@@ -30,8 +30,13 @@ jobs:
     steps:
       - checkout
 
-      - run: echo 'export KEYSTORE=${HOME}/repo/sigining.keystore' >> $BASH_ENV
-      - run: echo 'export PUBLISHER_ACCT_JSON_FILE=${HOME}/repo/publisher_profile.json' >> $BASH_ENV
+      - run: echo "Build process is started 👯"
+      - run:
+          name: Create moviebox_upload_cert.jks
+          command: echo $RELEASE_KEYSTORE_BASE64 | base64 -d > $releaseKeyStore
+      - run:
+          name: Create keystore.properies
+          command: printf 'releaseKeyAlias=%s\nreleaseKeyPassword=%s\nreleaseKeyStore=%s\nreleaseStorePassword=%s' $KEY_ALIAS $MOVIEBOX_KEY_PASS $RELEASE_KEY_STORE $MOVIEBOX_STORE_PASS > keystore.properties
 
       # Download and cache dependencies
       - restore_cache:
@@ -39,10 +44,6 @@ jobs:
           - v1-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-
-      # Get private keys etc
-      - run: ./misc/download_keystore.sh
-      - run: ./misc/inject_circle_build_number.sh
 
       - run: ./gradlew dependencies
 
