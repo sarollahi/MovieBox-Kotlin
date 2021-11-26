@@ -30,8 +30,13 @@ jobs:
     steps:
       - checkout
 
-      - run: echo 'export KEYSTORE=${HOME}/repo/sigining.keystore' >> $BASH_ENV
-      - run: echo 'export PUBLISHER_ACCT_JSON_FILE=${HOME}/repo/publisher_profile.json' >> $BASH_ENV
+      - run: echo "Build process is started 👯"
+      - run:
+          name: Create keystore.jks
+          command: echo $RELEASE_KEYSTORE_BASE64 | base64 -d > $RELEASE_KEY_STORE
+      - run:
+          name: Create keystore.properies
+          command: printf 'releaseKeyAlias=%s\nreleaseKeyPassword=%s\nreleaseKeyStore=%s\nreleaseStorePassword=%s' $KEY_ALIAS $MOVIEBOX_KEY_PASS $RELEASE_KEY_STORE $MOVIEBOX_STORE_PASS > keystore.properties
 
       # Download and cache dependencies
       - restore_cache:
@@ -40,10 +45,6 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      # Get private keys etc
-      - run: ./misc/download_keystore.sh
-      - run: ./misc/inject_circle_build_number.sh
-
       - run: ./gradlew dependencies
 
       - save_cache:
@@ -51,11 +52,8 @@ jobs:
             - ~/.m2
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
-      # run tests & code coc!
-      - run: ./gradlew testDebugUnitTest jacocoTestDebugUnitTestReport
-
       # build release
-      - run: ./gradlew assembleRelease
+      - run: ./gradlew assemble
 
       # javadoc
       - run: ./gradlew javadoc
@@ -70,14 +68,6 @@ jobs:
       - store_artifacts:
           path: app/build/outputs/apk/
           destination: apk
-
-      - store_artifacts:
-          path: app/build/reports/jacoco/debug/
-          destination: coverage_report
-
-      - store_artifacts:
-          path: app/build/reports/tests/
-          destination: test_results
 
       - store_artifacts:
           path: app/build/docs/javadoc

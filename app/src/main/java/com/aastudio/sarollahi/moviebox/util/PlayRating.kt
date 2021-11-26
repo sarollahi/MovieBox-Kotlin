@@ -28,3 +28,4 @@ fun inAppReview(activity: Activity) {
         }
     }
 }
+
