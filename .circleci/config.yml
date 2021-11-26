@@ -33,7 +33,7 @@ jobs:
       - run: echo "Build process is started 👯"
       - run:
           name: Create keystore.jks
-          command: echo base64 $RELEASE_KEYSTORE_BASE64 | base64 -di > $RELEASE_KEY_STORE
+          command: echo base64 $RELEASE_KEYSTORE_BASE64 | base64 -d --ignore-garbage > $RELEASE_KEY_STORE
           
       - run:
           name: Create keystore.properies
