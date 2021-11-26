@@ -24,15 +24,6 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("moviebox_upload_cert.jks")
-            storePassword System.getenv("MOVIEBOX_STORE_PASS")
-            keyAlias System.getenv("keyalias")
-            keyPassword System.getenv("MOVIEBOX_KEY_PASS")
-        }
-    }
-
-    signingConfigs {
-        release {
             storeFile file(System.getenv("KEYSTORE") ?: "keystore.jks")
             storePassword System.getenv("MOVIEBOX_STORE_PASS")
             keyAlias System.getenv("KEY_ALIAS")
