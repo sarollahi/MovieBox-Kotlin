@@ -116,7 +116,7 @@ class PersonMoviesFragment : Fragment() {
 
         // Set up the RecyclerView and start loading ads
         binding.recyclerView.adapter = myMoPubAdapter
-        myMoPubAdapter.loadAds(PERSON_MOVIE_ADS_PLACEMENT_ID)
+        myMoPubAdapter.loadAds(System.getenv("ADS_PLACEMENT_ID") ?: "")
     }
 
     companion object {

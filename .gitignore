@@ -6,3 +6,4 @@ Key.kt
 *.keystore
 key.json
 .DS_Store
+/DS_Store

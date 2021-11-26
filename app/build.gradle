@@ -34,9 +34,9 @@ android {
     signingConfigs {
         release {
             storeFile file(System.getenv("KEYSTORE") ?: "keystore.jks")
-            storePassword System.getenv("KEYSTORE_PASSWORD")
+            storePassword System.getenv("MOVIEBOX_STORE_PASS")
             keyAlias System.getenv("KEY_ALIAS")
-            keyPassword System.getenv("KEY_PASSWORD")
+            keyPassword System.getenv("MOVIEBOX_KEY_PASS")
         }
     }
 
