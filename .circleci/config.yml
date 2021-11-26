@@ -33,7 +33,7 @@ jobs:
       - run: echo "Build process is started 👯"
       - run:
           name: Create keystore.jks
-          command: echo $KEYSTORE | base64 -d > $RELEASE_KEY_STORE
+          command: echo $RELEASE_KEYSTORE_BASE64 | base64 -d > $RELEASE_KEY_STORE
       - run:
           name: Create keystore.properies
           command: printf 'releaseKeyAlias=%s\nreleaseKeyPassword=%s\nreleaseKeyStore=%s\nreleaseStorePassword=%s' $KEY_ALIAS $MOVIEBOX_KEY_PASS $RELEASE_KEY_STORE $MOVIEBOX_STORE_PASS > keystore.properties
